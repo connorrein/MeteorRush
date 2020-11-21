@@ -2,7 +2,6 @@ package edu.uw.project.common;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 

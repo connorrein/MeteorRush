@@ -31,10 +31,10 @@ public class InputManager {
 
 	public double getHorizontalAxis() {
 		double horizontal = 0;
-		if (keys[KeyEvent.VK_A]) {
+		if (keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT]) {
 			horizontal++;
 		}
-		if (keys[KeyEvent.VK_D]) {
+		if (keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT]) {
 			horizontal--;
 		}
 		return horizontal;
@@ -42,13 +42,17 @@ public class InputManager {
 
 	public double getVerticalAxis() {
 		double vertical = 0;
-		if (keys[KeyEvent.VK_W]) {
+		if (keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP]) {
 			vertical++;
 		}
-		if (keys[KeyEvent.VK_S]) {
+		if (keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN]) {
 			vertical--;
 		}
 		return vertical;
+	}
+	
+	public boolean spaceDown() {
+		return keys[KeyEvent.VK_SPACE];
 	}
 
 }
