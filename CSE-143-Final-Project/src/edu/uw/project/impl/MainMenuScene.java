@@ -6,7 +6,7 @@ import javax.sound.sampled.Clip;
 import edu.uw.project.common.ResourceLoader;
 import edu.uw.project.common.Scene;
 
-public class MainMenu implements Scene {
+public class MainMenuScene extends Scene {
 
 	private boolean initialized;
 	private Clip backgroundMusic;

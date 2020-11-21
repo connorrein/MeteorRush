@@ -18,6 +18,7 @@ public class Game {
 	private boolean running;
 	private long startTimeMilis;
 	private Display display;
+	private InputManager inputManager;
 	private Scene currentScene;
 	private long deltaTimeMilis;
 
@@ -45,6 +46,10 @@ public class Game {
 		return instance;
 	}
 
+	public InputManager getInputManager() {
+		return inputManager;
+	}
+
 	/**
 	 * Begin the game by opening the game window and entering the game loop.
 	 */
@@ -54,7 +59,8 @@ public class Game {
 		}
 		running = true;
 		startTimeMilis = System.currentTimeMillis();
-		display = new Display(title, width, height);
+		inputManager = new InputManager();
+		display = new Display(title, width, height, inputManager.getKeyListener());
 		new Thread() {
 			@Override
 			public void run() {
@@ -97,7 +103,7 @@ public class Game {
 	 * 
 	 * @param scene the scene to be loaded.
 	 */
-	public void setScene(Scene scene) {
+	public void loadScene(Scene scene) {
 		this.currentScene = scene;
 	}
 

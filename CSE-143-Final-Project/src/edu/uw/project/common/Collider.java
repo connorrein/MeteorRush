@@ -3,6 +3,12 @@ package edu.uw.project.common;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a 2D axis-aligned bounding box that can collide with others.
+ * Colliders should be disposed once they are no longer in use.
+ * 
+ * @author Connor Reinholdtsen
+ */
 public abstract class Collider {
 
 	private static List<Collider> colliders = new ArrayList<>();
@@ -71,33 +77,67 @@ public abstract class Collider {
 		return new Vector2(maxX, maxY);
 	}
 
-	public boolean collidesWith(Collider other) {
+	public boolean isContacting(Collider other) {
 		return this.minX <= other.maxX && this.maxX >= other.minX && this.minY <= other.maxY && this.maxY >= other.minY;
+	}
+
+	/**
+	 * Returns the Colliders that this collider is contacting.
+	 * 
+	 * @return the List of colliders that this collider is contacting
+	 */
+	public List<Collider> getContacts() {
+		return new ArrayList<>(contacts);
 	}
 
 	private void checkForCollision() {
 		for (Collider other : colliders) {
-			boolean collides = this.collidesWith(other);
+			boolean collides = this.isContacting(other);
 			if (contacts.contains(other)) {
 				if (!collides) {
-					onCollisionExit(other);
-					contacts.remove(other);
+					this.onCollisionExit(other);
+					other.onCollisionExit(this);
+					this.contacts.remove(other);
+					other.contacts.remove(this);
 				}
 			} else {
 				if (collides) {
-					onCollisionEnter(other);
-					contacts.add(other);
+					this.onCollisionEnter(other);
+					other.onCollisionEnter(this);
+					this.contacts.add(other);
+					other.contacts.add(this);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Disposes this Collider so that it can no longer collide with other Colliders.
+	 * This will also be treated as exiting a collision with all of this Collider's
+	 * contacts.
+	 */
 	public void dispose() {
+		for (Collider contact : contacts) {
+			onCollisionExit(contact);
+			contact.onCollisionExit(contact);
+			contact.contacts.remove(this);
+		}
+		contacts.clear();
 		colliders.remove(this);
 	}
 
+	/**
+	 * Invoked when this Collider enters a collision with another Collider
+	 * 
+	 * @param other the other Collider in the collision
+	 */
 	public abstract void onCollisionEnter(Collider other);
 
+	/**
+	 * Invoked when this Collider exits a collision with another Collider
+	 * 
+	 * @param other the other Collider in the collision
+	 */
 	public abstract void onCollisionExit(Collider other);
 
 }
