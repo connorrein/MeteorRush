@@ -1,4 +1,4 @@
-package edu.uw.project.common;
+package edu.uw.meteorRush.common;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -94,7 +94,7 @@ public class Game {
 	 * 
 	 * @return the current Scene open
 	 */
-	public Scene getScene() {
+	public Scene getOpenScene() {
 		return currentScene;
 	}
 

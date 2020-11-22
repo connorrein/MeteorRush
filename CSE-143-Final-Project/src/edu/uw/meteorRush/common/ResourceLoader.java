@@ -1,4 +1,4 @@
-package edu.uw.project.common;
+package edu.uw.meteorRush.common;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;

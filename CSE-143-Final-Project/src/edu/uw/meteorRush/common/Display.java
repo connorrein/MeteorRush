@@ -1,4 +1,4 @@
-package edu.uw.project.common;
+package edu.uw.meteorRush.common;
 
 import java.awt.Canvas;
 import java.awt.Dimension;

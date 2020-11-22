@@ -1,4 +1,4 @@
-package edu.uw.project.common;
+package edu.uw.meteorRush.common;
 
 /**
  * Represents a 2-dimensional vector with an x-component and a y-component.

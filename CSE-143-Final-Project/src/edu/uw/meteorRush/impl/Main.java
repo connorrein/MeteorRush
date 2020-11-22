@@ -1,6 +1,6 @@
-package edu.uw.project.impl;
+package edu.uw.meteorRush.impl;
 
-import edu.uw.project.common.Game;
+import edu.uw.meteorRush.common.Game;
 
 public class Main {
 
