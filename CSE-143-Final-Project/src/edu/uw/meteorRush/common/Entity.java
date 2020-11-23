@@ -11,7 +11,7 @@ public abstract class Entity {
 	}
 
 	public Vector2 getPosition() {
-		return collider.getCenter().clone();
+		return collider.getCenter();
 	}
 
 	public void setPosition(Vector2 position) {

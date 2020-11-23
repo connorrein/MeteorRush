@@ -123,17 +123,17 @@ public abstract class Collider {
 			boolean collides = this.isContacting(other);
 			if (contacts.contains(other)) {
 				if (!collides) {
-					this.onCollisionExit(other);
-					other.onCollisionExit(this);
 					this.contacts.remove(other);
 					other.contacts.remove(this);
+					this.onCollisionExit(other);
+					other.onCollisionExit(this);
 				}
 			} else {
 				if (collides) {
-					this.onCollisionEnter(other);
-					other.onCollisionEnter(this);
 					this.contacts.add(other);
 					other.contacts.add(this);
+					this.onCollisionEnter(other);
+					other.onCollisionEnter(this);
 				}
 			}
 		}

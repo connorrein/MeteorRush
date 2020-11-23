@@ -28,6 +28,8 @@ public abstract class Scene {
 		return new ArrayList<>(entities);
 	}
 
+	public abstract void initialize();
+
 	/**
 	 * Updates variables and performs non-graphical tasks.
 	 */
@@ -45,6 +47,12 @@ public abstract class Scene {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = entities.get(i);
 			entity.render(g);
+		}
+	}
+
+	void dispose() {
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).dispose();
 		}
 	}
 

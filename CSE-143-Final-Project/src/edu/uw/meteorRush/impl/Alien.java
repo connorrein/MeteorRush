@@ -8,17 +8,20 @@ import edu.uw.meteorRush.common.Vector2;
 
 public class Alien extends Entity {
 
+	private static final int WIDTH = 250;
+	private static final int HEIGHT = 250;
+
 	double rand;
 
 	public Alien(Vector2 position) {
-		super(position, new Vector2(250, 250));
+		super(position, new Vector2(WIDTH, HEIGHT));
 		rand = 6 * Math.random();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.ALIEN, (int) position.getX(), (int) position.getY(), null);
+		g.drawImage(Assets.ALIEN, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	@Override

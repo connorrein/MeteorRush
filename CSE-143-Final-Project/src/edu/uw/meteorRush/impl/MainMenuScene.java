@@ -12,13 +12,12 @@ public class MainMenuScene extends Scene {
 	private Clip backgroundMusic;
 
 	@Override
-	public void tick() {
+	public void initialize() {
 		if (!initialized) {
 			initialized = true;
 			backgroundMusic = ResourceLoader.loadAudioClip("res/MainMenuMusic.wav");
 			backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		}
-		super.tick();
 	}
 
 	@Override

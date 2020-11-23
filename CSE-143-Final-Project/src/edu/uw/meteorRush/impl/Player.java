@@ -1,6 +1,10 @@
 package edu.uw.meteorRush.impl;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
@@ -10,13 +14,34 @@ import edu.uw.meteorRush.common.Vector2;
 
 public class Player extends Entity {
 
+	private static final int PLAYER_WIDTH = 100;
+	private static final int PLAYER_HEIGHT = 100;
 	private static final double LASER_COOLDOWN = 0.22;
 	private static final double SPEED = 600;
+	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(PLAYER_WIDTH,
+			PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(PLAYER_WIDTH,
+			PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/PlayerLaser.png").getScaledInstance(50, 10,
+			0);
 
+	private Image sprite;
 	private double nextFireTime;
 
-	public Player() {
-		super(new Vector2(250, 250), new Vector2(50, 50));
+	public Player(Vector2 position) {
+		super(position, new Vector2(PLAYER_WIDTH, PLAYER_HEIGHT));
+		sprite = Assets.PLAYER_1;
+		TimerTask animationChange = new TimerTask() {
+			@Override
+			public void run() {
+				if (sprite == Assets.PLAYER_1) {
+					sprite = Assets.PLAYER_2;
+				} else {
+					sprite = Assets.PLAYER_1;
+				}
+			}
+		};
+		new Timer().schedule(animationChange, 0, 100);
 	}
 
 	@Override
@@ -27,7 +52,7 @@ public class Player extends Entity {
 		Vector2 position = getPosition();
 
 		position.add(move);
-		position.setX(clamp(position.getX(), 25, 400));
+		position.setX(clamp(position.getX(), 25, 1600));
 		position.setY(clamp(position.getY(), 25, 700));
 		setPosition(position);
 		if (input.spaceDown()) {
@@ -59,7 +84,8 @@ public class Player extends Entity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.PLAYER, (int) position.getX(), (int) position.getY(), null);
+		g.drawImage(sprite, (int) (position.getX() - PLAYER_WIDTH / 2.0), (int) (position.getY() - PLAYER_HEIGHT / 2.0),
+				null);
 	}
 
 	@Override
@@ -96,7 +122,7 @@ public class Player extends Entity {
 
 		@Override
 		public void onCollisionEnter(Entity other) {
-			if (!(other instanceof Player)) {
+			if (!(other instanceof Player || other instanceof Laser)) {
 				Scene scene = Game.getInstance().getOpenScene();
 				scene.removeEntity(other);
 				scene.removeEntity(this);

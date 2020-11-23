@@ -21,6 +21,7 @@ public class Game {
 	private InputManager inputManager;
 	private Scene currentScene;
 	private long deltaTimeMilis;
+	private boolean sceneInitialized;
 
 	/**
 	 * Creates a new game with the given title, window width, and window height.
@@ -70,6 +71,10 @@ public class Game {
 					deltaTimeMilis = currentTimeMilis - lastTimeMilis;
 					lastTimeMilis = currentTimeMilis;
 					if (currentScene != null) {
+						if (!sceneInitialized) {
+							currentScene.initialize();
+							sceneInitialized = true;
+						}
 						tick();
 						render();
 					}
@@ -104,6 +109,10 @@ public class Game {
 	 * @param scene the scene to be loaded.
 	 */
 	public void loadScene(Scene scene) {
+		if (currentScene != null) {
+			currentScene.dispose();
+		}
+		sceneInitialized = false;
 		this.currentScene = scene;
 	}
 
