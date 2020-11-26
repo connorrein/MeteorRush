@@ -2,6 +2,7 @@ package edu.uw.meteorRush.common;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Timer;
 
 /**
  * Controls the game loop, display, and execution of scene behavior.
@@ -20,6 +21,7 @@ public class Game {
 	private Display display;
 	private InputManager inputManager;
 	private Scene currentScene;
+	private Timer timer;
 	private long deltaTimeMilis;
 	private boolean sceneInitialized;
 
@@ -37,6 +39,7 @@ public class Game {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+		timer = new Timer();
 		instance = this;
 	}
 
@@ -114,6 +117,10 @@ public class Game {
 		}
 		sceneInitialized = false;
 		this.currentScene = scene;
+	}
+
+	public Timer getTimer() {
+		return timer;
 	}
 
 	/**

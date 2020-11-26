@@ -12,7 +12,7 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 
-public class Player extends Entity {
+public class PlayerShip extends Entity {
 
 	private static final int PLAYER_WIDTH = 100;
 	private static final int PLAYER_HEIGHT = 100;
@@ -28,7 +28,7 @@ public class Player extends Entity {
 	private Image sprite;
 	private double nextFireTime;
 
-	public Player(Vector2 position) {
+	public PlayerShip(Vector2 position) {
 		super(position, new Vector2(PLAYER_WIDTH, PLAYER_HEIGHT));
 		sprite = Assets.PLAYER_1;
 		TimerTask animationChange = new TimerTask() {
@@ -100,6 +100,7 @@ public class Player extends Entity {
 
 	private static class Laser extends Entity {
 
+		private static final double DAMAGE_AMOUNT = 1;
 		private static final double SPEED = 1500;
 		private static final Vector2 SIZE = new Vector2(50, 50);
 
@@ -122,10 +123,9 @@ public class Player extends Entity {
 
 		@Override
 		public void onCollisionEnter(Entity other) {
-			if (!(other instanceof Player || other instanceof Laser)) {
-				Scene scene = Game.getInstance().getOpenScene();
-				scene.removeEntity(other);
-				scene.removeEntity(this);
+			if (other instanceof DamagableEntity) {
+				((DamagableEntity) other).damage(DAMAGE_AMOUNT);
+				Game.getInstance().getOpenScene().removeEntity(this);
 			}
 		}
 

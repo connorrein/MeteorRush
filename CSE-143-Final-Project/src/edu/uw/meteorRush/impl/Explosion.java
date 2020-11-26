@@ -1,37 +1,48 @@
 package edu.uw.meteorRush.impl;
 
 import java.awt.Graphics;
-import java.awt.Image;
+import java.util.TimerTask;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 
-public class GameBackground extends Entity {
+public class Explosion extends Entity {
 
-	public static final Image BACKGROUND_IMAGE = ResourceLoader.loadImage("res/GameBackground.jpg");
+	private static final long LIFETIME = 1000;
 
-	public GameBackground(Vector2 position, Vector2 size) {
+	public Explosion(Vector2 position, Vector2 size) {
 		super(position, size);
+		Game.getInstance().getTimer().schedule(destroy(), LIFETIME);
+	}
+
+	private TimerTask destroy() {
+		return new TimerTask() {
+			@Override
+			public void run() {
+				Game.getInstance().getOpenScene().removeEntity(Explosion.this);
+			}
+		};
 	}
 
 	@Override
 	public void tick() {
+
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(BACKGROUND_IMAGE, 0, 0, null);
+
 	}
 
 	@Override
 	public void onCollisionEnter(Entity other) {
+
 	}
 
 	@Override
 	public void onCollisionExit(Entity other) {
-		//Game.getInstance().getOpenScene().removeEntity(other);
+
 	}
 
 }
