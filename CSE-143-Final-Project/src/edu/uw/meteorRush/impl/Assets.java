@@ -12,5 +12,5 @@ public class Assets {
 			0);
 	public static final Image ALIEN = ResourceLoader.loadImage("res/Alien.png").getScaledInstance(150, 150, 0);
 	public static final Image GAME_BACKGROUND = ResourceLoader.loadImage("res/GameBackground.jpg");
-
+	public static final Image EXPLOSION = ResourceLoader.loadImage("res/Explosion.png");
 }

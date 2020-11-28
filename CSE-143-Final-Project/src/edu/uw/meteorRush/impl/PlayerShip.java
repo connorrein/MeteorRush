@@ -9,10 +9,9 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 
-public class PlayerShip extends Entity {
+public class PlayerShip extends Entity implements DamagableEntity {
 
 	private static final int PLAYER_WIDTH = 100;
 	private static final int PLAYER_HEIGHT = 100;
@@ -90,7 +89,7 @@ public class PlayerShip extends Entity {
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-
+		
 	}
 
 	@Override
@@ -98,21 +97,14 @@ public class PlayerShip extends Entity {
 
 	}
 
-	private static class Laser extends Entity {
+	private static class Laser extends Projectile {
 
 		private static final double DAMAGE_AMOUNT = 1;
 		private static final double SPEED = 1500;
 		private static final Vector2 SIZE = new Vector2(50, 50);
 
 		Laser(Vector2 position) {
-			super(position, SIZE);
-		}
-
-		@Override
-		public void tick() {
-			Vector2 position = getPosition();
-			position.add(SPEED * Game.getInstance().getDeltaTime(), 0.0);
-			setPosition(position);
+			super(position, SIZE, new Vector2(SPEED, 0));
 		}
 
 		@Override
@@ -123,8 +115,10 @@ public class PlayerShip extends Entity {
 
 		@Override
 		public void onCollisionEnter(Entity other) {
-			if (other instanceof DamagableEntity) {
+			if (!(other instanceof PlayerShip) && other instanceof DamagableEntity) {
 				((DamagableEntity) other).damage(DAMAGE_AMOUNT);
+				Game.getInstance().getOpenScene().removeEntity(this);
+			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeEntity(this);
 			}
 		}
@@ -134,6 +128,12 @@ public class PlayerShip extends Entity {
 
 		}
 
+	}
+
+	@Override
+	public void damage(double amount) {
+		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
+		Game.getInstance().getOpenScene().addEntity(explosion);
 	}
 
 }

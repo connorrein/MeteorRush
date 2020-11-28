@@ -50,14 +50,14 @@ public class AlienShip extends Entity implements DamagableEntity {
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-		// TODO Auto-generated method stub
-
+		if (other instanceof PlayerShip) {
+			((PlayerShip) other).damage(2);
+			destroy();
+		}
 	}
 
 	@Override
 	public void onCollisionExit(Entity other) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -65,6 +65,9 @@ public class AlienShip extends Entity implements DamagableEntity {
 		health -= amount;
 		if (health <= 0) {
 			destroy();
+		} else {
+			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
+			Game.getInstance().getOpenScene().addEntity(explosion);
 		}
 	}
 
@@ -72,12 +75,15 @@ public class AlienShip extends Entity implements DamagableEntity {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeEntity(this);
 		scene.addScore(SCORE_VALUE);
+		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
+		Game.getInstance().getOpenScene().addEntity(explosion);
 	}
 
 	private static class AlienLaser extends Projectile {
 
 		private static final Vector2 SIZE = new Vector2(50, 50);
 		private static final Vector2 VELOCITY = new Vector2(-1000, 0);
+		private static final double DAMAGE_AMOUNT = 1;
 
 		public AlienLaser(Vector2 position) {
 			super(position, SIZE, VELOCITY);
@@ -92,7 +98,8 @@ public class AlienShip extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				System.out.println("HIT");
+				((PlayerShip) other).damage(DAMAGE_AMOUNT);
+				Game.getInstance().getOpenScene().removeEntity(this);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeEntity(this);
 			}
