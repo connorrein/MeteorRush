@@ -1,9 +1,13 @@
 package edu.uw.meteorRush.common;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
+import edu.uw.meteorRush.menus.GraphicsMenu;
+import edu.uw.meteorRush.menus.GraphicsMenuItem;
+import edu.uw.meteorRush.menus.GraphicsMenuListener;
+
+import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -22,6 +26,7 @@ public class Display {
 	private static final int NUM_BUFFERS = 3;
 
 	private JFrame window;
+	private JFrame menu;
 	private Canvas canvas;
 
 	/**
@@ -41,6 +46,15 @@ public class Display {
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
 
+		menu = new JFrame("Start Menu");
+		menu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		menu.setSize(dimension);
+		menu.setResizable(false);
+		menu.setLocationRelativeTo(null);
+		menu.setVisible(true);
+
+		initializeMenu(menu);
+
 		canvas = new Canvas();
 		canvas.setPreferredSize(dimension);
 		canvas.setMinimumSize(dimension);
@@ -53,6 +67,30 @@ public class Display {
 
 		canvas.createBufferStrategy(NUM_BUFFERS);
 		window.setVisible(true);
+	}
+
+	private void initializeMenu(JFrame frame) {
+		frame.setSize(900, 500);
+		ArrayList<GraphicsMenuItem> menuItems = new ArrayList<GraphicsMenuItem>();
+		GraphicsMenuItem item = new GraphicsMenuItem("Play", 280, 210, 30, 120);
+		menuItems.add(item);
+
+		item = new GraphicsMenuItem("Main Menu", 400, 175, 30, 200);
+		menuItems.add(item);
+
+		GraphicsMenu menu = new GraphicsMenu(menuItems);
+		menu.configure();
+		frame.add(menu);
+
+		menu.setMenuListener(new GraphicsMenuListener() {
+			@Override
+			public void menuSelected(String text) {
+				System.out.println("Menu selected: " + text);
+			}
+		});
+
+
+
 	}
 
 	/**

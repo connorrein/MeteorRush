@@ -1,1 +1,5 @@
-/bin/
+/bin
+
+#ide files
+.idea
+*.iml
