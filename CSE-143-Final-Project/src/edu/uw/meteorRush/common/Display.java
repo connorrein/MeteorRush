@@ -46,7 +46,7 @@ public class Display {
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
 
-		menu = new JFrame("Start Menu");
+		menu = new JFrame("Pause Menu");
 		menu.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		menu.setSize(dimension);
 		menu.setResizable(false);
@@ -75,7 +75,7 @@ public class Display {
 		GraphicsMenuItem item = new GraphicsMenuItem("Play", 280, 210, 30, 120);
 		menuItems.add(item);
 
-		item = new GraphicsMenuItem("Main Menu", 400, 175, 30, 200);
+		item = new GraphicsMenuItem("Settings Menu", 400, 175, 30, 200);
 		menuItems.add(item);
 
 		GraphicsMenu menu = new GraphicsMenu(menuItems);
@@ -85,7 +85,7 @@ public class Display {
 		menu.setMenuListener(new GraphicsMenuListener() {
 			@Override
 			public void menuSelected(String text) {
-				System.out.println("Menu selected: " + text);
+				System.out.println(text);
 			}
 		});
 
