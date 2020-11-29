@@ -72,7 +72,7 @@ public class Display {
 	private void initializeMenu(JFrame frame) {
 		frame.setSize(900, 500);
 		ArrayList<GraphicsMenuItem> menuItems = new ArrayList<GraphicsMenuItem>();
-		GraphicsMenuItem item = new GraphicsMenuItem("Play", 280, 210, 30, 120);
+		GraphicsMenuItem item = new GraphicsMenuItem("Play ", 280, 210, 30, 120);
 		menuItems.add(item);
 
 		item = new GraphicsMenuItem("Settings Menu", 400, 175, 30, 200);
