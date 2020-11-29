@@ -6,6 +6,9 @@ import edu.uw.meteorRush.menus.MenuDisplay;
 
 public class Main {
 
+	public static final int WIDTH = 1800;
+	public static final int HEIGHT = 800;
+
 	public static void main(String[] args) {
 		//creates a main menu which closes after pressing the Play button
 		// the play button starts the game
@@ -15,7 +18,7 @@ public class Main {
 					@Override
 					public void menuSelected(String option) {
 						if(option.equals("Play")) {
-							Game game = new Game("Title", 1800, 800);
+							Game game = new Game("Meteor Rush", WIDTH, HEIGHT);
 							game.start();
 							game.loadScene(new GameScene());
 							menuDisplay.close();

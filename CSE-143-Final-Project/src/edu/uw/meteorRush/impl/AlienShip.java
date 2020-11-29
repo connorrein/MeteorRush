@@ -100,6 +100,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 			if (other instanceof PlayerShip) {
 				((PlayerShip) other).damage(DAMAGE_AMOUNT);
 				Game.getInstance().getOpenScene().removeEntity(this);
+				Game.getInstance().setTimeScale(Game.getInstance().getTimeScale() - 0.1);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeEntity(this);
 			}

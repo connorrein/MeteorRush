@@ -62,8 +62,33 @@ public class Vector2 {
 		return Math.sqrt(x * x + y * y);
 	}
 
+	public double dotProduct(Vector2 other) {
+		return this.x * other.x + this.y * other.y;
+	}
+
+	public double angleBetween(Vector2 other) {
+		return Math.acos(this.dotProduct(other) / (this.magnitude() * other.magnitude()));
+	}
+
+	public Vector2 rotate(double radians) {
+		double sin = Math.sin(radians);
+		double cos = Math.cos(radians);
+		// must create temps because values of old x and y are used to calculate new
+		// values of x and y
+		double newX = x * cos - y * sin;
+		double newY = x * sin + y * cos;
+		x = newX;
+		y = newY;
+		return this;
+	}
+
 	public Vector2 clone() {
 		return new Vector2(x, y);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%f, %f]", x, y);
 	}
 
 }

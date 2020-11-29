@@ -7,7 +7,7 @@ import javax.swing.JFrame;
  *
  * @author marko.p.milovanovic
  */
-public class Display {
+class Display {
 
     protected JFrame window;
 

@@ -25,18 +25,21 @@ public class PlayerShip extends Entity implements DamagableEntity {
 			0);
 
 	private Image sprite;
+	private Image sprite1;
+	private Image sprite2;
 	private double nextFireTime;
 
 	public PlayerShip(Vector2 position) {
 		super(position, new Vector2(PLAYER_WIDTH, PLAYER_HEIGHT));
-		sprite = Assets.PLAYER_1;
+		sprite1 = Assets.PLAYER_1;
+		sprite2 = Assets.PLAYER_2;
 		TimerTask animationChange = new TimerTask() {
 			@Override
 			public void run() {
-				if (sprite == Assets.PLAYER_1) {
-					sprite = Assets.PLAYER_2;
+				if (sprite == sprite1) {
+					sprite = sprite2;
 				} else {
-					sprite = Assets.PLAYER_1;
+					sprite = sprite1;
 				}
 			}
 		};
@@ -46,8 +49,29 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	@Override
 	public void tick() {
 		InputManager input = Game.getInstance().getInputManager();
-		Vector2 move = new Vector2(input.getHorizontalAxis(), input.getVerticalAxis())
-				.multiply(Game.getInstance().getDeltaTime() * -SPEED);
+		double horizontal = input.getHorizontalAxis();
+		double vertical = input.getVerticalAxis();
+		Vector2 move = new Vector2(horizontal, -vertical).multiply(Game.getInstance().getDeltaTime() * SPEED);
+
+		if (vertical < 0) {
+			sprite1 = Assets.PLAYER_DOWN_1;
+			sprite2 = Assets.PLAYER_DOWN_2;
+		} else if (vertical > 0) {
+			sprite1 = Assets.PLAYER_UP_1;
+			sprite2 = Assets.PLAYER_UP_2;
+		} else {
+			if (horizontal < 0) {
+				sprite1 = Assets.PLAYER_BACKARD_1;
+				sprite2 = Assets.PLAYER_BACKARD_2;
+			} else if (horizontal > 0) {
+				sprite1 = Assets.PLAYER_FORWARD_1;
+				sprite2 = Assets.PLAYER_FORWARD_2;
+			} else {
+				sprite1 = Assets.PLAYER_1;
+				sprite2 = Assets.PLAYER_2;
+			}
+		}
+
 		Vector2 position = getPosition();
 
 		position.add(move);
@@ -89,7 +113,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-		
+
 	}
 
 	@Override

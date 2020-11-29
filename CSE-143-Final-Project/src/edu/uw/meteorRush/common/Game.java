@@ -2,7 +2,6 @@ package edu.uw.meteorRush.common;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.util.Timer;
 
 /**
  * Controls the game loop, display, and execution of scene behavior.
@@ -10,6 +9,8 @@ import java.util.Timer;
  * @author Connor Reinholdtsen
  */
 public class Game {
+
+	private static final long MILIS_PER_FRAME = 5;
 
 	private static Game instance;
 
@@ -21,8 +22,10 @@ public class Game {
 	private GameDisplay gameDisplay;
 	private InputManager inputManager;
 	private Scene currentScene;
-	private Timer timer;
-	private long deltaTimeMilis;
+
+	private double timeScale;
+	private double deltaTimeSeconds;
+	private double elapsedTimeSeconds;
 	private boolean sceneInitialized;
 
 	/**
@@ -39,7 +42,7 @@ public class Game {
 		this.title = title;
 		this.width = width;
 		this.height = height;
-		timer = new Timer();
+		this.timeScale = 1.0;
 		instance = this;
 	}
 
@@ -62,7 +65,6 @@ public class Game {
 			throw new IllegalStateException("Game already started!");
 		}
 		running = true;
-		startTimeMilis = System.currentTimeMillis();
 		inputManager = new InputManager();
 		gameDisplay = new GameDisplay(title, width, height, inputManager.getKeyListener());
 		new Thread() {
@@ -71,8 +73,13 @@ public class Game {
 				long lastTimeMilis = System.currentTimeMillis();
 				while (running) {
 					long currentTimeMilis = System.currentTimeMillis();
-					deltaTimeMilis = currentTimeMilis - lastTimeMilis;
+					long deltaTimeMilis = currentTimeMilis - lastTimeMilis;
+					if (deltaTimeMilis < MILIS_PER_FRAME) {
+						continue;
+					}
 					lastTimeMilis = currentTimeMilis;
+					deltaTimeSeconds = deltaTimeMilis * 0.001 * timeScale;
+					elapsedTimeSeconds += deltaTimeSeconds;
 					if (currentScene != null) {
 						if (!sceneInitialized) {
 							currentScene.initialize();
@@ -119,10 +126,6 @@ public class Game {
 		this.currentScene = scene;
 	}
 
-	public Timer getTimer() {
-		return timer;
-	}
-
 	/**
 	 * Updates variables and performs non-graphical tasks.
 	 */
@@ -142,13 +145,21 @@ public class Game {
 		bufferStrategy.show();
 	}
 
+	public double getTimeScale() {
+		return timeScale;
+	}
+
+	public void setTimeScale(double timeScale) {
+		this.timeScale = timeScale;
+	}
+
 	/**
 	 * Returns how much time has passed since the start of the game.
 	 * 
 	 * @return the time in seconds.
 	 */
 	public double getTime() {
-		return (System.currentTimeMillis() - startTimeMilis) / 1000.0;
+		return elapsedTimeSeconds;
 	}
 
 	/**
@@ -157,7 +168,7 @@ public class Game {
 	 * @return the delta time in seconds.
 	 */
 	public double getDeltaTime() {
-		return deltaTimeMilis / 1000.0;
+		return deltaTimeSeconds;
 	}
 
 }
