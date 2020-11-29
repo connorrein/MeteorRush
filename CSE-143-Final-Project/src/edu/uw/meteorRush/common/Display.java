@@ -75,6 +75,7 @@ public class Display {
 		GraphicsMenuItem item = new GraphicsMenuItem("Play ", 280, 210, 30, 120);
 		menuItems.add(item);
 
+
 		item = new GraphicsMenuItem("Settings Menu", 400, 175, 30, 200);
 		menuItems.add(item);
 
