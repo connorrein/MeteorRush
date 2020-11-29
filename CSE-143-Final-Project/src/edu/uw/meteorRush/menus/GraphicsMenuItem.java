@@ -1,5 +1,9 @@
 package edu.uw.meteorRush.menus;
 
+/**
+ * Configuration for a single graphic menu item
+ * @author marko.p.milovanovic
+ */
 public class GraphicsMenuItem {
 
     private final String MENU_ITEM;
@@ -8,6 +12,14 @@ public class GraphicsMenuItem {
     private final int FIXED_LENGTH;
     private final int FIXED_WIDTH;
 
+    /**
+     *
+     * @param menuItem : the name of the menu item
+     * @param topLeftX: the location of the top left corner in the x axis
+     * @param topLeftY: the location of the top left corner in the y axis
+     * @param fixedLength: the length
+     * @param fixedWidth: the width
+     */
     public GraphicsMenuItem(String menuItem, int topLeftX, int topLeftY, int fixedLength, int fixedWidth) {
         MENU_ITEM = menuItem;
         TOP_LEFT_X = topLeftX;

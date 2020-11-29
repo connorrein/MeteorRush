@@ -18,7 +18,7 @@ public class Game {
 	private int height;
 	private boolean running;
 	private long startTimeMilis;
-	private Display display;
+	private GameDisplay gameDisplay;
 	private InputManager inputManager;
 	private Scene currentScene;
 	private Timer timer;
@@ -64,7 +64,7 @@ public class Game {
 		running = true;
 		startTimeMilis = System.currentTimeMillis();
 		inputManager = new InputManager();
-		display = new Display(title, width, height, inputManager.getKeyListener());
+		gameDisplay = new GameDisplay(title, width, height, inputManager.getKeyListener());
 		new Thread() {
 			@Override
 			public void run() {
@@ -94,7 +94,7 @@ public class Game {
 			throw new IllegalStateException("Game already stopped!");
 		}
 		running = false;
-		display.close();
+		gameDisplay.close();
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class Game {
 	 * Performs graphical tasks.
 	 */
 	private void render() {
-		BufferStrategy bufferStrategy = display.getBufferStrategy();
+		BufferStrategy bufferStrategy = gameDisplay.getBufferStrategy();
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		graphics.clearRect(0, 0, width, height);
 		currentScene.render(graphics);
