@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  * 
  * @author Connor Reinholdtsen
  */
-public class Display {
+class Display {
 
 	/**
 	 * How many times we want to buffer images before rendering them to the actual

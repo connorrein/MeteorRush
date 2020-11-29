@@ -15,16 +15,19 @@ public abstract class Scene {
 		entities = new ArrayList<>();
 	}
 
-	public void addEntity(Entity entity) {
+	public final void addEntity(Entity entity) {
 		entities.add(entity);
+		if (entity == null) {
+			System.out.println("NULLLLLLL");
+		}
 	}
 
-	public void removeEntity(Entity entity) {
+	public final void removeEntity(Entity entity) {
 		entities.remove(entity);
 		entity.dispose();
 	}
 
-	public List<Entity> getEntities() {
+	public final List<Entity> getEntities() {
 		return new ArrayList<>(entities);
 	}
 
@@ -50,7 +53,7 @@ public abstract class Scene {
 		}
 	}
 
-	void dispose() {
+	public void dispose() {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).dispose();
 		}

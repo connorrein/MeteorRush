@@ -30,29 +30,37 @@ public class InputManager {
 	}
 
 	public double getHorizontalAxis() {
-		double horizontal = 0;
-		if (keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT]) {
-			horizontal++;
-		}
-		if (keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT]) {
+		double horizontal = 0.0;
+		if (keyDown(KeyEvent.VK_A) || keyDown(KeyEvent.VK_LEFT)) {
 			horizontal--;
+		}
+		if (keyDown(KeyEvent.VK_D) || keyDown(KeyEvent.VK_RIGHT)) {
+			horizontal++;
 		}
 		return horizontal;
 	}
 
 	public double getVerticalAxis() {
-		double vertical = 0;
-		if (keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP]) {
-			vertical++;
-		}
-		if (keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN]) {
+		double vertical = 0.0;
+		if (keyDown(KeyEvent.VK_S) || keyDown(KeyEvent.VK_DOWN)) {
 			vertical--;
+		}
+		if (keyDown(KeyEvent.VK_W) || keyDown(KeyEvent.VK_UP)) {
+			vertical++;
 		}
 		return vertical;
 	}
-	
+
+	public boolean keyDown(int keyCode) {
+		return keys[keyCode];
+	}
+
 	public boolean spaceDown() {
-		return keys[KeyEvent.VK_SPACE];
+		return keyDown(KeyEvent.VK_SPACE);
+	}
+
+	public boolean escDown() {
+		return keyDown(KeyEvent.VK_ESCAPE);
 	}
 
 }

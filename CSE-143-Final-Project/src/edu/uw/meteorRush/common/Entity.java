@@ -26,7 +26,7 @@ public abstract class Entity {
 		collider.setDimensions(size);
 	}
 
-	void dispose() {
+	public void dispose() {
 		collider.dispose();
 	}
 
