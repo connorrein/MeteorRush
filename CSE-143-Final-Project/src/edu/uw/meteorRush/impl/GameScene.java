@@ -19,6 +19,7 @@ import edu.uw.meteorRush.common.Vector2;
 
 public class GameScene extends Scene {
 
+	private static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
 	private static final Vector2 PLAYER_START = new Vector2(250, 350);
 
@@ -48,14 +49,6 @@ public class GameScene extends Scene {
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		player = new PlayerShip(PLAYER_START);
 		addEntity(player);
-		Timer timer = new Timer();
-		TimerTask spawnTask = new TimerTask() {
-			@Override
-			public void run() {
-				addEntity(new AlienShip(new Vector2(1920, 250)));
-			}
-		};
-		timer.scheduleAtFixedRate(spawnTask, 0, 1000);
 	}
 
 	@Override
