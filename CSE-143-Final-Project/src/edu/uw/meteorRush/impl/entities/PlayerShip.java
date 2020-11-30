@@ -20,12 +20,6 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	private static final int PLAYER_HEIGHT = 100;
 	private static final double LASER_COOLDOWN = 0.22;
 	private static final double SPEED = 600;
-	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(PLAYER_WIDTH,
-			PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(PLAYER_WIDTH,
-			PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/PlayerLaser.png").getScaledInstance(50, 10,
-			0);
 
 	private Image sprite;
 	private Image sprite1;
@@ -78,10 +72,10 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 position = getPosition();
 
 		position.add(move);
-		position.setX(clamp(position.getX(), 60, Main.WIDTH - 150));
+		position.setX(clamp(position.getX(), 40, Main.WIDTH - 150));
 		position.setY(clamp(position.getY(), 60, Main.HEIGHT - 60));
 		setPosition(position);
-		if (input.keyDown(KeyEvent.VK_SPACE)) {
+		if (input.getKey(KeyEvent.VK_SPACE)) {
 			double time = Game.getInstance().getTime();
 			if (time > nextFireTime) {
 				nextFireTime = time + LASER_COOLDOWN;
@@ -116,12 +110,10 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-
 	}
 
 	@Override
 	public void onCollisionExit(Entity other) {
-
 	}
 
 	private static class Laser extends Projectile {

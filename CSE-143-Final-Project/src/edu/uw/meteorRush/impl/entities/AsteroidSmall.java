@@ -10,7 +10,7 @@ import edu.uw.meteorRush.impl.Assets;
 public class AsteroidSmall extends Entity implements DamagableEntity {
 
 	private static final double DAMAGE_AMOUNT = 1.0;
-	private static final double MAX_HEALTH = 2;
+	private static final double MAX_HEALTH = 3;
 	public static final double SPEED = 600;
 	private static final Vector2 SIZE = new Vector2(100, 100);
 
@@ -33,7 +33,7 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.ALIEN, (int) position.getX(), (int) position.getY(), null);
+		g.drawImage(Assets.ASTEROID_SMALL, (int) position.getX(), (int) position.getY(), null);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	@Override
 	public void damage(double amount) {
 		currentHealth -= amount;
-		if (currentHealth < 0) {
+		if (currentHealth <= 0) {
 			destroy();
 		}
 	}

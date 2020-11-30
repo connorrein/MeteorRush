@@ -29,4 +29,8 @@ public class Assets {
 	public static final Image ALIEN = ResourceLoader.loadImage("res/Alien.png").getScaledInstance(150, 150, 0);
 	public static final Image GAME_BACKGROUND = ResourceLoader.loadImage("res/GameBackground.jpg");
 	public static final Image EXPLOSION = ResourceLoader.loadImage("res/Explosion.png");
+	public static final Image ASTEROID_LARGE = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(200, 200,
+			0);
+	public static final Image ASTEROID_SMALL = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(100, 100,
+			0);
 }

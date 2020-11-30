@@ -87,6 +87,7 @@ public class Game {
 						tick();
 						render();
 					}
+					inputManager.tick();
 				}
 				if (currentScene != null) {
 					currentScene.dispose();

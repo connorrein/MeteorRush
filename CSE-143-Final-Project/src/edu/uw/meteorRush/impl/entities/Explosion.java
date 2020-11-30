@@ -35,12 +35,10 @@ public class Explosion extends Entity {
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-
 	}
 
 	@Override
 	public void onCollisionExit(Entity other) {
-
 	}
 
 }

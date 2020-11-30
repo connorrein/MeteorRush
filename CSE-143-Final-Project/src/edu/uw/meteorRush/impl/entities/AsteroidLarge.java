@@ -11,7 +11,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 
 	private static final double DAMAGE_AMOUNT = 3.0;
 	private static final double MAX_HEALTH = 5;
-	private static final double SPEED = 300;
+	private static final double SPEED = 200;
 	private static final Vector2 SIZE = new Vector2(100, 100);
 
 	private Vector2 velocity;
@@ -33,7 +33,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.PLAYER_1, (int) position.getX(), (int) position.getY(), null);
+		g.drawImage(Assets.ASTEROID_LARGE, (int) position.getX(), (int) position.getY(), null);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	@Override
 	public void damage(double amount) {
 		currentHealth -= amount;
-		if (currentHealth < 0) {
+		if (currentHealth <= 0) {
 			destroy();
 		}
 	}
@@ -59,6 +59,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	private void destroy() {
 		Game.getInstance().getOpenScene().removeObject(this);
 		Vector2 position = getPosition();
+		Game.getInstance().getOpenScene().addObject(new AsteroidSmall(position, velocity));
 		velocity.rotate(-Math.toRadians(30));
 		Game.getInstance().getOpenScene().addObject(new AsteroidSmall(position, velocity));
 		velocity.rotate(Math.toRadians(60));

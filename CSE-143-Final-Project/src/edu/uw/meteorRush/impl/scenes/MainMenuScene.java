@@ -32,13 +32,13 @@ public class MainMenuScene extends Scene {
 	public void tick() {
 		InputManager inputManager = Game.getInstance().getInputManager();
 		// use InputManager to process user input
-		if (inputManager.keyDown(KeyEvent.VK_DOWN)) {
+		if (inputManager.getKey(KeyEvent.VK_DOWN)) {
 			// down option
 		}
-		if (inputManager.keyDown(KeyEvent.VK_UP)) {
+		if (inputManager.getKey(KeyEvent.VK_UP)) {
 			// up option
 		}
-		if (inputManager.keyDown(KeyEvent.VK_ENTER)) {
+		if (inputManager.getKey(KeyEvent.VK_ENTER)) {
 			// select option
 			Game.getInstance().loadScene(new GameScene());
 		}
