@@ -11,25 +11,49 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.Assets;
 import edu.uw.meteorRush.impl.Main;
 
 public class PlayerShip extends Entity implements DamagableEntity {
 
-	private static final int PLAYER_WIDTH = 100;
+	private static final int PLAYER_WIDTH = 185;
 	private static final int PLAYER_HEIGHT = 100;
 	private static final double LASER_COOLDOWN = 0.22;
 	private static final double SPEED = 600;
+	private static final double MAX_HEALTH = 10;
+	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(PLAYER_WIDTH,
+			PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(PLAYER_WIDTH,
+			PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_BACKARD_1 = ResourceLoader.loadImage("res/PlayerBackward1.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_BACKARD_2 = ResourceLoader.loadImage("res/PlayerBackward2.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_DOWN_1 = ResourceLoader.loadImage("res/PlayerDown1.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_DOWN_2 = ResourceLoader.loadImage("res/PlayerDown2.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_FORWARD_1 = ResourceLoader.loadImage("res/PlayerForward1.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_FORWARD_2 = ResourceLoader.loadImage("res/PlayerForward2.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_UP_1 = ResourceLoader.loadImage("res/PlayerUp1.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_UP_2 = ResourceLoader.loadImage("res/PlayerUp2.png")
+			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/PlayerLaser.png").getScaledInstance(50, 10,
+			0);
 
 	private Image sprite;
 	private Image sprite1;
 	private Image sprite2;
+	private double currentHealth;
 	private double nextFireTime;
 
 	public PlayerShip(Vector2 position) {
 		super(position, new Vector2(PLAYER_WIDTH, PLAYER_HEIGHT));
-		sprite1 = Assets.PLAYER_1;
-		sprite2 = Assets.PLAYER_2;
+		sprite1 = PLAYER_1;
+		sprite2 = PLAYER_2;
+		currentHealth = MAX_HEALTH;
 		TimerTask animationChange = new TimerTask() {
 			@Override
 			public void run() {
@@ -51,21 +75,21 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 move = new Vector2(horizontal, -vertical).multiply(Game.getInstance().getDeltaTime() * SPEED);
 
 		if (vertical < 0) {
-			sprite1 = Assets.PLAYER_DOWN_1;
-			sprite2 = Assets.PLAYER_DOWN_2;
+			sprite1 = PLAYER_DOWN_1;
+			sprite2 = PLAYER_DOWN_2;
 		} else if (vertical > 0) {
-			sprite1 = Assets.PLAYER_UP_1;
-			sprite2 = Assets.PLAYER_UP_2;
+			sprite1 = PLAYER_UP_1;
+			sprite2 = PLAYER_UP_2;
 		} else {
 			if (horizontal < 0) {
-				sprite1 = Assets.PLAYER_BACKARD_1;
-				sprite2 = Assets.PLAYER_BACKARD_2;
+				sprite1 = PLAYER_BACKARD_1;
+				sprite2 = PLAYER_BACKARD_2;
 			} else if (horizontal > 0) {
-				sprite1 = Assets.PLAYER_FORWARD_1;
-				sprite2 = Assets.PLAYER_FORWARD_2;
+				sprite1 = PLAYER_FORWARD_1;
+				sprite2 = PLAYER_FORWARD_2;
 			} else {
-				sprite1 = Assets.PLAYER_1;
-				sprite2 = Assets.PLAYER_2;
+				sprite1 = PLAYER_1;
+				sprite2 = PLAYER_2;
 			}
 		}
 
@@ -96,7 +120,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	private void fireLaser() {
 		Vector2 position = getPosition();
-		Laser laser = new Laser(position);
+		Laser laser = new Laser(position.add(PLAYER_WIDTH / 2.0, 0.0));
 		Game.getInstance().getOpenScene().addObject(laser);
 		ResourceLoader.loadAudioClip("res/laser.wav").start();
 	}
@@ -133,7 +157,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		@Override
 		public void render(Graphics g) {
 			Vector2 position = getPosition();
-			g.drawImage(Assets.PLAYER_LASER, (int) position.getX(), (int) position.getY(), null);
+			g.drawImage(PLAYER_LASER, (int) position.getX(), (int) position.getY(), null);
 		}
 
 		@Override
@@ -151,6 +175,14 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 		}
 
+	}
+
+	public double getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public double getMaxHealth() {
+		return MAX_HEALTH;
 	}
 
 	@Override

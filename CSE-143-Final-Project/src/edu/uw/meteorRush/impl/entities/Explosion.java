@@ -4,10 +4,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.Assets;
 
 public class Explosion extends Entity {
+
+	private static final Image EXPLOSION = ResourceLoader.loadImage("res/Explosion.png");
 
 	private double endTime;
 	private Image sprite;
@@ -15,7 +17,7 @@ public class Explosion extends Entity {
 	public Explosion(Vector2 position, Vector2 size, double lifetime) {
 		super(position, size);
 		endTime = Game.getInstance().getTime() + lifetime;
-		sprite = Assets.EXPLOSION.getScaledInstance((int) size.getX(), (int) size.getY(), 0);
+		sprite = EXPLOSION.getScaledInstance((int) size.getX(), (int) size.getY(), 0);
 	}
 
 	@Override
