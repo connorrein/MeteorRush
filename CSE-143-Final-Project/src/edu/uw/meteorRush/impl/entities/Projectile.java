@@ -1,4 +1,4 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.entities;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;

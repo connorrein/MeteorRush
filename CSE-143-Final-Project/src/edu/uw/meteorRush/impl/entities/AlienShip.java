@@ -1,10 +1,12 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.entities;
 
 import java.awt.Graphics;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Assets;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AlienShip extends Entity implements DamagableEntity {
 
@@ -45,7 +47,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 
 	private void fireLaser() {
 		AlienLaser laser = new AlienLaser(getPosition());
-		Game.getInstance().getOpenScene().addEntity(laser);
+		Game.getInstance().getOpenScene().addObject(laser);
 	}
 
 	@Override
@@ -67,26 +69,29 @@ public class AlienShip extends Entity implements DamagableEntity {
 			destroy();
 		} else {
 			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
-			Game.getInstance().getOpenScene().addEntity(explosion);
+			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
 	private void destroy() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		scene.removeEntity(this);
+		scene.removeObject(this);
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
-		Game.getInstance().getOpenScene().addEntity(explosion);
+		Game.getInstance().getOpenScene().addObject(explosion);
 	}
 
 	private static class AlienLaser extends Projectile {
-
 		private static final Vector2 SIZE = new Vector2(50, 50);
 		private static final Vector2 VELOCITY = new Vector2(-1000, 0);
 		private static final double DAMAGE_AMOUNT = 1;
 
 		public AlienLaser(Vector2 position) {
 			super(position, SIZE, VELOCITY);
+		}
+
+		@Override
+		public void initialize() {
 		}
 
 		@Override
@@ -99,17 +104,15 @@ public class AlienShip extends Entity implements DamagableEntity {
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
 				((PlayerShip) other).damage(DAMAGE_AMOUNT);
-				Game.getInstance().getOpenScene().removeEntity(this);
-				Game.getInstance().setTimeScale(Game.getInstance().getTimeScale() - 0.1);
+				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
-				Game.getInstance().getOpenScene().removeEntity(this);
+				Game.getInstance().getOpenScene().removeObject(this);
 			}
 		}
 
 		@Override
 		public void onCollisionExit(Entity other) {
 		}
-
 	}
 
 }

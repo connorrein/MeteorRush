@@ -1,6 +1,7 @@
 package edu.uw.meteorRush.impl;
 
 import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.impl.scenes.MainMenuScene;
 
 public class Main {
 
@@ -10,7 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		Game game = new Game("Meteor Rush", WIDTH, HEIGHT);
 		game.start();
-		game.loadScene(new GameScene());
+		game.loadScene(new MainMenuScene());
 	}
 
 }

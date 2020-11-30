@@ -32,7 +32,7 @@ class Display {
 	 * @param height      how many pixels tall the window is
 	 * @param keyListener
 	 */
-	public Display(String title, int width, int height, KeyListener keyListener) {
+	Display(String title, int width, int height, KeyListener keyListener) {
 		Dimension dimension = new Dimension(width, height);
 
 		window = new JFrame(title);
@@ -61,14 +61,14 @@ class Display {
 	 * 
 	 * @return the BufferStrategy of this Display's Canvas
 	 */
-	public BufferStrategy getBufferStrategy() {
+	BufferStrategy getBufferStrategy() {
 		return canvas.getBufferStrategy();
 	}
 
 	/**
 	 * Close the window.
 	 */
-	public void close() {
+	void close() {
 		window.dispose();
 	}
 

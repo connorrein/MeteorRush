@@ -1,10 +1,11 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.entities;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Assets;
 
 public class Explosion extends Entity {
 
@@ -20,7 +21,7 @@ public class Explosion extends Entity {
 	@Override
 	public void tick() {
 		if (Game.getInstance().getTime() > endTime) {
-			Game.getInstance().getOpenScene().removeEntity(this);
+			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
 

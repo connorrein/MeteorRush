@@ -1,4 +1,4 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.entities;
 
 public interface DamagableEntity {
 

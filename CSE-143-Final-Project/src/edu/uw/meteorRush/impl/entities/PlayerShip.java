@@ -1,7 +1,8 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.entities;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,6 +11,8 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Assets;
+import edu.uw.meteorRush.impl.Main;
 
 public class PlayerShip extends Entity implements DamagableEntity {
 
@@ -75,10 +78,10 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 position = getPosition();
 
 		position.add(move);
-		position.setX(clamp(position.getX(), 25, 1600));
-		position.setY(clamp(position.getY(), 25, 700));
+		position.setX(clamp(position.getX(), 60, Main.WIDTH - 150));
+		position.setY(clamp(position.getY(), 60, Main.HEIGHT - 60));
 		setPosition(position);
-		if (input.spaceDown()) {
+		if (input.keyDown(KeyEvent.VK_SPACE)) {
 			double time = Game.getInstance().getTime();
 			if (time > nextFireTime) {
 				nextFireTime = time + LASER_COOLDOWN;
@@ -100,7 +103,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	private void fireLaser() {
 		Vector2 position = getPosition();
 		Laser laser = new Laser(position);
-		Game.getInstance().getOpenScene().addEntity(laser);
+		Game.getInstance().getOpenScene().addObject(laser);
 		ResourceLoader.loadAudioClip("res/laser.wav").start();
 	}
 
@@ -132,6 +135,10 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		}
 
 		@Override
+		public void initialize() {
+		}
+
+		@Override
 		public void render(Graphics g) {
 			Vector2 position = getPosition();
 			g.drawImage(Assets.PLAYER_LASER, (int) position.getX(), (int) position.getY(), null);
@@ -141,9 +148,9 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		public void onCollisionEnter(Entity other) {
 			if (!(other instanceof PlayerShip) && other instanceof DamagableEntity) {
 				((DamagableEntity) other).damage(DAMAGE_AMOUNT);
-				Game.getInstance().getOpenScene().removeEntity(this);
+				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
-				Game.getInstance().getOpenScene().removeEntity(this);
+				Game.getInstance().getOpenScene().removeObject(this);
 			}
 		}
 
@@ -157,7 +164,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	@Override
 	public void damage(double amount) {
 		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
-		Game.getInstance().getOpenScene().addEntity(explosion);
+		Game.getInstance().getOpenScene().addObject(explosion);
 	}
 
 }

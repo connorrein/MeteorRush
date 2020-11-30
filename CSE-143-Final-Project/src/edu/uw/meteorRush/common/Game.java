@@ -4,7 +4,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 /**
- * Controls the game loop, display, and execution of scene behavior.
+ * Central class that controls the game loop, display, and execution of scene
+ * behavior.
  * 
  * @author Connor Reinholdtsen
  */
@@ -17,14 +18,13 @@ public class Game {
 	private String title;
 	private int width;
 	private int height;
-	private boolean running;
 	private Display display;
 	private InputManager inputManager;
 	private Scene currentScene;
-
+	private boolean running;
 	private double timeScale;
-	private double deltaTimeSeconds;
 	private double elapsedTimeSeconds;
+	private double deltaTimeSeconds;
 	private boolean sceneInitialized;
 
 	/**
@@ -63,21 +63,21 @@ public class Game {
 		if (running) {
 			throw new IllegalStateException("Game already started!");
 		}
-		running = true;
 		inputManager = new InputManager();
 		display = new Display(title, width, height, inputManager.getKeyListener());
+		running = true;
 		new Thread() {
 			@Override
 			public void run() {
 				long lastTimeMilis = System.currentTimeMillis();
 				while (running) {
 					long currentTimeMilis = System.currentTimeMillis();
-					long deltaTimeMilis = currentTimeMilis - lastTimeMilis;
-					if (deltaTimeMilis < MILIS_PER_FRAME) {
+					long absoluteDeltaTimeMilis = currentTimeMilis - lastTimeMilis;
+					if (absoluteDeltaTimeMilis < MILIS_PER_FRAME) {
 						continue;
 					}
 					lastTimeMilis = currentTimeMilis;
-					deltaTimeSeconds = deltaTimeMilis * 0.001 * timeScale;
+					deltaTimeSeconds = absoluteDeltaTimeMilis * 0.001 * timeScale;
 					elapsedTimeSeconds += deltaTimeSeconds;
 					if (currentScene != null) {
 						if (!sceneInitialized) {
@@ -88,19 +88,25 @@ public class Game {
 						render();
 					}
 				}
+				if (currentScene != null) {
+					currentScene.dispose();
+				}
+				display.close();
 			}
 		}.start();
 	}
 
 	/**
-	 * Stop the game by exiting the game window and exiting the game loop.
+	 * Stop the game by disposing of the open Scene if there is one, exiting the
+	 * game loop, and closing the game window.
 	 */
 	public void stop() {
 		if (!running) {
 			throw new IllegalStateException("Game already stopped!");
 		}
 		running = false;
-		display.close();
+		// The game loop will dipose of the open scene and close the Display once it
+		// notices that running == false.
 	}
 
 	/**
@@ -115,7 +121,7 @@ public class Game {
 	/**
 	 * Loads the given scene, closing the previously loaded scene if there was one.
 	 * 
-	 * @param scene the scene to be loaded.
+	 * @param scene the scene to be loaded
 	 */
 	public void loadScene(Scene scene) {
 		if (currentScene != null) {
@@ -144,16 +150,31 @@ public class Game {
 		bufferStrategy.show();
 	}
 
+	/**
+	 * Returns the rate at which time in the game progresses with respect to system
+	 * time.
+	 * 
+	 * @return a double representing the rate of time progression
+	 */
 	public double getTimeScale() {
 		return timeScale;
 	}
 
+	/**
+	 * Sets the rate at which time in the game progresses with respect to system
+	 * time. This will affect results from getTime() and getDeltaTime(). For
+	 * example, setTimeScale(0.0) will cause the game to "pause". The default time
+	 * scale is 1.0. That is, time in the game passes at the same rate as time in
+	 * the system by default.
+	 * 
+	 * @param timeScale the rate at which time progresses
+	 */
 	public void setTimeScale(double timeScale) {
 		this.timeScale = timeScale;
 	}
 
 	/**
-	 * Returns how much time has passed since the start of the game.
+	 * Returns how much scaled time has passed since the start of the game.
 	 * 
 	 * @return the time in seconds.
 	 */
@@ -162,7 +183,8 @@ public class Game {
 	}
 
 	/**
-	 * Returns how much time has passes since the previous update of the game loop.
+	 * Returns how much scaled time has passes since the previous update of the game
+	 * loop.
 	 * 
 	 * @return the delta time in seconds.
 	 */

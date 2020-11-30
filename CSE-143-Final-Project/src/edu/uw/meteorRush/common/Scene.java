@@ -5,57 +5,92 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a scene, or stage of the game.
+ * Represents a scene that can be opened by the Game. Scenes are made up of
+ * SceneObjects such as Entities.
+ * 
+ * @author Connor Reinholdtsen
  */
 public abstract class Scene {
 
-	private List<Entity> entities;
+	private List<SceneObject> objects;
 
+	/**
+	 * Constructs a new empty scene
+	 */
 	public Scene() {
-		entities = new ArrayList<>();
+		objects = new ArrayList<>();
 	}
 
-	public final void addEntity(Entity entity) {
-		entities.add(entity);
-		if (entity == null) {
-			System.out.println("NULLLLLLL");
-		}
+	/**
+	 * Adds the given SceneObject to this Scene, invoking intialize() on it. Once
+	 * added, this Scene will invoke tick() and render(Graphics) on it according to
+	 * the game loop.
+	 * 
+	 * @param object the SceneObject to be added
+	 */
+	public final void addObject(SceneObject object) {
+		objects.add(object);
+		object.initialize();
 	}
 
-	public final void removeEntity(Entity entity) {
-		entities.remove(entity);
-		entity.dispose();
+	/**
+	 * Removes the given SceneObject from this Scene, invoking dispose() on it. Once
+	 * removed, this scene will no longer invoke tick() and render(Graphics) on it
+	 * according to the game loop.
+	 * 
+	 * @param object the SceneObject to be removed
+	 */
+	public final void removeObject(SceneObject object) {
+		objects.remove(object);
+		object.dispose();
 	}
 
-	public final List<Entity> getEntities() {
-		return new ArrayList<>(entities);
+	/**
+	 * Returns all of the SceneObjects in this Scene.
+	 * 
+	 * @return a List of SceneObjects
+	 */
+	public final List<SceneObject> getObjects() {
+		return new ArrayList<>(objects);
 	}
 
+	/**
+	 * Invoked by the Game when it loads this Scene.
+	 */
 	public abstract void initialize();
 
 	/**
-	 * Updates variables and performs non-graphical tasks.
+	 * Invoked by the Game according to the game loop. Updates variables and
+	 * performs non-graphical tasks. Can be overridden in subclasses of Scene, but
+	 * overriding methods must invoke super.
 	 */
 	public void tick() {
-		for (int i = 0; i < entities.size(); i++) {
-			Entity entity = entities.get(i);
-			entity.tick();
+		for (int i = 0; i < objects.size(); i++) {
+			SceneObject object = objects.get(i);
+			object.tick();
 		}
 	}
 
 	/**
-	 * Performs graphical tasks using the given Graphics.
+	 * Performs graphical tasks using the given Graphics. Can be overridden in
+	 * subclasses of Scene, but overriding methods must invoke super.
+	 * 
+	 * @param g the Graphics used to render this scene
 	 */
 	public void render(Graphics g) {
-		for (int i = 0; i < entities.size(); i++) {
-			Entity entity = entities.get(i);
-			entity.render(g);
+		for (int i = 0; i < objects.size(); i++) {
+			SceneObject object = objects.get(i);
+			object.render(g);
 		}
 	}
 
+	/**
+	 * Invoked when the Game unloads this Scene. Can be overridden in subclasses of
+	 * Scene, but overriding methods must invoke super.
+	 */
 	public void dispose() {
-		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).dispose();
+		for (int i = 0; i < objects.size(); i++) {
+			objects.get(i).dispose();
 		}
 	}
 

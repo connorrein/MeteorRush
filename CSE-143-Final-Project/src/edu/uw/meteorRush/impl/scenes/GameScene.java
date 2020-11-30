@@ -1,25 +1,26 @@
-package edu.uw.meteorRush.impl;
+package edu.uw.meteorRush.impl.scenes;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.sound.sampled.Clip;
 
 import edu.uw.meteorRush.common.Collider;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Entity.EntityCollider;
+import edu.uw.meteorRush.impl.Main;
+import edu.uw.meteorRush.impl.entities.PlayerShip;
+import edu.uw.meteorRush.impl.waves.Wave1;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 
 public class GameScene extends Scene {
 
-	private static final double WAVE_REST_TIME = 5.0;
+	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
+	public static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
 	private static final Vector2 PLAYER_START = new Vector2(250, 350);
 
@@ -40,15 +41,17 @@ public class GameScene extends Scene {
 			public void onCollisionExit(Collider other) {
 				if (other instanceof EntityCollider) {
 					Entity entity = ((EntityCollider) other).getEntity();
-					Game.getInstance().getOpenScene().removeEntity(entity);
+					Game.getInstance().getOpenScene().removeObject(entity);
 				}
 			}
 		};
+		bounds.setActive(true);
 		backgroundImage = ResourceLoader.loadImage("res/GameBackground.jpg");
 		backgroundMusic = ResourceLoader.loadAudioClip("res/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		player = new PlayerShip(PLAYER_START);
-		addEntity(player);
+		addObject(player);
+		addObject(new Wave1());
 	}
 
 	@Override
@@ -60,6 +63,10 @@ public class GameScene extends Scene {
 		g.drawString("Score: " + score, 50, 50);
 	}
 
+	public PlayerShip getPlayer() {
+		return player;
+	}
+
 	public void addScore(int score) {
 		this.score += score;
 	}
@@ -67,7 +74,7 @@ public class GameScene extends Scene {
 	@Override
 	public void dispose() {
 		super.dispose();
-		bounds.dispose();
+		bounds.setActive(false);
 	}
 
 }
