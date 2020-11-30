@@ -1,20 +1,27 @@
 package edu.uw.meteorRush.impl.entities;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.Assets;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AlienShip extends Entity implements DamagableEntity {
 
-	private static final int WIDTH = 250;
-	private static final int HEIGHT = 250;
+	private static final int WIDTH = 150;
+	private static final int HEIGHT = 150;
 	private static final int MAX_HEALTH = 3;
 	private static final int SCORE_VALUE = 100;
-	private static final double LASER_COOLDOWN = 3;
+	private static final double LASER_COOLDOWN = 2;
+	private static final int LASER_WIDTH = 100;
+	private static final int LASER_HEIGHT = 20;
+	private static final Image SPRITE = ResourceLoader.loadImage("res/AlienShip.png").getScaledInstance(WIDTH, HEIGHT,
+			0);
+	private static final Image LASER = ResourceLoader.loadImage("res/AlienLaser.png").getScaledInstance(LASER_WIDTH,
+			LASER_HEIGHT, 0);
 
 	private double health;
 	private double rand;
@@ -29,7 +36,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.ALIEN, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
+		g.drawImage(SPRITE, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	@Override
@@ -46,7 +53,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 	}
 
 	private void fireLaser() {
-		AlienLaser laser = new AlienLaser(getPosition());
+		AlienLaser laser = new AlienLaser(getPosition().subtract(120, 10));
 		Game.getInstance().getOpenScene().addObject(laser);
 	}
 
@@ -82,12 +89,11 @@ public class AlienShip extends Entity implements DamagableEntity {
 	}
 
 	private static class AlienLaser extends Projectile {
-		private static final Vector2 SIZE = new Vector2(50, 50);
 		private static final Vector2 VELOCITY = new Vector2(-1000, 0);
 		private static final double DAMAGE_AMOUNT = 1;
 
 		public AlienLaser(Vector2 position) {
-			super(position, SIZE, VELOCITY);
+			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), VELOCITY);
 		}
 
 		@Override
@@ -97,7 +103,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 		@Override
 		public void render(Graphics g) {
 			Vector2 position = getPosition();
-			g.drawImage(Assets.PLAYER_LASER, (int) position.getX(), (int) position.getY(), null);
+			g.drawImage(LASER, (int) position.getX(), (int) position.getY(), null);
 		}
 
 		@Override

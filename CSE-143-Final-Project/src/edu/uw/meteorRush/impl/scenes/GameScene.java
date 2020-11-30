@@ -4,19 +4,20 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 
 import javax.sound.sampled.Clip;
 
 import edu.uw.meteorRush.common.Collider;
 import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Entity.EntityCollider;
-import edu.uw.meteorRush.impl.Main;
-import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave1;
+import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Main;
+import edu.uw.meteorRush.impl.entities.PlayerShip;
+import edu.uw.meteorRush.impl.waves.Wave2;
 
 public class GameScene extends Scene {
 
@@ -33,7 +34,7 @@ public class GameScene extends Scene {
 
 	@Override
 	public void initialize() {
-		bounds = new Collider(0, 0, Main.WIDTH, Main.HEIGHT) {
+		bounds = new Collider(-500, -500, Main.WIDTH + 500, Main.HEIGHT + 500) {
 			@Override
 			public void onCollisionEnter(Collider other) {
 			}
@@ -52,7 +53,19 @@ public class GameScene extends Scene {
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
-		addObject(new Wave1());
+		addObject(new Wave2());
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if (Game.getInstance().getInputManager().getKeyDown(KeyEvent.VK_ESCAPE)) {
+			pause();
+		}
+	}
+
+	private void pause() {
+		Game.getInstance().setTimeScale(0.0);
 	}
 
 	@Override

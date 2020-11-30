@@ -44,7 +44,7 @@ public class Wave2 extends Wave {
 		scene.addObject(enemy);
 		if (enemyCount > MAX_ENEMY_COUNT) {
 			scene.removeObject(this);
-			// scene.addObject(new Wave3());
+			scene.addObject(new Wave3());
 		}
 	}
 

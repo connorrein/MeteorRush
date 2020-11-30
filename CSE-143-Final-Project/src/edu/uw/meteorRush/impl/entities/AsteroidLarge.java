@@ -1,24 +1,28 @@
 package edu.uw.meteorRush.impl.entities;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.Assets;
 
 public class AsteroidLarge extends Entity implements DamagableEntity {
 
 	private static final double DAMAGE_AMOUNT = 3.0;
 	private static final double MAX_HEALTH = 5;
-	private static final double SPEED = 200;
-	private static final Vector2 SIZE = new Vector2(100, 100);
+	private static final double SPEED = 300;
+	private static final int WIDTH = 200;
+	private static final int HEIGHT = 200;
+	public static final Image ASTEROID_LARGE = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
 
 	private Vector2 velocity;
 	private double currentHealth;
 
 	public AsteroidLarge(Vector2 position, Vector2 direction) {
-		super(position, SIZE);
+		super(position, new Vector2(WIDTH, HEIGHT));
 		this.velocity = direction.clone().normalize().multiply(SPEED);
 		currentHealth = MAX_HEALTH;
 	}
@@ -33,7 +37,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(Assets.ASTEROID_LARGE, (int) position.getX(), (int) position.getY(), null);
+		g.drawImage(ASTEROID_LARGE, (int) position.getX() - WIDTH / 2, (int) position.getY() - HEIGHT / 2, null);
 	}
 
 	@Override

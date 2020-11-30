@@ -38,7 +38,6 @@ public class MainMenuScene extends Scene {
 		// use InputManager to process user input
 
 		 // the if it passes the bottom, wraps around to the top
-
 		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
 			currentSelection++;
 			if(currentSelection > 4) {
@@ -47,7 +46,6 @@ public class MainMenuScene extends Scene {
 		}
 
 		 // the if it passes the top, wraps around to the bottom
-
 		if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
 			currentSelection--;
 			if(currentSelection < 0) {
@@ -56,7 +54,6 @@ public class MainMenuScene extends Scene {
 		}
 
 		// depending on the option selected, enter will do something else
-
 		if (inputManager.getKey(KeyEvent.VK_ENTER)) {
 			if(currentSelection == 0) {
 				Game.getInstance().loadScene(new IntroScene());

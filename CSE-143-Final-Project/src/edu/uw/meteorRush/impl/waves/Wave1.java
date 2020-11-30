@@ -10,8 +10,8 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave1 extends Wave {
 
-	private static final double ENEMY_SPAWN_PERIOD = 2.0;
-	private static final int MAX_ENEMY_COUNT = 5;
+	private static final double ENEMY_SPAWN_PERIOD = 0.5;
+	private static final int MAX_ENEMY_COUNT = 20;
 
 	private int enemyCount;
 	private double startTime;
@@ -39,11 +39,9 @@ public class Wave1 extends Wave {
 	private void spawnEnemy() {
 		enemyCount++;
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		Vector2 position = new Vector2(Main.WIDTH + 100, Main.HEIGHT / 2.0);
-//		AlienShip enemy = new AlienShip(position);
-//		scene.addObject(enemy);
-		Vector2 velocity = new Vector2(-100, 0);
-		AsteroidLarge enemy = new AsteroidLarge(position, velocity);
+		Vector2 position = new Vector2(Main.WIDTH + 100, Main.HEIGHT * Math.random());
+		Vector2 direction = new Vector2(-1, Math.random() - 0.5);
+		AsteroidLarge enemy = new AsteroidLarge(position, direction);
 		scene.addObject(enemy);
 		if (enemyCount > MAX_ENEMY_COUNT) {
 			scene.removeObject(this);
