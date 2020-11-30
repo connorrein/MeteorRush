@@ -132,6 +132,28 @@ public class PlayerShip extends Entity implements DamagableEntity {
 				null);
 	}
 
+	public double getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public double getMaxHealth() {
+		return MAX_HEALTH;
+	}
+
+	@Override
+	public void damage(double amount) {
+		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
+		currentHealth -= amount;
+		if (currentHealth <= 0) {
+			destroy();
+		}
+		Game.getInstance().getOpenScene().addObject(explosion);
+	}
+
+	private void destroy() {
+		Game.getInstance().getOpenScene().removeObject(this);
+	}
+
 	@Override
 	public void onCollisionEnter(Entity other) {
 	}
@@ -174,21 +196,6 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		public void onCollisionExit(Entity other) {
 
 		}
-
-	}
-
-	public double getCurrentHealth() {
-		return currentHealth;
-	}
-
-	public double getMaxHealth() {
-		return MAX_HEALTH;
-	}
-
-	@Override
-	public void damage(double amount) {
-		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
-		Game.getInstance().getOpenScene().addObject(explosion);
 	}
 
 }
