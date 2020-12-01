@@ -31,6 +31,8 @@ public class GameScene extends Scene {
 	private Clip backgroundMusic;
 	private PlayerShip player;
 	private int score;
+	private double currentHealth;
+	private double maxHealth;
 
 	@Override
 	public void initialize() {
@@ -54,6 +56,7 @@ public class GameScene extends Scene {
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new Wave2());
+		maxHealth = player.getMaxHealth();
 	}
 
 	@Override
@@ -62,6 +65,7 @@ public class GameScene extends Scene {
 		if (Game.getInstance().getInputManager().getKeyDown(KeyEvent.VK_ESCAPE)) {
 			pause();
 		}
+		currentHealth = player.getCurrentHealth();
 	}
 
 	private void pause() {
@@ -75,6 +79,11 @@ public class GameScene extends Scene {
 		g.setColor(Color.WHITE);
 		g.setFont(UI_FONT);
 		g.drawString("Score: " + score, 50, 50);
+		g.drawString("Health", Main.WIDTH - 200, 50);
+		g.drawRect(Main.WIDTH - 225, 60, 200, 15);
+		g.setColor(Color.RED);
+		g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
+		
 	}
 
 	public PlayerShip getPlayer() {
