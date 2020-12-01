@@ -39,7 +39,6 @@ public class GameScene extends Scene {
 	private double currentHealth;
 	private double maxHealth;
 	private boolean paused;
-	private boolean exit;
 	private InputManager inputManager;
 	
 	@Override
@@ -63,7 +62,6 @@ public class GameScene extends Scene {
 		backgroundMusic = ResourceLoader.loadAudioClip("res/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		currentPauseOption = 0;
-		exit = false;
 		inputManager = Game.getInstance().getInputManager();
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
@@ -95,7 +93,7 @@ public class GameScene extends Scene {
 			} else if (currentPauseOption == 1) {
 				unPause();
 				backgroundMusic.stop();
-				exit = true;
+				Game.getInstance().loadScene(new MainMenuScene());
 			}
 		}
 	}
@@ -126,22 +124,18 @@ public class GameScene extends Scene {
 
 	@Override
 	public void render(Graphics g) {
-		if (exit) {
-			Game.getInstance().loadScene(new MainMenuScene());
+		if (paused) {
+			renderPause(g);
 		} else {
-			if (paused) {
-				renderPause(g);
-			} else {
-				g.drawImage(backgroundImage, 0, 0, null);
-				super.render(g);
-				g.setColor(Color.WHITE);
-				g.setFont(UI_FONT);
-				g.drawString("Score: " + score, 50, 50);
-				g.drawString("Health", Main.WIDTH - 200, 50);
-				g.drawRect(Main.WIDTH - 225, 60, 200, 15);
-				g.setColor(Color.RED);
-				g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
-			}
+			g.drawImage(backgroundImage, 0, 0, null);
+			super.render(g);
+			g.setColor(Color.WHITE);
+			g.setFont(UI_FONT);
+			g.drawString("Score: " + score, 50, 50);
+			g.drawString("Health", Main.WIDTH - 200, 50);
+			g.drawRect(Main.WIDTH - 225, 60, 200, 15);
+			g.setColor(Color.RED);
+			g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
 		}
 	}
 	
