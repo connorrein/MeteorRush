@@ -12,6 +12,7 @@ import edu.uw.meteorRush.common.Collider;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Entity.EntityCollider;
 import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
@@ -24,16 +25,23 @@ public class GameScene extends Scene {
 	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
 	public static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
+	private static final Font SELECT_FONT = new Font("Consolas", 0, 70);
 	private static final Vector2 PLAYER_START = new Vector2(250, 350);
+	private final String[] PAUSE_MENU_OPTIONS = {"Continue", "Main Menu"};
 
 	private Collider bounds;
 	private Image backgroundImage;
+	private Image pauseBackgroundImage;
 	private Clip backgroundMusic;
 	private PlayerShip player;
 	private int score;
+	private int currentPauseOption;
 	private double currentHealth;
 	private double maxHealth;
-
+	private boolean paused;
+	private boolean exit;
+	private InputManager inputManager;
+	
 	@Override
 	public void initialize() {
 		bounds = new Collider(-500, -500, Main.WIDTH + 500, Main.HEIGHT + 500) {
@@ -51,8 +59,12 @@ public class GameScene extends Scene {
 		};
 		bounds.setActive(true);
 		backgroundImage = ResourceLoader.loadImage("res/GameBackground.jpg");
+		pauseBackgroundImage = ResourceLoader.loadImage("res/PauseBackground.jpg");
 		backgroundMusic = ResourceLoader.loadAudioClip("res/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
+		currentPauseOption = 0;
+		exit = false;
+		inputManager = Game.getInstance().getInputManager();
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new Wave1());
@@ -62,28 +74,89 @@ public class GameScene extends Scene {
 	@Override
 	public void tick() {
 		super.tick();
-		if (Game.getInstance().getInputManager().getKeyDown(KeyEvent.VK_ESCAPE)) {
-			pause();
+		if (paused) {
+			if (Game.getInstance().getInputManager().getKeyDown(KeyEvent.VK_ESCAPE)) {
+				unPause();
+			}
+			pauseTick();
+		} else {
+			if (Game.getInstance().getInputManager().getKeyDown(KeyEvent.VK_ESCAPE)) {
+				pause();
+			}
 		}
 		currentHealth = player.getCurrentHealth();
+	}
+	
+	private void pauseTick() {
+		scroll(inputManager);
+		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			if (currentPauseOption == 0) {
+				unPause();
+			} else if (currentPauseOption == 1) {
+				unPause();
+				backgroundMusic.stop();
+				exit = true;
+			}
+		}
+	}
+	
+	private void scroll(InputManager inputManager) {
+		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
+			currentPauseOption++;
+			if (currentPauseOption >= PAUSE_MENU_OPTIONS.length) {
+				currentPauseOption = 0;
+			}
+		} else if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
+			currentPauseOption--;
+			if (currentPauseOption < 0) {
+				currentPauseOption = PAUSE_MENU_OPTIONS.length - 1;
+			}
+		}
 	}
 
 	private void pause() {
 		Game.getInstance().setTimeScale(0.0);
+		paused = true;
+	}
+	
+	private void unPause() {
+		Game.getInstance().setTimeScale(1.0);
+		paused = false;
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(backgroundImage, 0, 0, null);
-		super.render(g);
-		g.setColor(Color.WHITE);
-		g.setFont(UI_FONT);
-		g.drawString("Score: " + score, 50, 50);
-		g.drawString("Health", Main.WIDTH - 200, 50);
-		g.drawRect(Main.WIDTH - 225, 60, 200, 15);
-		g.setColor(Color.RED);
-		g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
-
+		if (exit) {
+			Game.getInstance().loadScene(new MainMenuScene());
+		} else {
+			if (paused) {
+				renderPause(g);
+			} else {
+				g.drawImage(backgroundImage, 0, 0, null);
+				super.render(g);
+				g.setColor(Color.WHITE);
+				g.setFont(UI_FONT);
+				g.drawString("Score: " + score, 50, 50);
+				g.drawString("Health", Main.WIDTH - 200, 50);
+				g.drawRect(Main.WIDTH - 225, 60, 200, 15);
+				g.setColor(Color.RED);
+				g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
+			}
+		}
+	}
+	
+	public void renderPause(Graphics g) {
+		g.drawImage(pauseBackgroundImage, 0, 0, null);
+		for (int i = 0; i < PAUSE_MENU_OPTIONS.length; i++) {
+			if (currentPauseOption == i) {
+				g.setFont(SELECT_FONT);
+				g.setColor(Color.RED);
+			} else {
+				g.setFont(UI_FONT);
+				g.setColor(Color.WHITE);
+			}
+			g.drawString(PAUSE_MENU_OPTIONS[i], 400, 300 + i * 70);
+		}
 	}
 
 	public PlayerShip getPlayer() {
