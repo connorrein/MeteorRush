@@ -7,6 +7,7 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AsteroidSmall extends Entity implements DamagableEntity {
 
@@ -15,8 +16,10 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	private static final double SPEED = 600;
 	private static final int WIDTH = 100;
 	private static final int HEIGHT = 100;
+	private static final int SCORE_VALUE = 20;
 	public static final Image ASTEROID_SMALL = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(WIDTH,
 			HEIGHT, 0);
+
 	private Vector2 velocity;
 	private double currentHealth;
 
@@ -56,11 +59,18 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			destroy();
+		} else {
+			Explosion explosion = new Explosion(getPosition(), new Vector2(50, 50), 0.1);
+			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
 	private void destroy() {
-		Game.getInstance().getOpenScene().removeObject(this);
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		scene.removeObject(this);
+		scene.addScore(SCORE_VALUE);
+		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
+		scene.addObject(explosion);
 	}
 
 }

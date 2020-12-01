@@ -9,28 +9,30 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class AlienShip extends Entity implements DamagableEntity {
+public class CircularAlienShip extends Entity implements DamagableEntity {
 
 	private static final int WIDTH = 150;
 	private static final int HEIGHT = 150;
 	private static final int MAX_HEALTH = 3;
+	private static final double SPEED = 300.0;
 	private static final int SCORE_VALUE = 100;
+	private static final double CONTACT_DAMAGE = 2.0;
 	private static final double LASER_COOLDOWN = 2;
 	private static final int LASER_WIDTH = 100;
 	private static final int LASER_HEIGHT = 20;
-	private static final Image SPRITE = ResourceLoader.loadImage("res/AlienShip.png").getScaledInstance(WIDTH, HEIGHT,
-			0);
+	private static final double LASER_SPEED = 1000.0;
+	private static final double LASER_DAMAGE_AMOUNT = 1;
+	private static final Image SPRITE = ResourceLoader.loadImage("res/CircularAlienShip.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
 	private static final Image LASER = ResourceLoader.loadImage("res/AlienLaser.png").getScaledInstance(LASER_WIDTH,
 			LASER_HEIGHT, 0);
 
 	private double health;
-	private double rand;
 	private double nextFireTime;
 
-	public AlienShip(Vector2 position) {
+	public CircularAlienShip(Vector2 position) {
 		super(position, new Vector2(WIDTH, HEIGHT));
 		health = MAX_HEALTH;
-		rand = 6.28318530718 * Math.random();
 	}
 
 	@Override
@@ -42,8 +44,7 @@ public class AlienShip extends Entity implements DamagableEntity {
 	@Override
 	public void tick() {
 		Vector2 position = getPosition();
-		position.setY(250 * Math.sin(rand + 2 * Game.getInstance().getTime()) + 425);
-		position.add(-300 * Game.getInstance().getDeltaTime(), 0);
+		position.add(-SPEED * Game.getInstance().getDeltaTime(), 0);
 		setPosition(position);
 		double currentTime = Game.getInstance().getTime();
 		if (currentTime > nextFireTime) {
@@ -53,14 +54,14 @@ public class AlienShip extends Entity implements DamagableEntity {
 	}
 
 	private void fireLaser() {
-		AlienLaser laser = new AlienLaser(getPosition().subtract(120, 10));
+		Laser laser = new Laser(getPosition().subtract(80, 10));
 		Game.getInstance().getOpenScene().addObject(laser);
 	}
 
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
-			((PlayerShip) other).damage(2);
+			((PlayerShip) other).damage(CONTACT_DAMAGE);
 			destroy();
 		}
 	}
@@ -85,15 +86,13 @@ public class AlienShip extends Entity implements DamagableEntity {
 		scene.removeObject(this);
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
-		Game.getInstance().getOpenScene().addObject(explosion);
+		scene.addObject(explosion);
 	}
 
-	private static class AlienLaser extends Projectile {
-		private static final Vector2 VELOCITY = new Vector2(-1000, 0);
-		private static final double DAMAGE_AMOUNT = 1;
+	private static class Laser extends Projectile {
 
-		public AlienLaser(Vector2 position) {
-			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), VELOCITY);
+		public Laser(Vector2 position) {
+			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(-LASER_SPEED, 0));
 		}
 
 		@Override
@@ -103,13 +102,14 @@ public class AlienShip extends Entity implements DamagableEntity {
 		@Override
 		public void render(Graphics g) {
 			Vector2 position = getPosition();
-			g.drawImage(LASER, (int) position.getX(), (int) position.getY(), null);
+			g.drawImage(LASER, (int) (position.getX() - LASER_WIDTH / 2.0),
+					(int) (position.getY() - LASER_HEIGHT / 2.0), null);
 		}
 
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				((PlayerShip) other).damage(DAMAGE_AMOUNT);
+				((PlayerShip) other).damage(LASER_DAMAGE_AMOUNT);
 				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeObject(this);

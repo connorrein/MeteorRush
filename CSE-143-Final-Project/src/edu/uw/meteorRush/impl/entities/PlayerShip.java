@@ -15,31 +15,37 @@ import edu.uw.meteorRush.impl.Main;
 
 public class PlayerShip extends Entity implements DamagableEntity {
 
-	private static final int PLAYER_WIDTH = 185;
-	private static final int PLAYER_HEIGHT = 100;
+	private static final int WIDTH = 150;
+	private static final int HEIGHT = 90;
 	private static final double LASER_COOLDOWN = 0.22;
 	private static final double SPEED = 600;
-	private static final double MAX_HEALTH = 10;
-	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(PLAYER_WIDTH,
-			PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(PLAYER_WIDTH,
-			PLAYER_HEIGHT, 0);
+	private static final double MAX_HEALTH = 20;
+
+	private static final double LASER_DAMAGE_AMOUNT = 1;
+	private static final double LASER_SPEED = 1500;
+	private static final double LASER_WIDTH = 50;
+	private static final double LASER_HEIGHT = 10;
+
+	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(WIDTH, HEIGHT,
+			0);
+	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(WIDTH, HEIGHT,
+			0);
 	public static final Image PLAYER_BACKARD_1 = ResourceLoader.loadImage("res/PlayerBackward1.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+			.getScaledInstance(WIDTH, HEIGHT, 0);
 	public static final Image PLAYER_BACKARD_2 = ResourceLoader.loadImage("res/PlayerBackward2.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_DOWN_1 = ResourceLoader.loadImage("res/PlayerDown1.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_DOWN_2 = ResourceLoader.loadImage("res/PlayerDown2.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_DOWN_1 = ResourceLoader.loadImage("res/PlayerDown1.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
+	public static final Image PLAYER_DOWN_2 = ResourceLoader.loadImage("res/PlayerDown2.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
 	public static final Image PLAYER_FORWARD_1 = ResourceLoader.loadImage("res/PlayerForward1.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+			.getScaledInstance(WIDTH, HEIGHT, 0);
 	public static final Image PLAYER_FORWARD_2 = ResourceLoader.loadImage("res/PlayerForward2.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_UP_1 = ResourceLoader.loadImage("res/PlayerUp1.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
-	public static final Image PLAYER_UP_2 = ResourceLoader.loadImage("res/PlayerUp2.png")
-			.getScaledInstance(PLAYER_WIDTH, PLAYER_HEIGHT, 0);
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_UP_1 = ResourceLoader.loadImage("res/PlayerUp1.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
+	public static final Image PLAYER_UP_2 = ResourceLoader.loadImage("res/PlayerUp2.png").getScaledInstance(WIDTH,
+			HEIGHT, 0);
 	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/PlayerLaser.png").getScaledInstance(50, 10,
 			0);
 
@@ -50,7 +56,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	private double nextFireTime;
 
 	public PlayerShip(Vector2 position) {
-		super(position, new Vector2(PLAYER_WIDTH, PLAYER_HEIGHT));
+		super(position, new Vector2(WIDTH, HEIGHT));
 		sprite1 = PLAYER_1;
 		sprite2 = PLAYER_2;
 		currentHealth = MAX_HEALTH;
@@ -120,16 +126,15 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	private void fireLaser() {
 		Vector2 position = getPosition();
-		Laser laser = new Laser(position.add(PLAYER_WIDTH / 2.0, 0.0));
+		Laser laser = new Laser(position.add(WIDTH / 2.0, 0.0));
 		Game.getInstance().getOpenScene().addObject(laser);
-		ResourceLoader.loadAudioClip("res/laser.wav").start();
+		ResourceLoader.loadAudioClip("res/Laser.wav").start();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(sprite, (int) (position.getX() - PLAYER_WIDTH / 2.0), (int) (position.getY() - PLAYER_HEIGHT / 2.0),
-				null);
+		g.drawImage(sprite, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	public double getCurrentHealth() {
@@ -142,11 +147,11 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	@Override
 	public void damage(double amount) {
-		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			destroy();
 		}
+		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
 		Game.getInstance().getOpenScene().addObject(explosion);
 	}
 
@@ -164,12 +169,8 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 	private static class Laser extends Projectile {
 
-		private static final double DAMAGE_AMOUNT = 1;
-		private static final double SPEED = 1500;
-		private static final Vector2 SIZE = new Vector2(50, 50);
-
 		Laser(Vector2 position) {
-			super(position, SIZE, new Vector2(SPEED, 0));
+			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(LASER_SPEED, 0));
 		}
 
 		@Override
@@ -185,7 +186,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (!(other instanceof PlayerShip) && other instanceof DamagableEntity) {
-				((DamagableEntity) other).damage(DAMAGE_AMOUNT);
+				((DamagableEntity) other).damage(LASER_DAMAGE_AMOUNT);
 				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeObject(this);

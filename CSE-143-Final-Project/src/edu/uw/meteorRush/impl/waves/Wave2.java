@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
-import edu.uw.meteorRush.impl.entities.AlienShip;
+import edu.uw.meteorRush.impl.entities.CircularAlienShip;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave2 extends Wave {
@@ -38,14 +38,19 @@ public class Wave2 extends Wave {
 
 	private void spawnEnemy() {
 		enemyCount++;
-		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		Vector2 position = new Vector2(Main.WIDTH + 100, Main.WIDTH / 2.0);
-		AlienShip enemy = new AlienShip(position);
-		scene.addObject(enemy);
+		spawnCircularAlienShip();
 		if (enemyCount > MAX_ENEMY_COUNT) {
+			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
 			scene.addObject(new Wave3());
 		}
+	}
+
+	private void spawnCircularAlienShip() {
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
+		CircularAlienShip enemy = new CircularAlienShip(position);
+		scene.addObject(enemy);
 	}
 
 	@Override

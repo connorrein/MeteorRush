@@ -17,7 +17,7 @@ import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave2;
+import edu.uw.meteorRush.impl.waves.Wave1;
 
 public class GameScene extends Scene {
 
@@ -55,7 +55,7 @@ public class GameScene extends Scene {
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
-		addObject(new Wave2());
+		addObject(new Wave1());
 		maxHealth = player.getMaxHealth();
 	}
 
@@ -83,7 +83,7 @@ public class GameScene extends Scene {
 		g.drawRect(Main.WIDTH - 225, 60, 200, 15);
 		g.setColor(Color.RED);
 		g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
-		
+
 	}
 
 	public PlayerShip getPlayer() {

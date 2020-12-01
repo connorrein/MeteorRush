@@ -7,6 +7,7 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AsteroidLarge extends Entity implements DamagableEntity {
 
@@ -15,6 +16,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	private static final double SPEED = 300;
 	private static final int WIDTH = 200;
 	private static final int HEIGHT = 200;
+	private static final int SCORE_VALUE = 50;
 	public static final Image ASTEROID_LARGE = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(WIDTH,
 			HEIGHT, 0);
 
@@ -57,17 +59,24 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			destroy();
+		} else {
+			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
+			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
 	private void destroy() {
-		Game.getInstance().getOpenScene().removeObject(this);
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		scene.addScore(SCORE_VALUE);
+		Explosion explosion = new Explosion(getPosition(), new Vector2(200, 200), 0.1);
+		scene.addObject(explosion);
+		scene.removeObject(this);
 		Vector2 position = getPosition();
-		Game.getInstance().getOpenScene().addObject(new AsteroidSmall(position, velocity));
+		scene.addObject(new AsteroidSmall(position, velocity));
 		velocity.rotate(-Math.toRadians(30));
-		Game.getInstance().getOpenScene().addObject(new AsteroidSmall(position, velocity));
+		scene.addObject(new AsteroidSmall(position, velocity));
 		velocity.rotate(Math.toRadians(60));
-		Game.getInstance().getOpenScene().addObject(new AsteroidSmall(position, velocity));
+		scene.addObject(new AsteroidSmall(position, velocity));
 	}
 
 }
