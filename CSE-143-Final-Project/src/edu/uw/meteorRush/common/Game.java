@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 /**
- * Central class that controls the game loop, display, and execution of scene
+ * Singleton class that controls the game loop, display, and execution of scene
  * behavior.
  * 
  * @author Connor Reinholdtsen
@@ -18,14 +18,14 @@ public class Game {
 	private String title;
 	private int width;
 	private int height;
-	private Display display;
 	private InputManager inputManager;
+	private Display display;
 	private Scene currentScene;
+	private Scene nextScene;
 	private boolean running;
 	private double timeScale;
 	private double elapsedTimeSeconds;
 	private double deltaTimeSeconds;
-	private boolean sceneInitialized;
 
 	/**
 	 * Creates a new game with the given title, window width, and window height.
@@ -41,17 +41,58 @@ public class Game {
 		this.title = title;
 		this.width = width;
 		this.height = height;
-		this.timeScale = 1.0;
+		inputManager = new InputManager();
+		display = new Display(title, width, height, inputManager.getKeyListener());
+		currentScene = null;
+		nextScene = null;
+		running = false;
+		timeScale = 1.0;
+		elapsedTimeSeconds = 0.0;
+		deltaTimeSeconds = 0.0;
 		instance = this;
 	}
 
 	/**
 	 * Returns the instance of the game being played.
+	 * 
+	 * @return the instance
 	 */
 	public static Game getInstance() {
 		return instance;
 	}
 
+	/**
+	 * Returns this Game's title.
+	 * 
+	 * @return
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Returns the width of this Game's window.
+	 * 
+	 * @return the window's width
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * Returns the height of this Game's window.
+	 * 
+	 * @return the window's height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * Returns the Game's InputManager to access user input.
+	 * 
+	 * @return the InputManager
+	 */
 	public InputManager getInputManager() {
 		return inputManager;
 	}
@@ -63,8 +104,7 @@ public class Game {
 		if (running) {
 			throw new IllegalStateException("Game already started!");
 		}
-		inputManager = new InputManager();
-		display = new Display(title, width, height, inputManager.getKeyListener());
+		display.open();
 		running = true;
 		new Thread() {
 			@Override
@@ -79,11 +119,15 @@ public class Game {
 					lastTimeMilis = currentTimeMilis;
 					deltaTimeSeconds = absoluteDeltaTimeMilis * 0.001 * timeScale;
 					elapsedTimeSeconds += deltaTimeSeconds;
-					if (currentScene != null) {
-						if (!sceneInitialized) {
-							currentScene.initialize();
-							sceneInitialized = true;
+					if (nextScene != null) {
+						if (currentScene != null) {
+							currentScene.dispose();
 						}
+						currentScene = nextScene;
+						nextScene = null;
+						currentScene.initialize();
+					}
+					if (currentScene != null) {
 						tick();
 						render();
 					}
@@ -120,16 +164,17 @@ public class Game {
 	}
 
 	/**
-	 * Loads the given scene, closing the previously loaded scene if there was one.
+	 * Loads the given scene once the game loop finishes its current iteration,
+	 * closing the previously loaded scene if there was one.
 	 * 
 	 * @param scene the scene to be loaded
 	 */
 	public void loadScene(Scene scene) {
-		if (currentScene != null) {
-			currentScene.dispose();
-		}
-		sceneInitialized = false;
-		this.currentScene = scene;
+		// We must wait to set the current scene to the given scene until the game loop
+		// finishes its current iteration. Not doing so could result in errors if tick()
+		// or render() is invoked on the given scene in the game loop before
+		// initialize().
+		nextScene = scene;
 	}
 
 	/**

@@ -52,7 +52,6 @@ class Display {
 		window.addKeyListener(keyListener);
 
 		canvas.createBufferStrategy(NUM_BUFFERS);
-		window.setVisible(true);
 	}
 
 	/**
@@ -63,6 +62,13 @@ class Display {
 	 */
 	BufferStrategy getBufferStrategy() {
 		return canvas.getBufferStrategy();
+	}
+
+	/**
+	 * Opens the window.
+	 */
+	void open() {
+		window.setVisible(true);
 	}
 
 	/**
