@@ -13,18 +13,20 @@ import edu.uw.meteorRush.common.Scene;
 public class MainMenuScene extends Scene {
 
 	/**
-	 * Stores the current "button" the user has selected.
+	 * Stores the current option the user has highlighted.
 	 */
-	private int currentSelection;
+	private int currentOption;
 
 	private Image backgroundImage;
 	private Clip backgroundMusic;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
+
 	// Bigger size for when the option is selected
 	private static Font SELECT_FONT = new Font("Consolas", 0, 70);
+
 	// list of options
-	private final String[]  MAIN_MENU_OPTIONS = {"Intro", "START", "CREDITS", "SETTINGS", "QUIT"};
-	private final String[] SETTINGS_OPTIONS = {"Hard", "Medium", "Easy", "Quit"};
+	private final String[]  MAIN_MENU_OPTIONS = {"START", "SETTINGS", "CREDITS", "INTRO", "QUIT"};
+	private final String[] SETTINGS_OPTIONS = {"HARD", "MEDIUM", "EASY", "RETURN TO MENU"};
 
 	private String sceneOption;
 
@@ -45,88 +47,90 @@ public class MainMenuScene extends Scene {
 		g.setColor(Color.BLACK);
 		// render background and text
 		if(sceneOption.equals("Intro")) {
-			introSceneRender(g);
-			mainMenuOnEnter(inputManager);
+			introScene(g, inputManager);
 		} else if(sceneOption.equals("Main")){
-			renderScrolling(g, MAIN_MENU_OPTIONS);
-			mainMenuScrolling(inputManager);
+			upDown(inputManager, MAIN_MENU_OPTIONS);
+			renderScrollingMenus(g, MAIN_MENU_OPTIONS);
+			mainMenuEnter(inputManager);
 		} else if(sceneOption.equals("Settings")){
-			renderScrolling(g, SETTINGS_OPTIONS);
-			settingsMenuScrolling(inputManager);
+			upDown(inputManager, SETTINGS_OPTIONS);
+			renderScrollingMenus(g, SETTINGS_OPTIONS);
+			settingsMenuEnter(inputManager);
 		} else if(sceneOption.equals("Credits")){
-			creditsSceneRender(g);
-			mainMenuOnEnter(inputManager);
+			creditsScene(g, inputManager);
 		}
 	}
 
-
-	@Override
-	public void dispose() {
-		super.dispose();
-		backgroundMusic.stop();
-	}
-
-	public void mainMenuOnEnter(InputManager inputManager) {
-		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
-			sceneOption = "Main";
-		}
-	}
-
+	/**
+	 * based on whether the up or down keys are clicked, the highlighted option is changed
+	 * @param inputManager: to process user input
+	 * @param options: the possible options in list form
+	 */
 	public void upDown(InputManager inputManager, String[] options) {
-		// use InputManager to process user input
 
 		// the if it passes the bottom, wraps around to the top
 		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
-			currentSelection++;
-			if(currentSelection >= options.length) {
-				currentSelection = 0;
+			currentOption++;
+			if(currentOption >= options.length) {
+				currentOption = 0;
 			}
 		}
 
 		// the if it passes the bottom, wraps around to the top
 		if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
-			currentSelection--;
-			if (currentSelection < 0) {
-				currentSelection = options.length - 1;
+			currentOption--;
+			if (currentOption < 0) {
+				currentOption = options.length - 1;
 			}
 		}
 	}
 
-	public void mainMenuScrolling(InputManager inputManager) {
-
-		upDown(inputManager, MAIN_MENU_OPTIONS);
+	/**
+	 * Decides what enter will do depending on the which option is highlighted,
+	 * picks the option selected
+	 * @param inputManager
+	 */
+	public void mainMenuEnter(InputManager inputManager) {
 
 		// depending on the option selected, enter will do something else
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
-			if(currentSelection == 0) {
-				sceneOption = "Intro";
-			} else if(currentSelection == 1) {
+			if(currentOption == 0) {
+				backgroundMusic.stop();
 				Game.getInstance().loadScene(new GameScene());
-			} else if(currentSelection == 2) {
-				sceneOption = "Credits";
-			} else if(currentSelection == 3){
+			} else if(currentOption == 1) {
 				sceneOption = "Settings";
-			} else if(currentSelection == 4){
-				// TODO
+			} else if(currentOption == 2) {
+				sceneOption = "Credits";
+			} else if(currentOption == 3){
+				sceneOption = "Intro";
+			} else if(currentOption == 4){
+				Game.getInstance().stop();
 			}
 		}
 	}
 
-	public void settingsMenuScrolling(InputManager inputManager) {
-		upDown(inputManager, SETTINGS_OPTIONS);
+	/**
+	 * Decides what enter will do depending on the which option is highlighted,
+	 * sets a difficulty or returns the user to the main menu
+	 * @param inputManager
+	 */
+	public void settingsMenuEnter(InputManager inputManager) {
 
 		// depending on the option selected, enter will do something else
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
-			if(currentSelection == 0) {
+			if(currentOption == 0) {
 				//TODO
 				//hard
-			} else if(currentSelection == 1){
+				sceneOption = "Main";
+			} else if(currentOption == 1){
 				//TODO
 				//medium
-			} else if(currentSelection == 2){
+				sceneOption = "Main";
+			} else if(currentOption == 2){
 				//TODO
 				//easy
-			} else if(currentSelection == 3) {
+				sceneOption = "Main";
+			} else if(currentOption == 3) {
 				sceneOption = "Main";
 			}
 		}
@@ -134,16 +138,15 @@ public class MainMenuScene extends Scene {
 	}
 
 	/**
-	 *
+	 * Renders all the options
+	 * Increases the size of option currently being considered
 	 * @param g: graphics from above
 	 * @param options: the options that can be selected
-	 * Increases the size of option currently being considered
-	 * Also sets its color to red
 	 */
-	public void renderScrolling(Graphics g, String[] options) {
+	public void renderScrollingMenus(Graphics g, String[] options) {
 		//g.drawImage(backgroundImage, 0, 0, null);
 		for(int i = 0; i < options.length; i++) {
-			if (currentSelection == i) {
+			if (currentOption == i) {
 				g.setColor(Color.RED);
 				g.setFont(SELECT_FONT);
 			} else {
@@ -154,19 +157,27 @@ public class MainMenuScene extends Scene {
 		}
 	}
 
-	public void introSceneRender(Graphics g) {
+	/**
+	 * The intro scene: tells us the backstory for the game as well and gives a button to return us to the main menu
+	 * @param g
+	 * @param inputManager
+	 */
+	public void introScene(Graphics g, InputManager inputManager) {
 		//g.drawImage(backgroundImage, 0, 0, null);
 		g.drawString("You are an astronaut who went off ", 475, 105);
 		g.drawString("course due to a malfunction.", 475, 150);
 		g.drawString("Now aliens are trying to kill you", 475, 195);
 		g.drawString("in the midst of a hectic asteroid belt", 475, 240);
-
-		g.setColor(Color.RED);
-		g.setFont(SELECT_FONT);
-		g.drawString("RETURN TO MAIN MENU", 475, 785);
+		returnToMenuOption(g, inputManager);
 	}
 
-	public void creditsSceneRender(Graphics g) {
+	/**
+	 * The credits scene: shows us who made the game as well as a button to return us to the main menu
+	 * @param g
+	 * @param inputManager
+	 */
+	public void creditsScene(Graphics g, InputManager inputManager) {
+		//g.drawImage(backgroundImage, 0, 0, null);
 		g.drawString("CREATORS:", 475, 105);
 		g.drawString("Jacob Barnhart", 480, 195);
 		g.drawString("Connor Reinholdtsen", 475, 245);
@@ -175,12 +186,21 @@ public class MainMenuScene extends Scene {
 		g.drawString("Main Menu Music: Stellardrone – Eternity", 475, 495);
 		g.drawString("In-game Music: F-777 - Ludicrous Speed", 480, 545);
 		g.drawString("Game art: Amy George", 475, 595);
-
-		g.setColor(Color.RED);
-		g.setFont(SELECT_FONT);
-		g.drawString("RETURN TO MENU", 475, 785);
+		returnToMenuOption(g, inputManager);
 	}
 
-
+	/**
+	 * Creates a big red RETURN TO MENU button that returns the user to the main menu
+	 * @param g
+	 * @param inputManager
+	 */
+	public void returnToMenuOption(Graphics g, InputManager inputManager) {
+		g.setColor(Color.RED);
+		g.setFont(SELECT_FONT);
+		g.drawString("RETURN TO MAIN MENU", 475, 785);
+		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			sceneOption = "Main";
+		}
+	}
 
 }
