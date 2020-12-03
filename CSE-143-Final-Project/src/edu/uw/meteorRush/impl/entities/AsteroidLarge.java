@@ -78,6 +78,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	}
 
 	private void destroy() {
+		ResourceLoader.loadAudioClip("res/audio/AsteroidHit.wav").start();
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(200, 200), 0.1);

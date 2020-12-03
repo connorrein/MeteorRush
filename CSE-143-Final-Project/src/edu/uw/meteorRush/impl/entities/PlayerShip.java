@@ -3,8 +3,6 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
@@ -15,8 +13,8 @@ import edu.uw.meteorRush.impl.Main;
 
 public class PlayerShip extends Entity implements DamagableEntity {
 
-	private static final int WIDTH = 150;
-	private static final int HEIGHT = 90;
+	private static final int WIDTH = 147;
+	private static final int HEIGHT = 70;
 	private static final double LASER_COOLDOWN = 0.22;
 	private static final double SPEED = 600;
 	private static final double MAX_HEALTH = 20;
@@ -49,7 +47,6 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/images/entities/player/PlayerLaser.png")
 			.getScaledInstance(50, 10, 0);
 
-	private Image sprite;
 	private Image sprite1;
 	private Image sprite2;
 	private double currentHealth;
@@ -60,17 +57,6 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		sprite1 = PLAYER_1;
 		sprite2 = PLAYER_2;
 		currentHealth = MAX_HEALTH;
-		TimerTask animationChange = new TimerTask() {
-			@Override
-			public void run() {
-				if (sprite == sprite1) {
-					sprite = sprite2;
-				} else {
-					sprite = sprite1;
-				}
-			}
-		};
-		new Timer().schedule(animationChange, 0, 100);
 	}
 
 	@Override
@@ -128,12 +114,19 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 position = getPosition();
 		Laser laser = new Laser(position.add(WIDTH / 2.0, 0.0));
 		Game.getInstance().getOpenScene().addObject(laser);
-		ResourceLoader.loadAudioClip("res/audio/Laser.wav").start();
+		ResourceLoader.loadAudioClip("res/audio/PlayerLaser.wav").start();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
+		Image sprite;
+		double time = Game.getInstance().getTime();
+		if (time % 0.2 < 0.1) {
+			sprite = sprite1;
+		} else {
+			sprite = sprite2;
+		}
 		g.drawImage(sprite, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
@@ -175,13 +168,8 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	}
 
 	private static class Laser extends Projectile {
-
 		Laser(Vector2 position) {
 			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(LASER_SPEED, 0));
-		}
-
-		@Override
-		public void initialize() {
 		}
 
 		@Override
@@ -202,7 +190,6 @@ public class PlayerShip extends Entity implements DamagableEntity {
 
 		@Override
 		public void onCollisionExit(Entity other) {
-
 		}
 	}
 

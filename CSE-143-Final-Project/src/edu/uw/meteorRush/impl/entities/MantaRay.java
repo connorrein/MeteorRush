@@ -11,8 +11,8 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class MantaRay extends Entity implements DamagableEntity {
 
-	private static final int WIDTH = 150;
-	private static final int HEIGHT = 150;
+	private static final int WIDTH = 250;
+	private static final int HEIGHT = 250;
 	private static final int MAX_HEALTH = 3;
 	private static final double SPEED = 300.0;
 	private static final int SCORE_VALUE = 100;
@@ -22,7 +22,10 @@ public class MantaRay extends Entity implements DamagableEntity {
 	private static final int LASER_HEIGHT = 20;
 	private static final double LASER_SPEED = 1000.0;
 	private static final double LASER_DAMAGE_AMOUNT = 1;
-	private static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/mantaRay/mantaRay.png")
+
+	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRay1.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	private static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRay2.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
 	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRayLaser.png")
 			.getScaledInstance(LASER_WIDTH, LASER_HEIGHT, 0);
@@ -33,12 +36,6 @@ public class MantaRay extends Entity implements DamagableEntity {
 	public MantaRay(Vector2 position) {
 		super(position, new Vector2(WIDTH, HEIGHT));
 		health = MAX_HEALTH;
-	}
-
-	@Override
-	public void render(Graphics g) {
-		Vector2 position = getPosition();
-		g.drawImage(SPRITE, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	@Override
@@ -56,6 +53,19 @@ public class MantaRay extends Entity implements DamagableEntity {
 	private void fireLaser() {
 		Laser laser = new Laser(getPosition().subtract(80, 10));
 		Game.getInstance().getOpenScene().addObject(laser);
+	}
+
+	@Override
+	public void render(Graphics g) {
+		Vector2 position = getPosition();
+		Image sprite;
+		double time = Game.getInstance().getTime();
+		if (time % 0.3 < 0.15) {
+			sprite = SPRITE_1;
+		} else {
+			sprite = SPRITE_2;
+		}
+		g.drawImage(sprite, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	@Override
@@ -87,6 +97,7 @@ public class MantaRay extends Entity implements DamagableEntity {
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
 		scene.addObject(explosion);
+		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 	}
 
 	private static class Laser extends Projectile {
