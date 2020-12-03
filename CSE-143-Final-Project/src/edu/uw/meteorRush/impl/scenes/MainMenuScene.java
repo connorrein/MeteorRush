@@ -10,6 +10,9 @@ import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
 
+/**
+ * @author Marko Milovanovic
+ */
 public class MainMenuScene extends Scene {
 
 	/**
@@ -33,8 +36,8 @@ public class MainMenuScene extends Scene {
 
 	@Override
 	public void initialize() {
-		backgroundImage = ResourceLoader.loadImage("res/MainMenuBackground.jpg");
-		backgroundMusic = ResourceLoader.loadAudioClip("res/MainMenuMusic.wav");
+		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/MainMenuBackground.jpg");
+		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		sceneOption = "Intro";
 	}

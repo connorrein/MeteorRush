@@ -17,8 +17,12 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	private static final int WIDTH = 200;
 	private static final int HEIGHT = 200;
 	private static final int SCORE_VALUE = 50;
-	public static final Image ASTEROID_LARGE = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
+	public static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidLarge1.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidLarge2.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image SPRITE_3 = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidLarge3.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
 
 	private Vector2 velocity;
 	private double currentHealth;
@@ -39,7 +43,15 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(ASTEROID_LARGE, (int) position.getX() - WIDTH / 2, (int) position.getY() - HEIGHT / 2, null);
+		Image sprite;
+		if (currentHealth < 3) {
+			sprite = SPRITE_3;
+		} else if (currentHealth < 5) {
+			sprite = SPRITE_2;
+		} else {
+			sprite = SPRITE_1;
+		}
+		g.drawImage(sprite, (int) position.getX() - WIDTH / 2, (int) position.getY() - HEIGHT / 2, null);
 	}
 
 	@Override

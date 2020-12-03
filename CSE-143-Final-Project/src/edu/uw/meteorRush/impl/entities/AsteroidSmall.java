@@ -17,8 +17,8 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	private static final int WIDTH = 100;
 	private static final int HEIGHT = 100;
 	private static final int SCORE_VALUE = 20;
-	public static final Image ASTEROID_SMALL = ResourceLoader.loadImage("res/Asteroid.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
+	public static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidSmall.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
 
 	private Vector2 velocity;
 	private double currentHealth;
@@ -39,13 +39,13 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(ASTEROID_SMALL, (int) position.getX() - WIDTH / 2, (int) position.getY() - HEIGHT / 2, null);
+		g.drawImage(SPRITE, (int) position.getX() - WIDTH / 2, (int) position.getY() - HEIGHT / 2, null);
 	}
 
 	@Override
 	public void onCollisionEnter(Entity other) {
-		if (other instanceof PlayerShip) {
-			((PlayerShip) other).damage(DAMAGE_AMOUNT);
+		if (other instanceof DamagableEntity && !(other instanceof AsteroidSmall || other instanceof AsteroidLarge)) {
+			((DamagableEntity) other).damage(DAMAGE_AMOUNT);
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}

@@ -26,28 +26,28 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	private static final double LASER_WIDTH = 50;
 	private static final double LASER_HEIGHT = 10;
 
-	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/Player1.png").getScaledInstance(WIDTH, HEIGHT,
-			0);
-	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/Player2.png").getScaledInstance(WIDTH, HEIGHT,
-			0);
-	public static final Image PLAYER_BACKARD_1 = ResourceLoader.loadImage("res/PlayerBackward1.png")
+	public static final Image PLAYER_1 = ResourceLoader.loadImage("res/images/entities/player/Player1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	public static final Image PLAYER_BACKARD_2 = ResourceLoader.loadImage("res/PlayerBackward2.png")
+	public static final Image PLAYER_2 = ResourceLoader.loadImage("res/images/entities/player/Player2.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	public static final Image PLAYER_DOWN_1 = ResourceLoader.loadImage("res/PlayerDown1.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	public static final Image PLAYER_DOWN_2 = ResourceLoader.loadImage("res/PlayerDown2.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	public static final Image PLAYER_FORWARD_1 = ResourceLoader.loadImage("res/PlayerForward1.png")
+	public static final Image PLAYER_BACKARD_1 = ResourceLoader
+			.loadImage("res/images/entities/player/PlayerBackward1.png").getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_BACKARD_2 = ResourceLoader
+			.loadImage("res/images/entities/player/PlayerBackward2.png").getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_DOWN_1 = ResourceLoader.loadImage("res/images/entities/player/PlayerDown1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	public static final Image PLAYER_FORWARD_2 = ResourceLoader.loadImage("res/PlayerForward2.png")
+	public static final Image PLAYER_DOWN_2 = ResourceLoader.loadImage("res/images/entities/player/PlayerDown2.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	public static final Image PLAYER_UP_1 = ResourceLoader.loadImage("res/PlayerUp1.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	public static final Image PLAYER_UP_2 = ResourceLoader.loadImage("res/PlayerUp2.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/PlayerLaser.png").getScaledInstance(50, 10,
-			0);
+	public static final Image PLAYER_FORWARD_1 = ResourceLoader
+			.loadImage("res/images/entities/player/PlayerForward1.png").getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_FORWARD_2 = ResourceLoader
+			.loadImage("res/images/entities/player/PlayerForward2.png").getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_UP_1 = ResourceLoader.loadImage("res/images/entities/player/PlayerUp1.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_UP_2 = ResourceLoader.loadImage("res/images/entities/player/PlayerUp2.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	public static final Image PLAYER_LASER = ResourceLoader.loadImage("res/images/entities/player/PlayerLaser.png")
+			.getScaledInstance(50, 10, 0);
 
 	private Image sprite;
 	private Image sprite1;
@@ -128,7 +128,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 position = getPosition();
 		Laser laser = new Laser(position.add(WIDTH / 2.0, 0.0));
 		Game.getInstance().getOpenScene().addObject(laser);
-		ResourceLoader.loadAudioClip("res/Laser.wav").start();
+		ResourceLoader.loadAudioClip("res/audio/Laser.wav").start();
 	}
 
 	@Override
@@ -153,6 +153,13 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		}
 		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
 		Game.getInstance().getOpenScene().addObject(explosion);
+	}
+
+	public void heal(double healAmount) {
+		currentHealth += healAmount;
+		if (currentHealth > MAX_HEALTH) {
+			currentHealth = MAX_HEALTH;
+		}
 	}
 
 	private void destroy() {

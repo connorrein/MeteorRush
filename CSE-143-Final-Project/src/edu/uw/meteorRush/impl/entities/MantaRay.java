@@ -9,7 +9,7 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class CircularAlienShip extends Entity implements DamagableEntity {
+public class MantaRay extends Entity implements DamagableEntity {
 
 	private static final int WIDTH = 150;
 	private static final int HEIGHT = 150;
@@ -22,15 +22,15 @@ public class CircularAlienShip extends Entity implements DamagableEntity {
 	private static final int LASER_HEIGHT = 20;
 	private static final double LASER_SPEED = 1000.0;
 	private static final double LASER_DAMAGE_AMOUNT = 1;
-	private static final Image SPRITE = ResourceLoader.loadImage("res/CircularAlienShip.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	private static final Image LASER = ResourceLoader.loadImage("res/AlienLaser.png").getScaledInstance(LASER_WIDTH,
-			LASER_HEIGHT, 0);
+	private static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/mantaRay/mantaRay.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRayLaser.png")
+			.getScaledInstance(LASER_WIDTH, LASER_HEIGHT, 0);
 
 	private double health;
 	private double nextFireTime;
 
-	public CircularAlienShip(Vector2 position) {
+	public MantaRay(Vector2 position) {
 		super(position, new Vector2(WIDTH, HEIGHT));
 		health = MAX_HEALTH;
 	}

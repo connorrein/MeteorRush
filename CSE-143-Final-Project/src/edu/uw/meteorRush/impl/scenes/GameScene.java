@@ -20,6 +20,11 @@ import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
 import edu.uw.meteorRush.impl.waves.Wave1;
 
+/**
+ * 
+ * @author Connor Reinholdtsen
+ * @author Jacob Barnhart
+ */
 public class GameScene extends Scene {
 
 	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
@@ -27,7 +32,7 @@ public class GameScene extends Scene {
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
 	private static final Font SELECT_FONT = new Font("Consolas", 0, 70);
 	private static final Vector2 PLAYER_START = new Vector2(250, 350);
-	private final String[] PAUSE_MENU_OPTIONS = {"Continue", "Main Menu"};
+	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
 
 	private Collider bounds;
 	private Image backgroundImage;
@@ -40,7 +45,7 @@ public class GameScene extends Scene {
 	private double maxHealth;
 	private boolean paused;
 	private InputManager inputManager;
-	
+
 	@Override
 	public void initialize() {
 		bounds = new Collider(-500, -500, Main.WIDTH + 500, Main.HEIGHT + 500) {
@@ -57,9 +62,9 @@ public class GameScene extends Scene {
 			}
 		};
 		bounds.setActive(true);
-		backgroundImage = ResourceLoader.loadImage("res/GameBackground.jpg");
-		pauseBackgroundImage = ResourceLoader.loadImage("res/PauseBackground.jpg");
-		backgroundMusic = ResourceLoader.loadAudioClip("res/GameMusic.wav");
+		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.jpg");
+		pauseBackgroundImage = ResourceLoader.loadImage("res/images/backgrounds/PauseBackground.jpg");
+		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		currentPauseOption = 0;
 		inputManager = Game.getInstance().getInputManager();
@@ -84,7 +89,7 @@ public class GameScene extends Scene {
 		}
 		currentHealth = player.getCurrentHealth();
 	}
-	
+
 	private void pauseTick() {
 		scroll(inputManager);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
@@ -97,7 +102,7 @@ public class GameScene extends Scene {
 			}
 		}
 	}
-	
+
 	private void scroll(InputManager inputManager) {
 		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
 			currentPauseOption++;
@@ -116,7 +121,7 @@ public class GameScene extends Scene {
 		Game.getInstance().setTimeScale(0.0);
 		paused = true;
 	}
-	
+
 	private void unPause() {
 		Game.getInstance().setTimeScale(1.0);
 		paused = false;
@@ -138,7 +143,7 @@ public class GameScene extends Scene {
 			g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
 		}
 	}
-	
+
 	public void renderPause(Graphics g) {
 		g.drawImage(pauseBackgroundImage, 0, 0, null);
 		for (int i = 0; i < PAUSE_MENU_OPTIONS.length; i++) {

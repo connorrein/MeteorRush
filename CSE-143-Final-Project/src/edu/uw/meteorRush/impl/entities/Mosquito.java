@@ -10,7 +10,7 @@ import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class TriangularAlienShip extends Entity implements DamagableEntity {
+public class Mosquito extends Entity implements DamagableEntity {
 
 	private static final int WIDTH = 100;
 	private static final int HEIGHT = 100;
@@ -23,16 +23,16 @@ public class TriangularAlienShip extends Entity implements DamagableEntity {
 	private static final int LASER_HEIGHT = 10;
 	private static final double LASER_SPEED = 1000.0;
 	private static final double LASER_DAMAGE_AMOUNT = 0.5;
-	private static final Image SPRITE = ResourceLoader.loadImage("res/TriangularAlienShip.png").getScaledInstance(WIDTH,
-			HEIGHT, 0);
-	private static final Image LASER = ResourceLoader.loadImage("res/AlienLaser.png").getScaledInstance(LASER_WIDTH,
-			LASER_HEIGHT, 0);
+	private static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/mosquito/Mosquito.png")
+			.getScaledInstance(WIDTH, HEIGHT, 0);
+	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/mosquito/MosquitoLaser.png")
+			.getScaledInstance(LASER_WIDTH, LASER_HEIGHT, 0);
 
 	private double health;
 	private double rand;
 	private double nextFireTime;
 
-	public TriangularAlienShip(Vector2 position) {
+	public Mosquito(Vector2 position) {
 		super(position, new Vector2(WIDTH, HEIGHT));
 		health = MAX_HEALTH;
 		rand = 6.28318530718 * Math.random();

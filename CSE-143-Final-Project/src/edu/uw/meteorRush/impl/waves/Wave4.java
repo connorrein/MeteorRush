@@ -6,8 +6,8 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.AsteroidLarge;
-import edu.uw.meteorRush.impl.entities.CircularAlienShip;
-import edu.uw.meteorRush.impl.entities.TriangularAlienShip;
+import edu.uw.meteorRush.impl.entities.MantaRay;
+import edu.uw.meteorRush.impl.entities.Mosquito;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave4 extends Wave {
@@ -66,14 +66,14 @@ public class Wave4 extends Wave {
 	private void spawnCircularAlienShip() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
-		CircularAlienShip enemy = new CircularAlienShip(position);
+		MantaRay enemy = new MantaRay(position);
 		scene.addObject(enemy);
 	}
 
 	private void spawnTriangularAlienShip() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT);
-		TriangularAlienShip enemy = new TriangularAlienShip(position);
+		Mosquito enemy = new Mosquito(position);
 		scene.addObject(enemy);
 	}
 

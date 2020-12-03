@@ -9,7 +9,7 @@ import edu.uw.meteorRush.common.Vector2;
 
 public class Explosion extends Entity {
 
-	private static final Image EXPLOSION = ResourceLoader.loadImage("res/Explosion.png");
+	private static final Image EXPLOSION = ResourceLoader.loadImage("res/images/entities/explosion/Explosion1.png");
 
 	private double endTime;
 	private Image sprite;
