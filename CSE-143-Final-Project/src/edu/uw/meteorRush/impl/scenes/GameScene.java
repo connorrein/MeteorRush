@@ -62,7 +62,8 @@ public class GameScene extends Scene {
 			}
 		};
 		bounds.setActive(true);
-		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.jpg");
+		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750,
+				825, 0);
 		pauseBackgroundImage = ResourceLoader.loadImage("res/images/backgrounds/PauseBackground.jpg");
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
@@ -132,7 +133,8 @@ public class GameScene extends Scene {
 		if (paused) {
 			renderPause(g);
 		} else {
-			g.drawImage(backgroundImage, 0, 0, null);
+			double time = Game.getInstance().getTime();
+			g.drawImage(backgroundImage, (int) (time * -150 % 22195), 0, null);
 			super.render(g);
 			g.setColor(Color.WHITE);
 			g.setFont(UI_FONT);
