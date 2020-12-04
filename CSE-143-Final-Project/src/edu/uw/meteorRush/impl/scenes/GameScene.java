@@ -73,6 +73,7 @@ public class GameScene extends Scene {
 		addObject(player);
 		addObject(new Wave1());
 		maxHealth = player.getMaxHealth();
+		addObject(new FadeIn(2));
 	}
 
 	@Override
