@@ -18,7 +18,7 @@ import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave1;
+import edu.uw.meteorRush.impl.waves.Wave3;
 
 /**
  * 
@@ -71,9 +71,9 @@ public class GameScene extends Scene {
 		inputManager = Game.getInstance().getInputManager();
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
-		addObject(new Wave1());
+		addObject(new Wave3());
 		maxHealth = player.getMaxHealth();
-		addObject(new FadeIn(2));
+		addObject(new FadeIn(1.5));
 	}
 
 	@Override

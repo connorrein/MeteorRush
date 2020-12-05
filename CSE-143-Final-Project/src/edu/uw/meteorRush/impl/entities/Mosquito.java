@@ -23,7 +23,7 @@ public class Mosquito extends Entity implements DamagableEntity {
 	private static final int LASER_HEIGHT = 10;
 	private static final double LASER_SPEED = 1000.0;
 	private static final double LASER_DAMAGE_AMOUNT = 0.5;
-	private static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/mosquito/Mosquito.png")
+	private static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/mosquito/Mosquito1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
 	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/mosquito/MosquitoLaser.png")
 			.getScaledInstance(LASER_WIDTH, LASER_HEIGHT, 0);

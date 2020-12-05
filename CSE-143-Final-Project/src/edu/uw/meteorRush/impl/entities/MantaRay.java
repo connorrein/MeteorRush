@@ -11,15 +11,15 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class MantaRay extends Entity implements DamagableEntity {
 
-	private static final int WIDTH = 250;
-	private static final int HEIGHT = 250;
+	private static final int WIDTH = 160;
+	private static final int HEIGHT = 76;
 	private static final int MAX_HEALTH = 3;
-	private static final double SPEED = 300.0;
+	private static final double SPEED = 400.0;
 	private static final int SCORE_VALUE = 100;
 	private static final double CONTACT_DAMAGE = 2.0;
 	private static final double LASER_COOLDOWN = 2;
-	private static final int LASER_WIDTH = 100;
-	private static final int LASER_HEIGHT = 20;
+	private static final int LASER_WIDTH = 60;
+	private static final int LASER_HEIGHT = 10;
 	private static final double LASER_SPEED = 1000.0;
 	private static final double LASER_DAMAGE_AMOUNT = 1;
 
@@ -51,7 +51,7 @@ public class MantaRay extends Entity implements DamagableEntity {
 	}
 
 	private void fireLaser() {
-		Laser laser = new Laser(getPosition().subtract(80, 10));
+		Laser laser = new Laser(getPosition().subtract(90, 0));
 		Game.getInstance().getOpenScene().addObject(laser);
 	}
 

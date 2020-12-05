@@ -1,6 +1,9 @@
 package edu.uw.meteorRush.common;
 
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -68,6 +71,33 @@ public class ResourceLoader {
 			clip.open(audioInputStream);
 			audioInputStream.close();
 			return clip;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Loads a font from the resource file in this project with the given name,
+	 * relative to the "src" directory. The file extension type must be ".ttf", and
+	 * ".ttf" must be included in the file name. The font will automatically be
+	 * registered with the GraphicsEnvironment.
+	 * 
+	 * @param fileName the name of the font file, relative to the "src" directory
+	 * @return a Font from the resource file with the specified name
+	 */
+	public static Font loadFont(String fileName, int fontSize) {
+		// must use float when deriving font
+		float size = fontSize;
+		try {
+			URL url = ResourceLoader.class.getClassLoader().getResource(fileName);
+			if (url == null) {
+				throw new IllegalArgumentException("Could not find the file specified");
+			}
+			InputStream inputStream = url.openStream();
+			Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(size);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+			return font;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
