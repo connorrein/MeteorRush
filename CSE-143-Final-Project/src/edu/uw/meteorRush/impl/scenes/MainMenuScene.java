@@ -21,6 +21,10 @@ public class MainMenuScene extends Scene {
 	private int currentOption;
 
 	private Image backgroundImage;
+	private Image buttonSelected;
+	private Image buttonSelectedLong;
+	private Image buttonHover;
+	private Image title;
 	private Clip backgroundMusic;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
 
@@ -29,14 +33,21 @@ public class MainMenuScene extends Scene {
 
 	// list of options
 	private final String[]  MAIN_MENU_OPTIONS = {"START", "SETTINGS", "CREDITS", "INTRO", "QUIT"};
-	private final String[] SETTINGS_OPTIONS = {"HARD", "MEDIUM", "EASY", "RETURN TO MENU"};
+	private final String[] SETTINGS_OPTIONS = {"HARD", "MEDIUM", "EASY", "BACK"};
 
 	private String sceneOption;
 
 
 	@Override
 	public void initialize() {
-		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/MainMenuBackground.jpg");
+		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/MainMenuBackground.jpg").getScaledInstance(24750,
+				825, 0);;
+		buttonSelected = ResourceLoader.loadImage("res/images/ui/Button.png");
+		buttonSelectedLong = ResourceLoader.loadImage("res/images/ui/ButtonLong.png");
+		buttonHover = ResourceLoader.loadImage("res/images/ui/ButtonHover.png");
+		title = ResourceLoader.loadImage("res/images/ui/Title.png");
+
+
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		sceneOption = "Intro";
@@ -47,7 +58,10 @@ public class MainMenuScene extends Scene {
 		super.render(g);
 		InputManager inputManager = Game.getInstance().getInputManager();
 		g.setFont(UI_FONT);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.WHITE);
+		double time = Game.getInstance().getTime();
+		g.drawImage(backgroundImage, (int) (time * -150 % 22195), 0, null);
+
 		// render background and text
 		if(sceneOption.equals("Intro")) {
 			introScene(g, inputManager);
@@ -148,15 +162,17 @@ public class MainMenuScene extends Scene {
 	 */
 	public void renderScrollingMenus(Graphics g, String[] options) {
 		//g.drawImage(backgroundImage, 0, 0, null);
+		Image buttonState = buttonHover;
 		for(int i = 0; i < options.length; i++) {
 			if (currentOption == i) {
-				g.setColor(Color.RED);
-				g.setFont(SELECT_FONT);
+				g.setColor(Color.BLACK);
+				buttonState = buttonSelected;
 			} else {
 				g.setColor(Color.WHITE);
-				g.setFont(UI_FONT);
+				buttonState = buttonHover;
 			}
-			g.drawString(options[i], 475, 155 + 70 * i);
+			g.drawImage(buttonState, 445, 100 + 90 * i, null);
+			g.drawString(options[i], 535, 155 + 90 * i);
 		}
 	}
 
@@ -198,9 +214,10 @@ public class MainMenuScene extends Scene {
 	 * @param inputManager
 	 */
 	public void returnToMenuOption(Graphics g, InputManager inputManager) {
-		g.setColor(Color.RED);
+		g.setColor(Color.BLACK);
 		g.setFont(SELECT_FONT);
-		g.drawString("RETURN TO MAIN MENU", 475, 785);
+		g.drawImage(buttonSelected, 475, 725, null);
+		g.drawString("MAIN MENU", 485, 785);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			sceneOption = "Main";
 		}
