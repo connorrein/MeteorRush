@@ -12,8 +12,8 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Mosquito extends Entity implements DamagableEntity {
 
-	private static final int WIDTH = 100;
-	private static final int HEIGHT = 100;
+	private static final int WIDTH = 36 * 4;
+	private static final int HEIGHT = 15 * 4;
 	private static final int MAX_HEALTH = 1;
 	private static final double SPEED = 500.0;
 	private static final int SCORE_VALUE = 75;
@@ -39,12 +39,6 @@ public class Mosquito extends Entity implements DamagableEntity {
 	}
 
 	@Override
-	public void render(Graphics g) {
-		Vector2 position = getPosition();
-		g.drawImage(SPRITE, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
-	}
-
-	@Override
 	public void tick() {
 		Vector2 position = getPosition();
 		position.setY(Main.HEIGHT * 0.42 * Math.sin(rand + 2 * Game.getInstance().getTime()) + Main.HEIGHT / 2.0);
@@ -55,6 +49,12 @@ public class Mosquito extends Entity implements DamagableEntity {
 			fireLaser();
 			nextFireTime = currentTime + LASER_COOLDOWN;
 		}
+	}
+
+	@Override
+	public void render(Graphics g) {
+		Vector2 position = getPosition();
+		g.drawImage(SPRITE, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	private void fireLaser() {

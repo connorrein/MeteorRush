@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
@@ -18,7 +19,7 @@ import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave3;
+import edu.uw.meteorRush.impl.waves.Wave1;
 
 /**
  * 
@@ -31,11 +32,11 @@ public class GameScene extends Scene {
 	public static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = new Font("Consolas", 0, 50);
 	private static final Font SELECT_FONT = new Font("Consolas", 0, 70);
-	private static final Vector2 PLAYER_START = new Vector2(250, 350);
+	private static final Vector2 PLAYER_START = new Vector2(250, Main.HEIGHT / 2);
 	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
 
 	private Collider bounds;
-	private Image backgroundImage;
+	private BufferedImage backgroundImage;
 	private Image pauseBackgroundImage;
 	private Clip backgroundMusic;
 	private PlayerShip player;
@@ -62,8 +63,8 @@ public class GameScene extends Scene {
 			}
 		};
 		bounds.setActive(true);
-		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750,
-				825, 0);
+		backgroundImage = ResourceLoader.toBufferedImage(
+				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
 		pauseBackgroundImage = ResourceLoader.loadImage("res/images/backgrounds/PauseBackground.jpg");
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
@@ -71,7 +72,7 @@ public class GameScene extends Scene {
 		inputManager = Game.getInstance().getInputManager();
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
-		addObject(new Wave3());
+		addObject(new Wave1());
 		maxHealth = player.getMaxHealth();
 		addObject(new FadeIn(1.5));
 	}
@@ -135,7 +136,9 @@ public class GameScene extends Scene {
 			renderPause(g);
 		} else {
 			double time = Game.getInstance().getTime();
-			g.drawImage(backgroundImage, (int) (time * -150 % 22195), 0, null);
+			int x = (int) (time * 150 % 22195);
+			Image backgroundSubImage = backgroundImage.getSubimage(x, 0, Main.WIDTH, Main.HEIGHT);
+			g.drawImage(backgroundSubImage, 0, 0, null);
 			super.render(g);
 			g.setColor(Color.WHITE);
 			g.setFont(UI_FONT);

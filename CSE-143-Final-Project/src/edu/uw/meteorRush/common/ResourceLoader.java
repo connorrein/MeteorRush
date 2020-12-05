@@ -1,7 +1,9 @@
 package edu.uw.meteorRush.common;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
@@ -102,6 +104,24 @@ public class ResourceLoader {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Returns a BufferedImage from the given image.
+	 * 
+	 * @param image the Image to create the BufferdImage with
+	 * @return a BufferedImage
+	 */
+	public static BufferedImage toBufferedImage(Image image) {
+		if (image instanceof BufferedImage) {
+			return (BufferedImage) image;
+		}
+		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = bufferedImage.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		return bufferedImage;
 	}
 
 }

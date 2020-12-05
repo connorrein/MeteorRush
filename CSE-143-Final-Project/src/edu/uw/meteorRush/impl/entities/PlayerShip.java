@@ -88,8 +88,8 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		Vector2 position = getPosition();
 
 		position.add(move);
-		position.setX(clamp(position.getX(), 40, Main.WIDTH - 150));
-		position.setY(clamp(position.getY(), 60, Main.HEIGHT - 60));
+		position.setX(clamp(position.getX(), 70, Main.WIDTH - 100));
+		position.setY(clamp(position.getY(), 50, Main.HEIGHT - 40));
 		setPosition(position);
 		if (input.getKey(KeyEvent.VK_SPACE)) {
 			double time = Game.getInstance().getTime();
