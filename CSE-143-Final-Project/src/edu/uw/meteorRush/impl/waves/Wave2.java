@@ -14,14 +14,14 @@ public class Wave2 extends Wave {
 	private static final int BASE_MAX_ENEMY_COUNT = 15;
 
 	private double modifiedEnemySpawnPeriod;
-	private double modifiedMaxEnemyCount;
+	private int modifiedMaxEnemyCount;
 	private int enemyCount;
 	private double startTime;
 	private double nextSpawnTime;
 
 	public Wave2() {
 		modifiedEnemySpawnPeriod = BASE_ENEMY_SPAWN_PERIOD / Main.difficulty.getModifier();
-		modifiedMaxEnemyCount = BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier();
+		modifiedMaxEnemyCount = (int) (BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier());
 		enemyCount = 0;
 		startTime = Game.getInstance().getTime();
 		nextSpawnTime = startTime + GameScene.WAVE_REST_TIME;
@@ -43,7 +43,7 @@ public class Wave2 extends Wave {
 	private void spawnEnemy() {
 		enemyCount++;
 		spawnJavelin();
-		if (enemyCount > modifiedMaxEnemyCount) {
+		if (enemyCount >= modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
 			scene.addObject(new Wave3());

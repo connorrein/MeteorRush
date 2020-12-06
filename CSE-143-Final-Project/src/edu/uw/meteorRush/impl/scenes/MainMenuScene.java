@@ -1,38 +1,48 @@
 package edu.uw.meteorRush.impl.scenes;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
+import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.impl.Difficulty;
 import edu.uw.meteorRush.impl.Main;
 
 /**
  * @author Marko Milovanovic
  */
-public class MainMenuScene extends MenuScene {
+public class MainMenuScene extends Scene {
 
+	/**
+	 * Stores the current option the user has highlighted.
+	 */
+	private int currentOption;
+
+	private BufferedImage backgroundImage;
+	private Image buttonSelected;
+	private Image button;
+	private Image title;
+	private Clip backgroundMusic;
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
+	private static final Font ENDING_FONT = ResourceLoader.loadFont("res/Font.ttf", 100);
+
 	// list of options
 	private final String[] MAIN_MENU_OPTIONS = { "START", "DIFFICULTY", "CREDITS", "INTRO", "QUIT" };
 	private final String[] SETTINGS_OPTIONS = { "EASY", "MEDIUM", "HARD", "BACK" };
+	private final String[] ENDING_OPTIONS = { "MAIN MENU", "QUIT" };
 
-	//Stores the current option the user has highlighted
-	private int currentOption;
-	//Stores the current Scene
 	private String sceneOption;
-
-	private Image backgroundImage;
-	private Image title;
-	private Clip backgroundMusic;
 
 	public MainMenuScene(String sceneOption) {
 		this.sceneOption = sceneOption;
-		initialize();
 	}
 
 	public MainMenuScene() {
@@ -41,8 +51,10 @@ public class MainMenuScene extends MenuScene {
 
 	@Override
 	public void initialize() {
-		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750,
-				825, 0);
+		backgroundImage = ResourceLoader.toBufferedImage(
+				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
+		buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
+		button = ResourceLoader.loadImage("res/images/ui/Button.png").getScaledInstance(336, 56, 0);
 		title = ResourceLoader.loadImage("res/images/ui/Title.png").getScaledInstance(1089, 322, 0);
 
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
@@ -55,24 +67,62 @@ public class MainMenuScene extends MenuScene {
 		InputManager inputManager = Game.getInstance().getInputManager();
 		g.setFont(UI_FONT);
 		g.setColor(Color.WHITE);
+
 		double time = Game.getInstance().getTime();
-		g.drawImage(backgroundImage, (int) (time * -50 % 22195), 0, null);
+		int x = (int) (time * 50 % 22195);
+		Image backgroundSubImage = backgroundImage.getSubimage(x, 0, Main.WIDTH, Main.HEIGHT);
+		g.drawImage(backgroundSubImage, 0, 0, null);
 
 		// render background and text
 		if (sceneOption.equals("Intro")) {
 			introScene(g, inputManager);
 		} else if (sceneOption.equals("Main")) {
 			g.drawImage(title, 355, 45, null);
-			currentOption= upDown(inputManager, MAIN_MENU_OPTIONS, currentOption);
-			renderScrollingMenus(g, MAIN_MENU_OPTIONS, currentOption);
+			upDown(inputManager, MAIN_MENU_OPTIONS);
+			renderScrollingMenus(g, MAIN_MENU_OPTIONS);
 			mainMenuEnter(inputManager);
 		} else if (sceneOption.equals("Difficulty")) {
 			g.drawImage(title, 355, 45, null);
-			currentOption= upDown(inputManager, SETTINGS_OPTIONS, currentOption);
-			renderScrollingMenus(g, SETTINGS_OPTIONS, currentOption);
+			upDown(inputManager, SETTINGS_OPTIONS);
+			renderScrollingMenus(g, SETTINGS_OPTIONS);
 			settingsMenuEnter(inputManager);
 		} else if (sceneOption.equals("Credits")) {
 			creditsScene(g, inputManager);
+		} else if (sceneOption.equals("Ending")) {
+			g.setFont(ENDING_FONT);
+			g.drawString("YOU DIED", 640, 145);
+			g.setFont(UI_FONT);
+			upDown(inputManager, ENDING_OPTIONS);
+			renderScrollingMenus(g, ENDING_OPTIONS);
+			endMenuEnter(inputManager);
+		}
+	}
+
+	/**
+	 * based on whether the up or down keys are clicked, the highlighted option is
+	 * changed
+	 * 
+	 * @param inputManager: to process user input
+	 * @param options:      the possible options in list form
+	 */
+	public void upDown(InputManager inputManager, String[] options) {
+
+		// the if it passes the bottom, wraps around to the top
+		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
+			onSound();
+			currentOption++;
+			if (currentOption >= options.length) {
+				currentOption = 0;
+			}
+		}
+
+		// the if it passes the bottom, wraps around to the top
+		if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
+			onSound();
+			currentOption--;
+			if (currentOption < 0) {
+				currentOption = options.length - 1;
+			}
 		}
 	}
 
@@ -123,6 +173,48 @@ public class MainMenuScene extends MenuScene {
 			}
 			currentOption = 1;
 			sceneOption = "Main";
+		}
+	}
+
+	/**
+	 * Decides what enter will do depending on the which option is highlighted, goes
+	 * to main menu, or quits the game
+	 * 
+	 * @param inputManager
+	 */
+	public void endMenuEnter(InputManager inputManager) {
+
+		// depending on the option selected, enter will do something else
+		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			onSound();
+			if (currentOption == 0) {
+				sceneOption = "Main";
+			} else if (currentOption == 1) {
+				Game.getInstance().stop();
+			}
+		}
+	}
+
+	/**
+	 * Renders all the options Increases the size of option currently being
+	 * considered
+	 * 
+	 * @param g:       graphics from above
+	 * @param options: the options that can be selected
+	 */
+	public void renderScrollingMenus(Graphics g, String[] options) {
+		Image buttonState = button;
+		for (int i = 0; i < options.length; i++) {
+			if (currentOption == i) {
+				g.setColor(Color.WHITE);
+				buttonState = buttonSelected;
+			} else {
+				g.setColor(Color.WHITE);
+				buttonState = button;
+			}
+			g.drawImage(buttonState, 730, 420 + 67 * i, null);
+			String option = options[i];
+			g.drawString(option, 905 - option.length() * 12, 462 + 67 * i);
 		}
 	}
 
@@ -179,4 +271,9 @@ public class MainMenuScene extends MenuScene {
 			sceneOption = "Main";
 		}
 	}
+
+	private void onSound() {
+		ResourceLoader.loadAudioClip("res/audio/Button.wav").start();
+	}
+
 }

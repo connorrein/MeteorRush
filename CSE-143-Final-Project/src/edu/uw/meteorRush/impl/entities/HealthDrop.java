@@ -24,6 +24,7 @@ public class HealthDrop extends Drop {
 	@Override
 	public void onPickup(PlayerShip player) {
 		player.heal(HEAL_AMOUNT);
+		ResourceLoader.loadAudioClip("res/audio/RestoreHP.wav").start();
 		PlayerFollowingText text = new PlayerFollowingText("+" + (int) HEAL_AMOUNT + " HP");
 		Game.getInstance().getOpenScene().addObject(text);
 	}

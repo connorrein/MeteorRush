@@ -14,14 +14,14 @@ public class Wave1 extends Wave {
 	private static final int BASE_MAX_ENEMY_COUNT = 20;
 
 	private double modifiedEnemySpawnPeriod;
-	private double modifiedMaxEnemyCount;
+	private int modifiedMaxEnemyCount;
 	private int enemyCount;
 	private double startTime;
 	private double nextSpawnTime;
 
 	public Wave1() {
 		modifiedEnemySpawnPeriod = BASE_ENEMY_SPAWN_PERIOD / Main.difficulty.getModifier();
-		modifiedMaxEnemyCount = BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier();
+		modifiedMaxEnemyCount = (int) (BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier());
 		enemyCount = 0;
 		startTime = Game.getInstance().getTime();
 		nextSpawnTime = startTime + GameScene.FIRST_WAVE_WAIT_TIME;
@@ -44,7 +44,7 @@ public class Wave1 extends Wave {
 		enemyCount++;
 		spawnAsteroid();
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		if (enemyCount > modifiedMaxEnemyCount) {
+		if (enemyCount >= modifiedMaxEnemyCount) {
 			scene.removeObject(this);
 			scene.addObject(new Wave2());
 		}
