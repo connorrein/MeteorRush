@@ -3,8 +3,10 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.PlayerFollowingText;
 
 public class HealthDrop extends Drop {
 
@@ -22,6 +24,8 @@ public class HealthDrop extends Drop {
 	@Override
 	public void onPickup(PlayerShip player) {
 		player.heal(HEAL_AMOUNT);
+		PlayerFollowingText text = new PlayerFollowingText("+" + (int) HEAL_AMOUNT + " HP");
+		Game.getInstance().getOpenScene().addObject(text);
 	}
 
 	@Override

@@ -3,11 +3,8 @@ package edu.uw.meteorRush.impl.entities;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public abstract class Drop extends Entity {
-
-	private static final double SPEED = 100;
 
 	private double deathTime;
 	private double startY;
