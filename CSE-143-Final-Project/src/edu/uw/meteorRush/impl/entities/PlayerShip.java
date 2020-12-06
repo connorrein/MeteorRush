@@ -11,6 +11,7 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.EndingScene;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 import edu.uw.meteorRush.impl.scenes.MainMenuScene;
 
 public class PlayerShip extends Entity implements DamagableEntity {
@@ -145,6 +146,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			destroy();
+			Game.getInstance().getOpenScene().endGame();
 			Game.getInstance().loadScene(new EndingScene());
 		}
 		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);

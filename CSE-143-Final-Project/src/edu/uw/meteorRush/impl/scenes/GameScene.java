@@ -205,4 +205,8 @@ public class GameScene extends Scene {
 		bounds.setActive(false);
 	}
 
+	public void endGame(){
+		backgroundMusic.stop();
+	}
+
 }
