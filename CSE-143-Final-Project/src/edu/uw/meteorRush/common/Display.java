@@ -1,9 +1,13 @@
 package edu.uw.meteorRush.common;
 
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -40,6 +44,10 @@ class Display {
 		window.setSize(dimension);
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
+		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+		    cursorImg, new Point(0, 0), "Blank");
+		window.getContentPane().setCursor(blankCursor);
 
 		canvas = new Canvas();
 		canvas.setPreferredSize(dimension);

@@ -3,17 +3,38 @@ package edu.uw.meteorRush.impl.entities;
 import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public abstract class Drop extends Entity {
 
-	public Drop(Vector2 position, Vector2 size) {
+	private static final double SPEED = 100;
+
+	private double deathTime;
+	private double startY;
+
+	public Drop(Vector2 position, Vector2 size, double lifetime) {
 		super(position, size);
+		deathTime = Game.getInstance().getTime() + lifetime;
+		startY = position.getY();
+	}
+
+	@Override
+	public void tick() {
+		double time = Game.getInstance().getTime();
+		if (time >= deathTime) {
+			Game.getInstance().getOpenScene().removeObject(this);
+		} else {
+			Vector2 position = getPosition();
+			position.setX(position.getX() - 150.0 * Game.getInstance().getDeltaTime());
+			position.setY(startY + 15.0 * Math.sin(2.0 * (deathTime - time)));
+			setPosition(position);
+		}
 	}
 
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
-			onPickup();
+			onPickup((PlayerShip) other);
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
@@ -22,10 +43,6 @@ public abstract class Drop extends Entity {
 	public void onCollisionExit(Entity other) {
 	}
 
-	@Override
-	public void tick() {
-	}
-
-	public abstract void onPickup();
+	public abstract void onPickup(PlayerShip player);
 
 }

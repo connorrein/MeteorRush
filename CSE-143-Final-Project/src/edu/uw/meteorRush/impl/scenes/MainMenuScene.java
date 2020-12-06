@@ -9,7 +9,6 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
-import edu.uw.meteorRush.impl.Main;
 
 /**
  * @author Marko Milovanovic
@@ -29,7 +28,7 @@ public class MainMenuScene extends Scene {
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
 
 	// list of options
-	private final String[] MAIN_MENU_OPTIONS = { "START", "SETTINGS", "CREDITS", "INTRO", "QUIT" };
+	private final String[] MAIN_MENU_OPTIONS = { "START", "DIFFICULTY", "CREDITS", "INTRO", "QUIT" };
 	private final String[] SETTINGS_OPTIONS = { "HARD", "MEDIUM", "EASY", "BACK" };
 
 	private String sceneOption;
@@ -63,7 +62,7 @@ public class MainMenuScene extends Scene {
 			upDown(inputManager, MAIN_MENU_OPTIONS);
 			renderScrollingMenus(g, MAIN_MENU_OPTIONS);
 			mainMenuEnter(inputManager);
-		} else if (sceneOption.equals("Settings")) {
+		} else if (sceneOption.equals("Difficulty")) {
 			upDown(inputManager, SETTINGS_OPTIONS);
 			renderScrollingMenus(g, SETTINGS_OPTIONS);
 			settingsMenuEnter(inputManager);
@@ -83,6 +82,7 @@ public class MainMenuScene extends Scene {
 
 		// the if it passes the bottom, wraps around to the top
 		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
+			onSound();
 			currentOption++;
 			if (currentOption >= options.length) {
 				currentOption = 0;
@@ -91,6 +91,7 @@ public class MainMenuScene extends Scene {
 
 		// the if it passes the bottom, wraps around to the top
 		if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
+			onSound();
 			currentOption--;
 			if (currentOption < 0) {
 				currentOption = options.length - 1;
@@ -108,11 +109,12 @@ public class MainMenuScene extends Scene {
 
 		// depending on the option selected, enter will do something else
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			onSound();
 			if (currentOption == 0) {
 				backgroundMusic.stop();
 				Game.getInstance().loadScene(new GameScene());
 			} else if (currentOption == 1) {
-				sceneOption = "Settings";
+				sceneOption = "Difficulty";
 			} else if (currentOption == 2) {
 				sceneOption = "Credits";
 			} else if (currentOption == 3) {
@@ -133,6 +135,7 @@ public class MainMenuScene extends Scene {
 
 		// depending on the option selected, enter will do something else
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			onSound();
 			if (currentOption == 0) {
 				// TODO
 				// hard
@@ -172,7 +175,7 @@ public class MainMenuScene extends Scene {
 			}
 			g.drawImage(buttonState, 730, 420 + 67 * i, null);
 			String option = options[i];
-			g.drawString(option, 905 - option.length() * 13, 462 + 67 * i);
+			g.drawString(option, 905 - option.length() * 12, 462 + 67 * i);
 		}
 	}
 
@@ -225,8 +228,15 @@ public class MainMenuScene extends Scene {
 		g.drawImage(buttonSelected, 475, 725, null);
 		g.drawString("MAIN MENU", 485, 785);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			onSound();
 			sceneOption = "Main";
 		}
 	}
 
+	private void onSound() {
+		ResourceLoader.loadAudioClip("res/audio/Button.wav").start();
+	}
+
+	
+	
 }

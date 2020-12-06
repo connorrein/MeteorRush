@@ -137,7 +137,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	public double getMaxHealth() {
 		return MAX_HEALTH;
 	}
-
+	
 	@Override
 	public void damage(double amount) {
 		currentHealth -= amount;

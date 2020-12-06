@@ -30,7 +30,7 @@ public class GameScene extends Scene {
 
 	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
 	public static final double WAVE_REST_TIME = 5.0;
-	private static final Font UI_FONT = new Font("Consolas", 0, 50);
+	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 50);
 	private static final Font SELECT_FONT = new Font("Consolas", 0, 70);
 	private static final Vector2 PLAYER_START = new Vector2(250, Main.HEIGHT / 2);
 	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
@@ -142,7 +142,7 @@ public class GameScene extends Scene {
 			super.render(g);
 			g.setColor(Color.WHITE);
 			g.setFont(UI_FONT);
-			g.drawString("Score: " + score, 50, 50);
+			g.drawString("Score: " + score, 50, 70);
 			g.drawString("Health", Main.WIDTH - 200, 50);
 			g.drawRect(Main.WIDTH - 225, 60, 200, 15);
 			g.setColor(Color.RED);

@@ -11,8 +11,6 @@ import java.awt.image.BufferStrategy;
  */
 public class Game {
 
-	private static final long MILIS_PER_FRAME = 5;
-
 	private static Game instance;
 
 	private String title;
@@ -113,9 +111,6 @@ public class Game {
 				while (running) {
 					long currentTimeMilis = System.currentTimeMillis();
 					long absoluteDeltaTimeMilis = currentTimeMilis - lastTimeMilis;
-					if (absoluteDeltaTimeMilis < MILIS_PER_FRAME) {
-						continue;
-					}
 					lastTimeMilis = currentTimeMilis;
 					deltaTimeSeconds = absoluteDeltaTimeMilis * 0.001 * timeScale;
 					elapsedTimeSeconds += deltaTimeSeconds;
