@@ -1,7 +1,11 @@
 package edu.uw.meteorRush.impl.scenes;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
@@ -22,7 +26,7 @@ public class MainMenuScene extends Scene {
 	 */
 	private int currentOption;
 
-	private Image backgroundImage;
+	private BufferedImage backgroundImage;
 	private Image buttonSelected;
 	private Image button;
 	private Image title;
@@ -47,8 +51,8 @@ public class MainMenuScene extends Scene {
 
 	@Override
 	public void initialize() {
-		backgroundImage = ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750,
-				825, 0);
+		backgroundImage = ResourceLoader.toBufferedImage(
+				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
 		buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
 		button = ResourceLoader.loadImage("res/images/ui/Button.png").getScaledInstance(336, 56, 0);
 		title = ResourceLoader.loadImage("res/images/ui/Title.png").getScaledInstance(1089, 322, 0);
@@ -63,8 +67,11 @@ public class MainMenuScene extends Scene {
 		InputManager inputManager = Game.getInstance().getInputManager();
 		g.setFont(UI_FONT);
 		g.setColor(Color.WHITE);
+
 		double time = Game.getInstance().getTime();
-		g.drawImage(backgroundImage, (int) (time * -50 % 22195), 0, null);
+		int x = (int) (time * 50 % 22195);
+		Image backgroundSubImage = backgroundImage.getSubimage(x, 0, Main.WIDTH, Main.HEIGHT);
+		g.drawImage(backgroundSubImage, 0, 0, null);
 
 		// render background and text
 		if (sceneOption.equals("Intro")) {

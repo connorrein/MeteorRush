@@ -5,13 +5,13 @@ import java.awt.Graphics;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
-import edu.uw.meteorRush.impl.entities.Javelin;
+import edu.uw.meteorRush.impl.entities.Marauder;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class Wave2 extends Wave {
+public class Wave5 extends Wave {
 
-	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.0;
-	private static final int BASE_MAX_ENEMY_COUNT = 15;
+	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.5;
+	private static final int BASE_MAX_ENEMY_COUNT = 1;
 
 	private double modifiedEnemySpawnPeriod;
 	private double modifiedMaxEnemyCount;
@@ -19,7 +19,7 @@ public class Wave2 extends Wave {
 	private double startTime;
 	private double nextSpawnTime;
 
-	public Wave2() {
+	public Wave5() {
 		modifiedEnemySpawnPeriod = BASE_ENEMY_SPAWN_PERIOD / Main.difficulty.getModifier();
 		modifiedMaxEnemyCount = BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier();
 		enemyCount = 0;
@@ -42,18 +42,18 @@ public class Wave2 extends Wave {
 
 	private void spawnEnemy() {
 		enemyCount++;
-		spawnJavelin();
+		spawnMarauder();
 		if (enemyCount == modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
-			scene.addObject(new Wave3());
+			scene.addObject(new Wave1());
 		}
 	}
 
-	private void spawnJavelin() {
+	private void spawnMarauder() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
-		Javelin enemy = new Javelin(position);
+		Marauder enemy = new Marauder(position);
 		scene.addObject(enemy);
 	}
 

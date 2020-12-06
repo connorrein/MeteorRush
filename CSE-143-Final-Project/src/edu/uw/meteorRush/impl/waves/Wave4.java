@@ -52,10 +52,10 @@ public class Wave4 extends Wave {
 		case 2:
 			spawnHornet();
 		}
-		if (enemyCount > modifiedMaxEnemyCount) {
+		if (enemyCount == modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
-			scene.addObject(new Wave1());
+			scene.addObject(new Wave5());
 		}
 	}
 

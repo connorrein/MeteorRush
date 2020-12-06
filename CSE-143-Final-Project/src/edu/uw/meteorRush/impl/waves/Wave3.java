@@ -43,7 +43,7 @@ public class Wave3 extends Wave {
 	private void spawnEnemy() {
 		enemyCount++;
 		spawnHornet();
-		if (enemyCount > modifiedMaxEnemyCount) {
+		if (enemyCount == modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
 			scene.addObject(new Wave4());

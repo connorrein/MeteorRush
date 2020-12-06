@@ -44,7 +44,7 @@ public class Wave1 extends Wave {
 		enemyCount++;
 		spawnAsteroid();
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		if (enemyCount > modifiedMaxEnemyCount) {
+		if (enemyCount == modifiedMaxEnemyCount) {
 			scene.removeObject(this);
 			scene.addObject(new Wave2());
 		}

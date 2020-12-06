@@ -19,7 +19,7 @@ import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave3;
+import edu.uw.meteorRush.impl.waves.*;
 
 /**
  * 
@@ -35,6 +35,19 @@ public class GameScene extends Scene {
 	private static final Vector2 PLAYER_START = new Vector2(250, Main.HEIGHT / 2);
 	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
 
+	private static final Image GREEN_HP_FRAME = ResourceLoader.loadImage("res/images/ui/HealthOutlineGreen.png")
+			.getScaledInstance((int) (142 * 2.5), (int) (20 * 2.5), 0);
+	private static final Image YELLOW_HP_FRAME = ResourceLoader.loadImage("res/images/ui/HealthOutlineYellow.png")
+			.getScaledInstance((int) (142 * 2.5), (int) (20 * 2.5), 0);
+	private static final Image RED_HP_FRAME = ResourceLoader.loadImage("res/images/ui/HealthOutlineRed.png")
+			.getScaledInstance((int) (142 * 2.5), (int) (20 * 2.5), 0);
+	private static final Image GREEN_HP_BAR = ResourceLoader.loadImage("res/images/ui/HealthBitGreen.png")
+			.getScaledInstance((int) (10 * 2.5), (int) (14 * 2.5), 0);
+	private static final Image YELLOW_HP_BAR = ResourceLoader.loadImage("res/images/ui/HealthBitYellow.png")
+			.getScaledInstance((int) (10 * 2.5), (int) (14 * 2.5), 0);
+	private static final Image RED_HP_BAR = ResourceLoader.loadImage("res/images/ui/HealthBitRed.png")
+			.getScaledInstance((int) (10 * 2.5), (int) (14 * 2.5), 0);
+
 	private Collider bounds;
 	private BufferedImage backgroundImage;
 	private Image pauseBackgroundImage;
@@ -42,8 +55,6 @@ public class GameScene extends Scene {
 	private PlayerShip player;
 	private int score;
 	private int currentPauseOption;
-	private double currentHealth;
-	private double maxHealth;
 	private boolean paused;
 	private InputManager inputManager;
 
@@ -72,9 +83,8 @@ public class GameScene extends Scene {
 		inputManager = Game.getInstance().getInputManager();
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
-		addObject(new Wave3());
-		maxHealth = player.getMaxHealth();
 		addObject(new FadeIn(1.5));
+		addObject(new Wave1());
 	}
 
 	@Override
@@ -90,7 +100,6 @@ public class GameScene extends Scene {
 				pause();
 			}
 		}
-		currentHealth = player.getCurrentHealth();
 	}
 
 	private void pauseTick() {
@@ -101,7 +110,7 @@ public class GameScene extends Scene {
 			} else if (currentPauseOption == 1) {
 				unPause();
 				backgroundMusic.stop();
-				Game.getInstance().loadScene(new MainMenuScene());
+				Game.getInstance().loadScene(new MainMenuScene("Main"));
 			}
 		}
 	}
@@ -143,11 +152,29 @@ public class GameScene extends Scene {
 			g.setColor(Color.WHITE);
 			g.setFont(UI_FONT);
 			g.drawString("Score: " + score, 50, 70);
-			g.drawString("Health", Main.WIDTH - 200, 50);
-			g.drawRect(Main.WIDTH - 225, 60, 200, 15);
-			g.setColor(Color.RED);
-			g.fillRect(Main.WIDTH - 224, 61, (int) (currentHealth / maxHealth * 200.0), 13);
+			drawHealthBar(g);
 		}
+	}
+
+	private void drawHealthBar(Graphics g) {
+		double healthProportion = player.getCurrentHealth() / player.getMaxHealth();
+		Image frame;
+		Image bar;
+		if (healthProportion < 0.33) {
+			frame = RED_HP_FRAME;
+			bar = RED_HP_BAR;
+		} else if (healthProportion < 0.66) {
+			frame = YELLOW_HP_FRAME;
+			bar = YELLOW_HP_BAR;
+		} else {
+			frame = GREEN_HP_FRAME;
+			bar = GREEN_HP_BAR;
+		}
+		int numBars = (int) Math.ceil(healthProportion * 15);
+		for (int i = 0; i < numBars; i++) {
+			g.drawImage(bar, Main.WIDTH - 391 + i * 23, 43, null);
+		}
+		g.drawImage(frame, Main.WIDTH - 400, 35, null);
 	}
 
 	public void renderPause(Graphics g) {
@@ -163,7 +190,6 @@ public class GameScene extends Scene {
 			g.drawString(PAUSE_MENU_OPTIONS[i], 400, 300 + i * 70);
 		}
 	}
-
 
 	public PlayerShip getPlayer() {
 		return player;
