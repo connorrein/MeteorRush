@@ -164,6 +164,7 @@ public class GameScene extends Scene {
 		}
 	}
 
+
 	public PlayerShip getPlayer() {
 		return player;
 	}
