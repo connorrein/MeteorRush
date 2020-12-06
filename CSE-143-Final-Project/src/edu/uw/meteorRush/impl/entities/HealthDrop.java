@@ -6,12 +6,11 @@ import java.awt.Image;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
-import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.PlayerFollowingText;
 
 public class HealthDrop extends Drop {
 
-	private static final double HEAL_AMOUNT = (1 / Main.difficulty);
+	private static final double HEAL_AMOUNT = 1;
 	private static final double LIFETIME = 10.0;
 	private static final int WIDTH = 50;
 	private static final int HEIGHT = 50;

@@ -7,16 +7,17 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AsteroidLarge extends Entity implements DamagableEntity {
 
-	private static final double DAMAGE_AMOUNT = 3.0;
+	private static final double BASE_DAMAGE_AMOUNT = 1.5;
 	private static final double MAX_HEALTH = 5;
-	private static final double SPEED = 300;
+	private static final double BASE_SPEED = 300;
+	private static final int BASE_SCORE_VALUE = 50;
 	private static final int WIDTH = 200;
 	private static final int HEIGHT = 200;
-	private static final int SCORE_VALUE = 50;
 	public static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidLarge1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
 	public static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidLarge2.png")
@@ -29,7 +30,8 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 
 	public AsteroidLarge(Vector2 position, Vector2 direction) {
 		super(position, new Vector2(WIDTH, HEIGHT));
-		this.velocity = direction.clone().normalize().multiply(SPEED);
+		double difficultyModifier = Main.difficulty.getModifier();
+		this.velocity = direction.clone().normalize().multiply(BASE_SPEED * difficultyModifier);
 		currentHealth = MAX_HEALTH;
 	}
 
@@ -57,7 +59,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
-			((PlayerShip) other).damage(DAMAGE_AMOUNT);
+			((PlayerShip) other).damage(BASE_DAMAGE_AMOUNT * Main.difficulty.getModifier());
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
@@ -80,7 +82,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	private void destroy() {
 		ResourceLoader.loadAudioClip("res/audio/AsteroidHit.wav").start();
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		scene.addScore(SCORE_VALUE);
+		scene.addScore((int) (BASE_SCORE_VALUE * Main.difficulty.getModifier()));
 		Explosion explosion = new Explosion(getPosition(), new Vector2(200, 200), 0.1);
 		scene.addObject(explosion);
 		scene.removeObject(this);

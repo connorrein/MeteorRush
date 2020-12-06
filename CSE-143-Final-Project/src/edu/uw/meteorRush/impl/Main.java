@@ -7,8 +7,9 @@ public class Main {
 
 	public static final int WIDTH = 1800;
 	public static final int HEIGHT = 800;
-	public static double difficulty = 1;
-	
+
+	public static Difficulty difficulty = Difficulty.MEDIUM;
+
 	public static void main(String[] args) {
 		Game game = new Game("Meteor Rush", WIDTH, HEIGHT);
 		game.start();

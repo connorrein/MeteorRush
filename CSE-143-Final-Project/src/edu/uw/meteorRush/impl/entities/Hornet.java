@@ -10,7 +10,7 @@ import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class MantaRay extends Entity implements DamagableEntity {
+public class Hornet extends Entity implements DamagableEntity {
 
 	private static final int WIDTH = (int) (44 * 2.8);
 	private static final int HEIGHT = (int) (21 * 2.8);
@@ -18,24 +18,24 @@ public class MantaRay extends Entity implements DamagableEntity {
 	private static final double SPEED = 700.0;
 	private static final int SCORE_VALUE = 75;
 	private static final double HEALTH_DROP_CHANCE = 1;
-	private static final double CONTACT_DAMAGE = 1.0;
+	private static final double BASE_CONTACT_DAMAGE = 1.0;
 	private static final double LASER_COOLDOWN = 0.5;
 	private static final int LASER_WIDTH = 30;
 	private static final int LASER_HEIGHT = 6;
-	private static final double LASER_SPEED = 1000.0;
-	private static final double LASER_DAMAGE_AMOUNT = 0.5;
-	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRay1.png")
+	private static final double BASE_LASER_SPEED = 1000.0;
+	private static final double BASE_LASER_DAMAGE_AMOUNT = 1.0;
+	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/hornet/Hornet1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	private static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRay2.png")
+	private static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/hornet/Hornet2.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
-	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/mantaRay/MantaRayLaser.png")
+	private static final Image LASER = ResourceLoader.loadImage("res/images/entities/hornet/HornetLaser.png")
 			.getScaledInstance(LASER_WIDTH, LASER_HEIGHT, 0);
 
 	private double health;
 	private double rand;
 	private double nextFireTime;
 
-	public MantaRay(Vector2 position) {
+	public Hornet(Vector2 position) {
 		super(position, new Vector2(WIDTH, HEIGHT));
 		health = MAX_HEALTH;
 		rand = 6.28318530718 * Math.random();
@@ -75,7 +75,7 @@ public class MantaRay extends Entity implements DamagableEntity {
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
-			((PlayerShip) other).damage(CONTACT_DAMAGE);
+			((PlayerShip) other).damage(Main.difficulty.getModifier() * BASE_CONTACT_DAMAGE);
 			destroy();
 		}
 	}
@@ -109,7 +109,8 @@ public class MantaRay extends Entity implements DamagableEntity {
 	private static class Laser extends Projectile {
 
 		public Laser(Vector2 position) {
-			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(-LASER_SPEED, 0));
+			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT),
+					new Vector2(Main.difficulty.getModifier() * -BASE_LASER_SPEED, 0));
 		}
 
 		@Override
@@ -126,7 +127,7 @@ public class MantaRay extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				((PlayerShip) other).damage(LASER_DAMAGE_AMOUNT);
+				((PlayerShip) other).damage(Main.difficulty.getModifier() * BASE_LASER_DAMAGE_AMOUNT);
 				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeObject(this);

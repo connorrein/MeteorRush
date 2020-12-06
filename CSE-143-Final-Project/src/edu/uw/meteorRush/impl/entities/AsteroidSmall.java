@@ -7,16 +7,17 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AsteroidSmall extends Entity implements DamagableEntity {
 
-	private static final double DAMAGE_AMOUNT = 1.0;
+	private static final double BASE_DAMAGE_AMOUNT = 1.0;
 	private static final double MAX_HEALTH = 3;
-	private static final double SPEED = 600;
+	private static final double BASE_SPEED = 500;
+	private static final int BASE_SCORE_VALUE = 20;
 	private static final int WIDTH = 100;
 	private static final int HEIGHT = 100;
-	private static final int SCORE_VALUE = 20;
 	public static final Image SPRITE = ResourceLoader.loadImage("res/images/entities/asteroids/AsteroidSmall.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
 
@@ -25,8 +26,9 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 
 	public AsteroidSmall(Vector2 position, Vector2 direction) {
 		super(position, new Vector2(WIDTH, HEIGHT));
-		this.velocity = direction.clone().normalize().multiply(SPEED);
-		currentHealth = MAX_HEALTH;
+		double difficultyModifier = Main.difficulty.getModifier();
+		this.velocity = direction.clone().normalize().multiply(BASE_SPEED * difficultyModifier);
+		currentHealth = MAX_HEALTH * difficultyModifier;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof DamagableEntity && !(other instanceof AsteroidSmall || other instanceof AsteroidLarge)) {
-			((DamagableEntity) other).damage(DAMAGE_AMOUNT);
+			((DamagableEntity) other).damage(BASE_DAMAGE_AMOUNT * Main.difficulty.getModifier());
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
@@ -68,7 +70,7 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	private void destroy() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeObject(this);
-		scene.addScore(SCORE_VALUE);
+		scene.addScore((int) (BASE_SCORE_VALUE * Main.difficulty.getModifier()));
 		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
 		scene.addObject(explosion);
 	}

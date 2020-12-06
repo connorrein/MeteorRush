@@ -9,6 +9,7 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
+import edu.uw.meteorRush.impl.Difficulty;
 import edu.uw.meteorRush.impl.Main;
 
 /**
@@ -31,7 +32,7 @@ public class MainMenuScene extends Scene {
 
 	// list of options
 	private final String[] MAIN_MENU_OPTIONS = { "START", "DIFFICULTY", "CREDITS", "INTRO", "QUIT" };
-	private final String[] SETTINGS_OPTIONS = { "HARD", "MEDIUM", "EASY", "BACK" };
+	private final String[] SETTINGS_OPTIONS = { "EASY", "MEDIUM", "HARD", "BACK" };
 	private final String[] ENDING_OPTIONS = { "MAIN MENU", "QUIT" };
 
 	private String sceneOption;
@@ -39,6 +40,7 @@ public class MainMenuScene extends Scene {
 	public MainMenuScene(String sceneOption) {
 		this.sceneOption = sceneOption;
 	}
+
 	public MainMenuScene() {
 		this.sceneOption = "Intro";
 	}
@@ -133,6 +135,7 @@ public class MainMenuScene extends Scene {
 				Game.getInstance().loadScene(new GameScene());
 			} else if (currentOption == 1) {
 				sceneOption = "Difficulty";
+				currentOption = Main.difficulty.ordinal();
 			} else if (currentOption == 2) {
 				sceneOption = "Credits";
 			} else if (currentOption == 3) {
@@ -155,23 +158,21 @@ public class MainMenuScene extends Scene {
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			onSound();
 			if (currentOption == 0) {
-				// hard
-				Main.difficulty = 1.25;
+				Main.difficulty = Difficulty.EASY;
 			} else if (currentOption == 1) {
-				// medium
-				Main.difficulty = 1;
+				Main.difficulty = Difficulty.MEDIUM;
 			} else if (currentOption == 2) {
-				// easy
-				Main.difficulty = 0.75;
-//				System.out.println(Main.difficulty);
+				Main.difficulty = Difficulty.HARD;
 			}
+			currentOption = 1;
 			sceneOption = "Main";
 		}
 	}
 
 	/**
-	 * Decides what enter will do depending on the which option is highlighted,
-	 * goes to main menu, or quits the game
+	 * Decides what enter will do depending on the which option is highlighted, goes
+	 * to main menu, or quits the game
+	 * 
 	 * @param inputManager
 	 */
 	public void endMenuEnter(InputManager inputManager) {
@@ -268,6 +269,4 @@ public class MainMenuScene extends Scene {
 		ResourceLoader.loadAudioClip("res/audio/Button.wav").start();
 	}
 
-	
-	
 }
