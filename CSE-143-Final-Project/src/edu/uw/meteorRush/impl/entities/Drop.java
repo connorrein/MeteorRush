@@ -6,26 +6,22 @@ import edu.uw.meteorRush.common.Vector2;
 
 public abstract class Drop extends Entity {
 
-	private double deathTime;
 	private double startY;
+	private double rand;
 
-	public Drop(Vector2 position, Vector2 size, double lifetime) {
+	public Drop(Vector2 position, Vector2 size) {
 		super(position, size);
-		deathTime = Game.getInstance().getTime() + lifetime;
 		startY = position.getY();
+		rand = Math.random();
 	}
 
 	@Override
 	public void tick() {
 		double time = Game.getInstance().getTime();
-		if (time >= deathTime) {
-			Game.getInstance().getOpenScene().removeObject(this);
-		} else {
-			Vector2 position = getPosition();
-			position.setX(position.getX() - 150.0 * Game.getInstance().getDeltaTime());
-			position.setY(startY + 15.0 * Math.sin(2.0 * (deathTime - time)));
-			setPosition(position);
-		}
+		Vector2 position = getPosition();
+		position.setX(position.getX() - 150.0 * Game.getInstance().getDeltaTime());
+		position.setY(startY + 15.0 * Math.sin(rand + 2.0 * time));
+		setPosition(position);
 	}
 
 	@Override
