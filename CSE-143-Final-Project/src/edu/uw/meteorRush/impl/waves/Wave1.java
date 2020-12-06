@@ -10,8 +10,8 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave1 extends Wave {
 
-	private static final double ENEMY_SPAWN_PERIOD = 0.5;
-	private static final int MAX_ENEMY_COUNT = 20;
+	private static final double ENEMY_SPAWN_PERIOD = 0.5 / Main.difficulty;
+	private static final int MAX_ENEMY_COUNT = (int) (20 * Main.difficulty);
 
 	private int enemyCount;
 	private double startTime;

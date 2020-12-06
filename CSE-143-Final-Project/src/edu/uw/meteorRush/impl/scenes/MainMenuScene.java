@@ -9,6 +9,7 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Scene;
+import edu.uw.meteorRush.impl.Main;
 
 /**
  * @author Marko Milovanovic
@@ -137,16 +138,17 @@ public class MainMenuScene extends Scene {
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			onSound();
 			if (currentOption == 0) {
-				// TODO
 				// hard
+				Main.difficulty = 125;
 				sceneOption = "Main";
 			} else if (currentOption == 1) {
-				// TODO
 				// medium
+				Main.difficulty = 1;
 				sceneOption = "Main";
 			} else if (currentOption == 2) {
-				// TODO
 				// easy
+				Main.difficulty = 0.075;
+//				System.out.println(Main.difficulty);
 				sceneOption = "Main";
 			} else if (currentOption == 3) {
 				sceneOption = "Main";
