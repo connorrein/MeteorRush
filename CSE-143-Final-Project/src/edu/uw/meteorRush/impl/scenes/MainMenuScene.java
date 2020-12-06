@@ -27,12 +27,21 @@ public class MainMenuScene extends Scene {
 	private Image title;
 	private Clip backgroundMusic;
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
+	private static final Font ENDING_FONT = ResourceLoader.loadFont("res/Font.ttf", 100);
 
 	// list of options
 	private final String[] MAIN_MENU_OPTIONS = { "START", "DIFFICULTY", "CREDITS", "INTRO", "QUIT" };
 	private final String[] SETTINGS_OPTIONS = { "HARD", "MEDIUM", "EASY", "BACK" };
+	private final String[] ENDING_OPTIONS = { "MAIN MENU", "QUIT" };
 
 	private String sceneOption;
+
+	public MainMenuScene(String sceneOption) {
+		this.sceneOption = sceneOption;
+	}
+	public MainMenuScene() {
+		this.sceneOption = "Intro";
+	}
 
 	@Override
 	public void initialize() {
@@ -44,7 +53,6 @@ public class MainMenuScene extends Scene {
 
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
-		sceneOption = "Intro";
 	}
 
 	@Override
@@ -60,15 +68,24 @@ public class MainMenuScene extends Scene {
 		if (sceneOption.equals("Intro")) {
 			introScene(g, inputManager);
 		} else if (sceneOption.equals("Main")) {
+			g.drawImage(title, 355, 45, null);
 			upDown(inputManager, MAIN_MENU_OPTIONS);
 			renderScrollingMenus(g, MAIN_MENU_OPTIONS);
 			mainMenuEnter(inputManager);
 		} else if (sceneOption.equals("Difficulty")) {
+			g.drawImage(title, 355, 45, null);
 			upDown(inputManager, SETTINGS_OPTIONS);
 			renderScrollingMenus(g, SETTINGS_OPTIONS);
 			settingsMenuEnter(inputManager);
 		} else if (sceneOption.equals("Credits")) {
 			creditsScene(g, inputManager);
+		} else if (sceneOption.equals("Ending")) {
+			g.setFont(ENDING_FONT);
+			g.drawString("YOU DIED", 640, 145);
+			g.setFont(UI_FONT);
+			upDown(inputManager, ENDING_OPTIONS);
+			renderScrollingMenus(g, ENDING_OPTIONS);
+			endMenuEnter(inputManager);
 		}
 	}
 
@@ -140,21 +157,34 @@ public class MainMenuScene extends Scene {
 			if (currentOption == 0) {
 				// hard
 				Main.difficulty = 1.25;
-				sceneOption = "Main";
 			} else if (currentOption == 1) {
 				// medium
 				Main.difficulty = 1;
-				sceneOption = "Main";
 			} else if (currentOption == 2) {
 				// easy
 				Main.difficulty = 0.75;
 //				System.out.println(Main.difficulty);
+			}
+			sceneOption = "Main";
+		}
+	}
+
+	/**
+	 * Decides what enter will do depending on the which option is highlighted,
+	 * goes to main menu, or quits the game
+	 * @param inputManager
+	 */
+	public void endMenuEnter(InputManager inputManager) {
+
+		// depending on the option selected, enter will do something else
+		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			onSound();
+			if (currentOption == 0) {
 				sceneOption = "Main";
-			} else if (currentOption == 3) {
-				sceneOption = "Main";
+			} else if (currentOption == 1) {
+				Game.getInstance().stop();
 			}
 		}
-
 	}
 
 	/**
@@ -165,7 +195,6 @@ public class MainMenuScene extends Scene {
 	 * @param options: the options that can be selected
 	 */
 	public void renderScrollingMenus(Graphics g, String[] options) {
-		g.drawImage(title, 355, 45, null);
 		Image buttonState = button;
 		for (int i = 0; i < options.length; i++) {
 			if (currentOption == i) {
@@ -228,7 +257,7 @@ public class MainMenuScene extends Scene {
 		g.setColor(Color.BLACK);
 		// g.setFont(SELECT_FONT);
 		g.drawImage(buttonSelected, 475, 725, null);
-		g.drawString("MAIN MENU", 485, 785);
+		g.drawString("MAIN MENU", 500, 770);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			onSound();
 			sceneOption = "Main";
