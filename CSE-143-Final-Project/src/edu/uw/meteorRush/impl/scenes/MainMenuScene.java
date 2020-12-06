@@ -139,7 +139,7 @@ public class MainMenuScene extends Scene {
 			onSound();
 			if (currentOption == 0) {
 				// hard
-				Main.difficulty = 125;
+				Main.difficulty = 1.25;
 				sceneOption = "Main";
 			} else if (currentOption == 1) {
 				// medium
@@ -147,7 +147,7 @@ public class MainMenuScene extends Scene {
 				sceneOption = "Main";
 			} else if (currentOption == 2) {
 				// easy
-				Main.difficulty = 0.075;
+				Main.difficulty = 0.75;
 //				System.out.println(Main.difficulty);
 				sceneOption = "Main";
 			} else if (currentOption == 3) {
