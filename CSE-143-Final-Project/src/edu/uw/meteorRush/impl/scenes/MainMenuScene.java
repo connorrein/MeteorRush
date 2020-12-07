@@ -145,9 +145,9 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void introScene(Graphics g, InputManager inputManager) {
 		g.drawImage(IntroScene1, 0, 0, null);
-		Color colorSemi = new Color(0, 0, 0, 125);
+		Color colorSemi = new Color(0, 0, 0, 100);
 		g.setColor(colorSemi);
-		g.fillRect(625, 75, 625, 175);
+		g.fillRect(0, 0, 1800, 800);
 		g.setColor(Color.WHITE);
 		String[] wordsToPrint = {"You are an astronaut who went off", "course due to a malfunction.",
 				"Now aliens are trying to kill you", "in the midst of a hectic asteroid belt"};
