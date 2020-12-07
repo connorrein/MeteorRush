@@ -8,25 +8,59 @@ import edu.uw.meteorRush.common.Scene;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.*;
+import java.util.Scanner;
 
 public class EndingScene extends MenuScene {
 
     private Image backgroundImage;
     private Clip backgroundMusic;
     private int currentOption;
+    private int score;
+    private boolean wasNewHighScore;
+    private int highScore;
 
     private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
     private static final Font ENDING_FONT = ResourceLoader.loadFont("res/Font.ttf", 100);
 
     private final String[] ENDING_OPTIONS = { "RESTART", "MAIN MENU", "QUIT" };
 
-    public void render(Graphics g) {
+    public EndingScene (int score) {
+        this.score = score;
+    }
+
+    public void initialize() {
+        try {
+            highScore = getHighScore();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (score > highScore) {
+            wasNewHighScore = true;
+            try {
+                setHighScore(score);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            highScore = score;
+        } else {
+            wasNewHighScore = false;
+        }
+    }
+
+    public void render(Graphics g){
         super.render(g);
         InputManager inputManager = Game.getInstance().getInputManager();
         g.setFont(UI_FONT);
         g.setColor(Color.WHITE);
         g.setFont(ENDING_FONT);
         g.drawString("YOU DIED", 640, 145);
+        g.drawString("YOUR SCORE: " + score, 640, 255);
+        if (wasNewHighScore) {
+            g.drawString("NEW HIGH SCORE!", 640, 365);
+        } else {
+            g.drawString("HIGH SCORE = " + highScore, 640, 365);
+        }
         g.setFont(UI_FONT);
         currentOption = upDown(inputManager, ENDING_OPTIONS, currentOption);
         renderScrollingMenus(g, ENDING_OPTIONS, currentOption);
@@ -51,5 +85,22 @@ public class EndingScene extends MenuScene {
                 Game.getInstance().stop();
             }
         }
+    }
+
+    public int getHighScore() throws FileNotFoundException {
+        File highScoreFile = new File("src/res/highScore");
+        Scanner scanner = new Scanner(highScoreFile);
+        int highScore = scanner.nextInt();
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) throws IOException {
+        File highScoreFile = new File("src/res/highScore");
+        highScoreFile.delete();
+        highScoreFile.createNewFile();
+        FileWriter fw = new FileWriter(highScoreFile);
+        String highScoreString = "" + highScore;
+        fw.write(highScoreString);
+        fw.close();
     }
 }

@@ -209,4 +209,8 @@ public class GameScene extends Scene {
 		backgroundMusic.stop();
 	}
 
+	public int getScore() {
+		return score;
+	}
+
 }
