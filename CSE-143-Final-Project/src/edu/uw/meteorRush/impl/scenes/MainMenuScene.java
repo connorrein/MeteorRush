@@ -18,7 +18,7 @@ import edu.uw.meteorRush.impl.Main;
 /**
  * @author Marko Milovanovic
  */
-public class MainMenuScene extends MenuScene {
+public class MainMenuScene extends SceneWithKeys {
 
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
 	// list of options
@@ -194,6 +194,8 @@ public class MainMenuScene extends MenuScene {
 		g.drawString("Game art: Amy George", 475, 595);
 		returnToMenuOption(g, inputManager);
 	}
+
+
 
 	/**
 	 * Creates a big red RETURN TO MENU button that returns the user to the main
