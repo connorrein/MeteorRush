@@ -148,10 +148,11 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void introScene(Graphics g, InputManager inputManager) {
 		g.drawImage(IntroScene1, 0, 0, null);
-		g.drawString("You are an astronaut who went off ", 475, 105);
-		g.drawString("course due to a malfunction.", 475, 150);
-		g.drawString("Now aliens are trying to kill you", 475, 195);
-		g.drawString("in the midst of a hectic asteroid belt", 475, 240);
+		String[] wordsToPrint = {"You are an astronaut who went off", "course due to a malfunction.",
+				"Now aliens are trying to kill you", "in the midst of a hectic asteroid belt"};
+		for (int i = 0; i < wordsToPrint.length; i++) {
+			g.drawString(wordsToPrint[i], 625, 105 + i * 45);
+		}
 		returnToMenuOption(g, inputManager);
 	}
 
@@ -164,18 +165,19 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void creditsScene(Graphics g, InputManager inputManager) {
 		// g.drawImage(backgroundImage, 0, 0, null);
-		g.drawString("CREATORS:", 475, 105);
-		g.drawString("Jacob Barnhart", 480, 195);
-		g.drawString("Connor Reinholdtsen", 475, 245);
-		g.drawString("Marko Milovanovic", 475, 295);
-		g.drawString("OTHER CREDITS:", 475, 405);
-		g.drawString("Main Menu Music: Stellardrone – Eternity", 475, 495);
-		g.drawString("In-game Music: F-777 - Ludicrous Speed", 480, 545);
-		g.drawString("Game art: Amy George", 475, 595);
+		g.drawString("CREATORS:", 750, 105);
+		String[] creatorNames = {"Jacob Barnhart", "Connor Reinholdtsen", "Marko Milovanovic" };
+		for (int i = 0; i < creatorNames.length; i++) {
+			g.drawString(creatorNames[i], 750, 195 + i * 50);
+		}
+		g.drawString("OTHER CREDITS:", 750, 405);
+		String[] otherNames = {"Main Menu Music: Stellardrone – Eternity", "In-game Music: F-777 - Ludicrous Speed",
+				"Game art: Amy George"};
+		for (int i = 0; i < otherNames.length; i++) {
+			g.drawString(otherNames[i], 750, 495 + i * 50);
+		}
 		returnToMenuOption(g, inputManager);
 	}
-
-
 
 	/**
 	 * Creates a big red RETURN TO MENU button that returns the user to the main
@@ -187,8 +189,8 @@ public class MainMenuScene extends SceneWithKeys {
 	public void returnToMenuOption(Graphics g, InputManager inputManager) {
 		g.setColor(Color.BLACK);
 		// g.setFont(SELECT_FONT);
-		g.drawImage(buttonSelected, 475, 725, null);
-		g.drawString("MAIN MENU", 500, 770);
+		g.drawImage(buttonSelected, 740, 725, null);
+		g.drawString("MAIN MENU", 800, 770);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			onSound();
 			sceneOption = "Main";
