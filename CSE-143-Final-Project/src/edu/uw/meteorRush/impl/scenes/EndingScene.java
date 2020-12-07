@@ -3,7 +3,6 @@ package edu.uw.meteorRush.impl.scenes;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Scene;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;
@@ -11,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.Scanner;
 
-public class EndingScene extends MenuScene {
+public class EndingScene extends SceneWithKeys {
 
     private Image backgroundImage;
     private Clip backgroundMusic;
@@ -59,7 +58,7 @@ public class EndingScene extends MenuScene {
         if (wasNewHighScore) {
             g.drawString("NEW HIGH SCORE!", 640, 365);
         } else {
-            g.drawString("HIGH SCORE = " + highScore, 640, 365);
+            g.drawString("HIGH SCORE: " + highScore, 640, 365);
         }
         g.setFont(UI_FONT);
         currentOption = upDown(inputManager, ENDING_OPTIONS, currentOption);
