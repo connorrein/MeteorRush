@@ -46,6 +46,7 @@ public class MainMenuScene extends SceneWithKeys {
 
 	@Override
 	public void initialize() {
+		addObject(new FadeIn(1.5));
 		backgroundImage = ResourceLoader.toBufferedImage(
 				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
 		buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
@@ -74,12 +75,12 @@ public class MainMenuScene extends SceneWithKeys {
 		} else if (sceneOption.equals("Main")) {
 			g.drawImage(title, 355, 45, null);
 			currentOption = upDown(inputManager, MAIN_MENU_OPTIONS, currentOption);
-			renderScrollingMenus(g, MAIN_MENU_OPTIONS);
+			renderScrollingMenus(g, MAIN_MENU_OPTIONS, currentOption);
 			mainMenuEnter(inputManager);
 		} else if (sceneOption.equals("Difficulty")) {
 			g.drawImage(title, 355, 45, null);
 			currentOption = upDown(inputManager, SETTINGS_OPTIONS, currentOption);
-			renderScrollingMenus(g, SETTINGS_OPTIONS);
+			renderScrollingMenus(g, SETTINGS_OPTIONS, currentOption);
 			settingsMenuEnter(inputManager);
 		} else if (sceneOption.equals("Credits")) {
 			creditsScene(g, inputManager);
@@ -133,29 +134,6 @@ public class MainMenuScene extends SceneWithKeys {
 			}
 			currentOption = 1;
 			sceneOption = "Main";
-		}
-	}
-
-	/**
-	 * Renders all the options Increases the size of option currently being
-	 * considered
-	 * 
-	 * @param g:       graphics from above
-	 * @param options: the options that can be selected
-	 */
-	public void renderScrollingMenus(Graphics g, String[] options) {
-		Image buttonState = button;
-		for (int i = 0; i < options.length; i++) {
-			if (currentOption == i) {
-				g.setColor(Color.WHITE);
-				buttonState = buttonSelected;
-			} else {
-				g.setColor(Color.WHITE);
-				buttonState = button;
-			}
-			g.drawImage(buttonState, 730, 420 + 67 * i, null);
-			String option = options[i];
-			g.drawString(option, 905 - option.length() * 12, 462 + 67 * i);
 		}
 	}
 

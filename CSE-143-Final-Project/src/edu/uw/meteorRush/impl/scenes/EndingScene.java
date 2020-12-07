@@ -29,6 +29,7 @@ public class EndingScene extends SceneWithKeys {
     }
 
     public void initialize() {
+        addObject(new FadeIn(1.5));
         try {
             highScore = getHighScore();
         } catch (FileNotFoundException e) {

@@ -30,7 +30,6 @@ public class GameScene extends SceneWithKeys {
 	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
 	public static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 50);
-	private static final Font SELECT_FONT = new Font("Consolas", 0, 70);
 	private static final Vector2 PLAYER_START = new Vector2(250, Main.HEIGHT / 2);
 	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
 

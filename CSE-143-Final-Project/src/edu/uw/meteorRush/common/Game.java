@@ -145,7 +145,7 @@ public class Game {
 			throw new IllegalStateException("Game already stopped!");
 		}
 		running = false;
-		// The game loop will dipose of the open scene and close the Display once it
+		// The game loop will dispose of the open scene and close the Display once it
 		// notices that running == false.
 	}
 
