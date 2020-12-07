@@ -58,7 +58,6 @@ public class MainMenuScene extends SceneWithKeys {
 
 	@Override
 	public void render(Graphics g) {
-		super.render(g);
 		InputManager inputManager = Game.getInstance().getInputManager();
 		g.setFont(UI_FONT);
 		g.setColor(Color.WHITE);
@@ -84,6 +83,7 @@ public class MainMenuScene extends SceneWithKeys {
 		} else if (sceneOption.equals("Credits")) {
 			creditsScene(g, inputManager);
 		}
+		super.render(g);
 	}
 
 	/**
