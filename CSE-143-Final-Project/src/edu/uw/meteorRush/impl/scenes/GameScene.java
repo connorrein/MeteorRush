@@ -15,7 +15,6 @@ import edu.uw.meteorRush.common.Entity.EntityCollider;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Scene;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
@@ -26,7 +25,7 @@ import edu.uw.meteorRush.impl.waves.*;
  * @author Connor Reinholdtsen
  * @author Jacob Barnhart
  */
-public class GameScene extends Scene {
+public class GameScene extends SceneWithKeys {
 
 	public static final double FIRST_WAVE_WAIT_TIME = 2.5;
 	public static final double WAVE_REST_TIME = 5.0;
@@ -103,7 +102,7 @@ public class GameScene extends Scene {
 	}
 
 	private void pauseTick() {
-		scroll(inputManager);
+		currentPauseOption = upDown(inputManager, PAUSE_MENU_OPTIONS, currentPauseOption);
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			if (currentPauseOption == 0) {
 				unPause();
@@ -111,20 +110,6 @@ public class GameScene extends Scene {
 				unPause();
 				backgroundMusic.stop();
 				Game.getInstance().loadScene(new MainMenuScene("Main"));
-			}
-		}
-	}
-
-	private void scroll(InputManager inputManager) {
-		if (inputManager.getKeyDown(KeyEvent.VK_DOWN)) {
-			currentPauseOption++;
-			if (currentPauseOption >= PAUSE_MENU_OPTIONS.length) {
-				currentPauseOption = 0;
-			}
-		} else if (inputManager.getKeyDown(KeyEvent.VK_UP)) {
-			currentPauseOption--;
-			if (currentPauseOption < 0) {
-				currentPauseOption = PAUSE_MENU_OPTIONS.length - 1;
 			}
 		}
 	}
@@ -142,7 +127,8 @@ public class GameScene extends Scene {
 	@Override
 	public void render(Graphics g) {
 		if (paused) {
-			renderPause(g);
+			g.drawImage(pauseBackgroundImage, 0, 0, null);
+			renderScrollingMenus(g, PAUSE_MENU_OPTIONS, currentPauseOption);
 		} else {
 			double time = Game.getInstance().getTime();
 			int x = (int) (time * 150 % 22195);
@@ -177,20 +163,6 @@ public class GameScene extends Scene {
 		g.drawImage(frame, Main.WIDTH - 400, 35, null);
 	}
 
-	public void renderPause(Graphics g) {
-		g.drawImage(pauseBackgroundImage, 0, 0, null);
-		for (int i = 0; i < PAUSE_MENU_OPTIONS.length; i++) {
-			if (currentPauseOption == i) {
-				g.setFont(SELECT_FONT);
-				g.setColor(Color.RED);
-			} else {
-				g.setFont(UI_FONT);
-				g.setColor(Color.WHITE);
-			}
-			g.drawString(PAUSE_MENU_OPTIONS[i], 400, 300 + i * 70);
-		}
-	}
-
 	public PlayerShip getPlayer() {
 		return player;
 	}
@@ -207,6 +179,10 @@ public class GameScene extends Scene {
 
 	public void endGame(){
 		backgroundMusic.stop();
+	}
+
+	public int getScore() {
+		return score;
 	}
 
 }

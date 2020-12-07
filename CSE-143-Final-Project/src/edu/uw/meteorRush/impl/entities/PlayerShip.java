@@ -147,7 +147,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		if (currentHealth <= 0) {
 			destroy();
 			Game.getInstance().getOpenScene().endGame();
-			Game.getInstance().loadScene(new EndingScene());
+			Game.getInstance().loadScene(new EndingScene(Game.getInstance().getOpenScene().getScore()));
 		}
 		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
 		Game.getInstance().getOpenScene().addObject(explosion);

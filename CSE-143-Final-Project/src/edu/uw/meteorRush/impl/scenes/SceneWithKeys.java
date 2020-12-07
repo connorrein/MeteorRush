@@ -8,8 +8,9 @@ import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class MenuScene extends Scene {
+public class SceneWithKeys extends Scene {
 
+    private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
     public final Image buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
     public final Image button = ResourceLoader.loadImage("res/images/ui/Button.png").getScaledInstance(336, 56, 0);
 
@@ -25,6 +26,7 @@ public class MenuScene extends Scene {
      */
     public void renderScrollingMenus(Graphics g, String[] options, int currentOption) {
         Image buttonState;
+        g.setFont(UI_FONT);
         for (int i = 0; i < options.length; i++) {
             if (currentOption == i) {
                 g.setColor(Color.WHITE);

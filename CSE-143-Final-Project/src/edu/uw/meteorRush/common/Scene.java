@@ -97,6 +97,10 @@ public abstract class Scene {
 	public void endGame() {
 	}
 
+	public int getScore() {
+		return 0;
+	}
+
 
 
 }
