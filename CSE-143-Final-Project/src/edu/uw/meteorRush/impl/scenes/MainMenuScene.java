@@ -27,6 +27,7 @@ public class MainMenuScene extends SceneWithKeys {
 
 	private BufferedImage backgroundImage;
 	private Image buttonSelected;
+	private Image IntroScene1;
 	private Image button;
 	private Image title;
 	private Clip backgroundMusic;
@@ -46,15 +47,16 @@ public class MainMenuScene extends SceneWithKeys {
 
 	@Override
 	public void initialize() {
-		addObject(new FadeIn(1.5));
 		backgroundImage = ResourceLoader.toBufferedImage(
 				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
 		buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
+		IntroScene1 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene1.png").getScaledInstance(1800, 800, 0);
 		button = ResourceLoader.loadImage("res/images/ui/Button.png").getScaledInstance(336, 56, 0);
 		title = ResourceLoader.loadImage("res/images/ui/Title.png").getScaledInstance(1089, 322, 0);
 
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
+		addObject(new FadeIn(1.5));
 	}
 
 	@Override
@@ -145,7 +147,7 @@ public class MainMenuScene extends SceneWithKeys {
 	 * @param inputManager
 	 */
 	public void introScene(Graphics g, InputManager inputManager) {
-		// g.drawImage(backgroundImage, 0, 0, null);
+		g.drawImage(IntroScene1, 0, 0, null);
 		g.drawString("You are an astronaut who went off ", 475, 105);
 		g.drawString("course due to a malfunction.", 475, 150);
 		g.drawString("Now aliens are trying to kill you", 475, 195);
