@@ -22,7 +22,7 @@ public class Hornet extends Entity implements DamagableEntity {
 	private static final double LASER_COOLDOWN = 0.5;
 	private static final int LASER_WIDTH = 30;
 	private static final int LASER_HEIGHT = 6;
-	private static final double BASE_LASER_SPEED = 1000.0;
+	private static final double LASER_SPEED = 1000.0;
 	private static final double BASE_LASER_DAMAGE_AMOUNT = 1.0;
 	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/hornet/Hornet1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
@@ -109,8 +109,7 @@ public class Hornet extends Entity implements DamagableEntity {
 	private static class Laser extends Projectile {
 
 		public Laser(Vector2 position) {
-			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT),
-					new Vector2(Main.difficulty.getModifier() * -BASE_LASER_SPEED, 0));
+			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(-LASER_SPEED, 0));
 		}
 
 		@Override
