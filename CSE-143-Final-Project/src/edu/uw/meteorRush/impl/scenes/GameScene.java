@@ -18,11 +18,10 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.*;
+import edu.uw.meteorRush.impl.waves.Wave1;
 
 /**
  * 
- * @author Connor Reinholdtsen
  * @author Jacob Barnhart
  */
 public class GameScene extends SceneWithKeys {
@@ -48,7 +47,6 @@ public class GameScene extends SceneWithKeys {
 
 	private Collider bounds;
 	private BufferedImage backgroundImage;
-	private Image pauseBackgroundImage;
 	private Clip backgroundMusic;
 	private PlayerShip player;
 	private int score;
@@ -74,7 +72,6 @@ public class GameScene extends SceneWithKeys {
 		bounds.setActive(true);
 		backgroundImage = ResourceLoader.toBufferedImage(
 				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
-		pauseBackgroundImage = ResourceLoader.loadImage("res/images/backgrounds/PauseBackground.jpg");
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/GameMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
 		currentPauseOption = 0;
@@ -113,6 +110,10 @@ public class GameScene extends SceneWithKeys {
 		}
 	}
 
+	public boolean isPaused() {
+		return paused;
+	}
+
 	private void pause() {
 		Game.getInstance().setTimeScale(0.0);
 		paused = true;
@@ -125,19 +126,22 @@ public class GameScene extends SceneWithKeys {
 
 	@Override
 	public void render(Graphics g) {
+		double time = Game.getInstance().getTime();
+		int x = (int) (time * 150 % 22195);
+		Image backgroundSubImage = backgroundImage.getSubimage(x, 0, Main.WIDTH, Main.HEIGHT);
+		g.drawImage(backgroundSubImage, 0, 0, null);
+		super.render(g);
+		g.setColor(Color.WHITE);
+		g.setFont(UI_FONT);
+		g.drawString("Score: " + score, 50, 70);
+		drawHealthBar(g);
 		if (paused) {
-			g.drawImage(pauseBackgroundImage, 0, 0, null);
-			renderScrollingMenus(g, PAUSE_MENU_OPTIONS, currentPauseOption);
-		} else {
-			double time = Game.getInstance().getTime();
-			int x = (int) (time * 150 % 22195);
-			Image backgroundSubImage = backgroundImage.getSubimage(x, 0, Main.WIDTH, Main.HEIGHT);
-			g.drawImage(backgroundSubImage, 0, 0, null);
-			super.render(g);
+			Color filter = new Color(0, 0, 0, 100);
+			g.setColor(filter);
+			g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 			g.setColor(Color.WHITE);
-			g.setFont(UI_FONT);
-			g.drawString("Score: " + score, 50, 70);
-			drawHealthBar(g);
+			g.drawString("PAUSED", 800, 350);
+			renderScrollingMenus(g, PAUSE_MENU_OPTIONS, currentPauseOption);
 		}
 	}
 
@@ -176,8 +180,9 @@ public class GameScene extends SceneWithKeys {
 		bounds.setActive(false);
 	}
 
-	public void endGame(){
+	public void endGame() {
 		backgroundMusic.stop();
+		Game.getInstance().loadScene(new EndingScene(score));
 	}
 
 	public int getScore() {

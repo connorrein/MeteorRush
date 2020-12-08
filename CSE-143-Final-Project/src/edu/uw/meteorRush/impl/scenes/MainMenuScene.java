@@ -23,9 +23,7 @@ public class MainMenuScene extends SceneWithKeys {
 	private final String[] SETTINGS_OPTIONS = { "EASY", "MEDIUM", "HARD", "BACK" };
 
 	private BufferedImage backgroundImage;
-	private Image buttonSelected;
 	private Image IntroScene1;
-	private Image button;
 	private Image title;
 	private Clip backgroundMusic;
 
@@ -46,14 +44,13 @@ public class MainMenuScene extends SceneWithKeys {
 	public void initialize() {
 		backgroundImage = ResourceLoader.toBufferedImage(
 				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
-		buttonSelected = ResourceLoader.loadImage("res/images/ui/ButtonHover.png").getScaledInstance(336, 56, 0);
-		IntroScene1 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene1.png").getScaledInstance(1800, 800, 0);
-		button = ResourceLoader.loadImage("res/images/ui/Button.png").getScaledInstance(336, 56, 0);
+		IntroScene1 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene1.png").getScaledInstance(1800, 800,
+				0);
 		title = ResourceLoader.loadImage("res/images/ui/Title.png").getScaledInstance(1089, 322, 0);
 
 		backgroundMusic = ResourceLoader.loadAudioClip("res/audio/MainMenuMusic.wav");
 		backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
-		addObject(new FadeIn(1.5));
+		addObject(new FadeIn(1.0));
 	}
 
 	@Override
@@ -105,8 +102,10 @@ public class MainMenuScene extends SceneWithKeys {
 				currentOption = Main.difficulty.ordinal();
 			} else if (currentOption == 2) {
 				sceneOption = "Credits";
+				addObject(new FadeIn(1.0));
 			} else if (currentOption == 3) {
 				sceneOption = "Intro";
+				addObject(new FadeIn(1.0));
 			} else if (currentOption == 4) {
 				Game.getInstance().stop();
 			}
@@ -145,15 +144,7 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void introScene(Graphics g, InputManager inputManager) {
 		g.drawImage(IntroScene1, 0, 0, null);
-		Color colorSemi = new Color(0, 0, 0, 100);
-		g.setColor(colorSemi);
-		g.fillRect(0, 0, 1800, 800);
-		g.setColor(Color.WHITE);
-		String[] wordsToPrint = {"You are an astronaut who went off", "course due to a malfunction.",
-				"Now aliens are trying to kill you", "in the midst of a hectic asteroid belt"};
-		for (int i = 0; i < wordsToPrint.length; i++) {
-			g.drawString(wordsToPrint[i], 10, 35 + i * 45);
-		}
+		g.drawString("You are an astronaut who got caught in a wormhole...", 10, 35);
 		returnToMenuOption(g, inputManager);
 	}
 
@@ -165,17 +156,14 @@ public class MainMenuScene extends SceneWithKeys {
 	 * @param inputManager
 	 */
 	public void creditsScene(Graphics g, InputManager inputManager) {
-		// g.drawImage(backgroundImage, 0, 0, null);
-		g.drawString("CREATORS:", 739, 105);
-		String[] creatorNames = {"Jacob Barnhart", "Connor Reinholdtsen", "Marko Milovanovic" };
-		for (int i = 0; i < creatorNames.length; i++) {
-			g.drawString(creatorNames[i], 739, 195 + i * 50);
-		}
-		g.drawString("OTHER CREDITS:", 739, 405);
-		String[] otherNames = {"Main Menu Music: Stellardrone – Eternity", "In-game Music: F-777 - Ludicrous Speed",
-				"Game art: Amy George"};
-		for (int i = 0; i < otherNames.length; i++) {
-			g.drawString(otherNames[i], 739, 495 + i * 50);
+		g.drawString("CREDITS", 825, 105);
+		String[] lines = { "Jacob Barnhart - Programmer", "Connor Reinholdtsen - Programmer",
+				"Marko Milovanovic - Programmer", "Amy George - Artist", "", "Main Menu Music: Stellardrone - Eternity",
+				"Game Music: F-777 - Ludicrous Speed", "Font: Minecraft" };
+		for (int i = 0; i < lines.length; i++) {
+			String line = lines[i];
+			int width = g.getFontMetrics().stringWidth(line);
+			g.drawString(lines[i], 900 - width / 2, 230 + i * 50);
 		}
 		returnToMenuOption(g, inputManager);
 	}
@@ -188,12 +176,12 @@ public class MainMenuScene extends SceneWithKeys {
 	 * @param inputManager
 	 */
 	public void returnToMenuOption(Graphics g, InputManager inputManager) {
-		g.setColor(Color.BLACK);
-		// g.setFont(SELECT_FONT);
-		g.drawImage(buttonSelected, 740, 725, null);
-		g.drawString("MAIN MENU", 800, 770);
+		if (Game.getInstance().getTime() % 1.5 < 0.9) {
+			g.drawString("PRESS ENTER", 775, 735);
+		}
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
 			onSound();
+			addObject(new FadeIn(1.0));
 			sceneOption = "Main";
 		}
 	}
