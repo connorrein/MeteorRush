@@ -17,7 +17,7 @@ public class Hornet extends Entity implements DamagableEntity {
 	private static final int MAX_HEALTH = 1;
 	private static final double SPEED = 700.0;
 	private static final int SCORE_VALUE = 75;
-	private static final double HEALTH_DROP_CHANCE = 1;
+	private static final double HEALTH_DROP_CHANCE = 0.2;
 	private static final double BASE_CONTACT_DAMAGE = 1.0;
 	private static final double LASER_COOLDOWN = 0.5;
 	private static final int LASER_WIDTH = 30;

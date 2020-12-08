@@ -152,7 +152,7 @@ public class MainMenuScene extends SceneWithKeys {
 		String[] wordsToPrint = {"You are an astronaut who went off", "course due to a malfunction.",
 				"Now aliens are trying to kill you", "in the midst of a hectic asteroid belt"};
 		for (int i = 0; i < wordsToPrint.length; i++) {
-			g.drawString(wordsToPrint[i], 625, 105 + i * 45);
+			g.drawString(wordsToPrint[i], 10, 35 + i * 45);
 		}
 		returnToMenuOption(g, inputManager);
 	}
@@ -166,16 +166,16 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void creditsScene(Graphics g, InputManager inputManager) {
 		// g.drawImage(backgroundImage, 0, 0, null);
-		g.drawString("CREATORS:", 750, 105);
+		g.drawString("CREATORS:", 739, 105);
 		String[] creatorNames = {"Jacob Barnhart", "Connor Reinholdtsen", "Marko Milovanovic" };
 		for (int i = 0; i < creatorNames.length; i++) {
-			g.drawString(creatorNames[i], 750, 195 + i * 50);
+			g.drawString(creatorNames[i], 739, 195 + i * 50);
 		}
-		g.drawString("OTHER CREDITS:", 750, 405);
+		g.drawString("OTHER CREDITS:", 739, 405);
 		String[] otherNames = {"Main Menu Music: Stellardrone – Eternity", "In-game Music: F-777 - Ludicrous Speed",
 				"Game art: Amy George"};
 		for (int i = 0; i < otherNames.length; i++) {
-			g.drawString(otherNames[i], 750, 495 + i * 50);
+			g.drawString(otherNames[i], 739, 495 + i * 50);
 		}
 		returnToMenuOption(g, inputManager);
 	}
