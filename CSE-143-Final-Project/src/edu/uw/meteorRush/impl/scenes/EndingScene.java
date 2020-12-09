@@ -8,6 +8,8 @@ import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class EndingScene extends SceneWithKeys {
@@ -92,31 +94,51 @@ public class EndingScene extends SceneWithKeys {
 
     public int getHighScore() throws FileNotFoundException {
         File highScoreFile;
+        String userProfile = System.getProperty("user.home");
+        int highScore = 0;
         if(os.contains("Mac")) {
-            highScoreFile = new File("/Library/Application Support/highScore.txt");
+            if(!Files.exists(Paths.get(userProfile + "/Library/Application Support/MeteorRush/"))) {
+                createFolderMac();
+            }
+            highScoreFile = new File( userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
         } else {
-            String userProfile = System.getProperty("user.home");
-            highScoreFile = new File(userProfile + "/Local/highScore.txt");
+            if(!Files.exists(Paths.get(userProfile + "/Local/MeteorRush/"))) {
+                createFolderWindows();
+            }
+            highScoreFile = new File( userProfile + "/Local/MeteorRush/highScore.txt");
         }
         if(highScoreFile.exists()) {
             Scanner scanner = new Scanner(highScoreFile);
             if(scanner.hasNext()) {
-                scanner.close();
-                return scanner.nextInt();
+                highScore = scanner.nextInt();
             }
             scanner.close();
         }
-        return 0;
+        return highScore;
+    }
+
+    public void createFolderMac() {
+        String userProfile = System.getProperty("user.home");
+        File highScoreDirectory = new File( userProfile + "/Library/Application Support/MeteorRush/");
+        System.out.println(highScoreDirectory);
+        highScoreDirectory.mkdir();
+    }
+
+    public void createFolderWindows() {
+        String userProfile = System.getProperty("user.home");
+        File highScoreDirectory = new File(userProfile + "/Local/MeteorRush/");
+        highScoreDirectory.mkdir();
     }
 
     public void setHighScore(int highScore) throws IOException {
         File highScoreFile;
+        String userProfile = System.getProperty("user.home");
         if(os.contains("Mac")) {
-            highScoreFile = new File("/Library/Application Support/highScore.txt");
+            highScoreFile = new File(userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
         } else {
-            String userProfile = System.getProperty("user.home");
-            highScoreFile = new File(userProfile + "/Local/highScore.txt");
+            highScoreFile = new File(userProfile + "/Local/MeteorRush/highScore.txt");
         }
+        System.out.println(highScoreFile);
         highScoreFile.delete();
         highScoreFile.createNewFile();
         FileWriter fw = new FileWriter(highScoreFile);
