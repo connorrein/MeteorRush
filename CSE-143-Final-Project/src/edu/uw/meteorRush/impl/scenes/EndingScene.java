@@ -112,9 +112,10 @@ public class EndingScene extends SceneWithKeys {
         File highScoreFile;
         if(os.contains("Mac")) {
             highScoreFile = new File("/Library/Application Support/highScore.txt");
+            highScoreFile = new File("/Users/marko.p.milovanovic/Downloads/highScore.txt");
         } else {
             String userProfile = System.getProperty("user.home");
-            highScoreFile = new File(userProfile + "/Local");
+            highScoreFile = new File(userProfile + "/Local/highScore.txt");
         }
         highScoreFile.delete();
         highScoreFile.createNewFile();
