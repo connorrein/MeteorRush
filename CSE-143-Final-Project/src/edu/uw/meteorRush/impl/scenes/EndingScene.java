@@ -102,10 +102,10 @@ public class EndingScene extends SceneWithKeys {
             }
             highScoreFile = new File( userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
         } else {
-            if(!Files.exists(Paths.get(userProfile + "AppData/Local/MeteorRush/"))) {
+            if(!Files.exists(Paths.get(userProfile + "/AppData/Local/MeteorRush/"))) {
                 createFolderWindows();
             }
-            highScoreFile = new File( userProfile + "AppData/Local/MeteorRush/highScore.txt");
+            highScoreFile = new File( userProfile + "/AppData/Local/MeteorRush/highScore.txt");
         }
         if(highScoreFile.exists()) {
             Scanner scanner = new Scanner(highScoreFile);
@@ -126,7 +126,7 @@ public class EndingScene extends SceneWithKeys {
 
     public void createFolderWindows() {
         String userProfile = System.getProperty("user.home");
-        File highScoreDirectory = new File(userProfile + "AppData/Local/MeteorRush/");
+        File highScoreDirectory = new File(userProfile + "/AppData/Local/MeteorRush/");
         highScoreDirectory.mkdir();
     }
 
@@ -136,7 +136,7 @@ public class EndingScene extends SceneWithKeys {
         if(os.contains("Mac")) {
             highScoreFile = new File(userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
         } else {
-            highScoreFile = new File(userProfile + "AppData/Local/MeteorRush/highScore.txt");
+            highScoreFile = new File(userProfile + "/AppData/Local/MeteorRush/highScore.txt");
         }
         System.out.println(highScoreFile);
         highScoreFile.delete();
