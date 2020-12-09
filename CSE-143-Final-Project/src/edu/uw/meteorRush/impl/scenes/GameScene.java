@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.FloatControl.Type;
 
 import edu.uw.meteorRush.common.Collider;
 import edu.uw.meteorRush.common.Entity;
