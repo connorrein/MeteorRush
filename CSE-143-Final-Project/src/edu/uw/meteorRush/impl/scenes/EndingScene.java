@@ -100,8 +100,10 @@ public class EndingScene extends SceneWithKeys {
         if(highScoreFile.exists()) {
             Scanner scanner = new Scanner(highScoreFile);
             if(scanner.hasNext()) {
+                scanner.close();
                 return scanner.nextInt();
             }
+            scanner.close();
         }
         return 0;
     }
@@ -111,7 +113,8 @@ public class EndingScene extends SceneWithKeys {
         if(os.contains("Mac")) {
             highScoreFile = new File("/Library/Application Support/highScore.txt");
         } else {
-            highScoreFile = new File("AppData/Local");
+            String userProfile = System.getProperty("user.home");
+            highScoreFile = new File(userProfile + "/Local");
         }
         highScoreFile.delete();
         highScoreFile.createNewFile();
