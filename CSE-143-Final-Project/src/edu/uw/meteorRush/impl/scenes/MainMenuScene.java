@@ -144,7 +144,7 @@ public class MainMenuScene extends SceneWithKeys {
 	 */
 	public void introScene(Graphics g, InputManager inputManager) {
 		g.drawImage(IntroScene1, 0, 0, null);
-		g.drawString("You are an astronaut who got caught in a wormhole...", 10, 35);
+		g.drawString("You are an astronaut who got sucked into a wormhole...", 10, 35);
 		returnToMenuOption(g, inputManager);
 	}
 
@@ -180,6 +180,7 @@ public class MainMenuScene extends SceneWithKeys {
 			g.drawString("PRESS ENTER", 775, 735);
 		}
 		if (inputManager.getKeyDown(KeyEvent.VK_ENTER)) {
+			currentOption = 0;
 			onSound();
 			addObject(new FadeIn(1.0));
 			sceneOption = "Main";

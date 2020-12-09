@@ -7,6 +7,7 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Javelin extends Entity implements DamagableEntity {
@@ -17,12 +18,12 @@ public class Javelin extends Entity implements DamagableEntity {
 	private static final double SPEED = 400.0;
 	private static final int SCORE_VALUE = 100;
 	private static final double HEALTH_DROP_CHANCE = 0.2;
-	private static final double CONTACT_DAMAGE = 2.0;
+	private static final double BASE_CONTACT_DAMAGE = 2.0;
+	private static final double BASE_LASER_DAMAGE = 1;
 	private static final double LASER_COOLDOWN = 2;
 	private static final int LASER_WIDTH = 90;
 	private static final int LASER_HEIGHT = 15;
 	private static final double LASER_SPEED = 1000.0;
-	private static final double LASER_DAMAGE_AMOUNT = 1;
 
 	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/javelin/Javelin1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
@@ -72,7 +73,7 @@ public class Javelin extends Entity implements DamagableEntity {
 	@Override
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
-			((PlayerShip) other).damage(CONTACT_DAMAGE);
+			((PlayerShip) other).damage(BASE_CONTACT_DAMAGE * Main.difficulty.getModifier());
 			destroy();
 		}
 	}
@@ -124,7 +125,7 @@ public class Javelin extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				((PlayerShip) other).damage(LASER_DAMAGE_AMOUNT);
+				((PlayerShip) other).damage(BASE_LASER_DAMAGE * Main.difficulty.getModifier());
 				Game.getInstance().getOpenScene().removeObject(this);
 			} else if (other instanceof Projectile) {
 				Game.getInstance().getOpenScene().removeObject(this);

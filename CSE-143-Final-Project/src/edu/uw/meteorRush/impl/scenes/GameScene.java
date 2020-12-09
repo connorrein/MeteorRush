@@ -8,8 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.FloatControl.Type;
 
 import edu.uw.meteorRush.common.Collider;
 import edu.uw.meteorRush.common.Entity;
@@ -20,7 +18,7 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave1;
+import edu.uw.meteorRush.impl.waves.Wave7;
 
 /**
  * 
@@ -32,7 +30,7 @@ public class GameScene extends SceneWithKeys {
 	public static final double WAVE_REST_TIME = 5.0;
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 50);
 	private static final Vector2 PLAYER_START = new Vector2(250, Main.HEIGHT / 2);
-	private final String[] PAUSE_MENU_OPTIONS = { "Continue", "Main Menu" };
+	private final String[] PAUSE_MENU_OPTIONS = { "CONTINUE", "MAIN MENU" };
 
 	private static final Image GREEN_HP_FRAME = ResourceLoader.loadImage("res/images/ui/HealthOutlineGreen.png")
 			.getScaledInstance((int) (142 * 2.5), (int) (20 * 2.5), 0);
@@ -81,7 +79,7 @@ public class GameScene extends SceneWithKeys {
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new FadeIn(1.5));
-		addObject(new Wave1());
+		addObject(new Wave7());
 	}
 
 	@Override
@@ -138,7 +136,7 @@ public class GameScene extends SceneWithKeys {
 		g.drawString("Score: " + score, 50, 70);
 		drawHealthBar(g);
 		if (paused) {
-			Color filter = new Color(0, 0, 0, 100);
+			Color filter = new Color(0, 0, 0, 150);
 			g.setColor(filter);
 			g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 			g.setColor(Color.WHITE);

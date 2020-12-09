@@ -120,7 +120,6 @@ public class EndingScene extends SceneWithKeys {
     public void createFolderMac() {
         String userProfile = System.getProperty("user.home");
         File highScoreDirectory = new File( userProfile + "/Library/Application Support/MeteorRush/");
-        System.out.println(highScoreDirectory);
         highScoreDirectory.mkdir();
     }
 
@@ -138,7 +137,6 @@ public class EndingScene extends SceneWithKeys {
         } else {
             highScoreFile = new File(userProfile + "/AppData/Local/MeteorRush/highScore.txt");
         }
-        System.out.println(highScoreFile);
         highScoreFile.delete();
         highScoreFile.createNewFile();
         FileWriter fw = new FileWriter(highScoreFile);

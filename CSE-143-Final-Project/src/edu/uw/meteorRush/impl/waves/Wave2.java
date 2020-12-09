@@ -3,9 +3,7 @@ package edu.uw.meteorRush.impl.waves;
 import java.awt.Graphics;
 
 import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
-import edu.uw.meteorRush.impl.entities.Javelin;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave2 extends Wave {
@@ -48,13 +46,6 @@ public class Wave2 extends Wave {
 			scene.removeObject(this);
 			scene.addObject(new Wave3());
 		}
-	}
-
-	private void spawnJavelin() {
-		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
-		Javelin enemy = new Javelin(position);
-		scene.addObject(enemy);
 	}
 
 	@Override

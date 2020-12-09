@@ -64,7 +64,14 @@ public class Marauder extends Entity implements DamagableEntity {
 	@Override
 	public void render(Graphics g) {
 		Vector2 position = getPosition();
-		g.drawImage(SPRITE_1, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
+		Image sprite;
+		double time = Game.getInstance().getTime();
+		if (time % 0.3 < 0.15) {
+			sprite = SPRITE_1;
+		} else {
+			sprite = SPRITE_2;
+		}
+		g.drawImage(sprite, (int) (position.getX() - WIDTH / 2.0), (int) (position.getY() - HEIGHT / 2.0), null);
 	}
 
 	@Override

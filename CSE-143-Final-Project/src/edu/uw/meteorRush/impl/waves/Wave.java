@@ -1,7 +1,44 @@
 package edu.uw.meteorRush.impl.waves;
 
+import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.SceneObject;
+import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.impl.Main;
+import edu.uw.meteorRush.impl.entities.AsteroidLarge;
+import edu.uw.meteorRush.impl.entities.Hornet;
+import edu.uw.meteorRush.impl.entities.Javelin;
+import edu.uw.meteorRush.impl.entities.Marauder;
+import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public abstract class Wave extends SceneObject {
-	
+
+	protected void spawnAsteroid() {
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		Vector2 position = new Vector2(Main.WIDTH + 100, Main.HEIGHT * Math.random());
+		Vector2 direction = new Vector2(-1, Math.random() - 0.5);
+		AsteroidLarge enemy = new AsteroidLarge(position, direction);
+		scene.addObject(enemy);
+	}
+
+	protected void spawnJavelin() {
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
+		Javelin enemy = new Javelin(position);
+		scene.addObject(enemy);
+	}
+
+	protected void spawnHornet() {
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT);
+		Hornet enemy = new Hornet(position);
+		scene.addObject(enemy);
+	}
+
+	protected void spawnMarauder() {
+		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
+		Marauder enemy = new Marauder(position);
+		scene.addObject(enemy);
+	}
+
 }

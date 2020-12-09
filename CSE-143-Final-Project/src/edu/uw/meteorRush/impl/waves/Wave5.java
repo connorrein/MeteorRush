@@ -3,15 +3,13 @@ package edu.uw.meteorRush.impl.waves;
 import java.awt.Graphics;
 
 import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
-import edu.uw.meteorRush.impl.entities.Marauder;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave5 extends Wave {
 
-	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.5;
-	private static final int BASE_MAX_ENEMY_COUNT = 1;
+	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.25;
+	private static final int BASE_MAX_ENEMY_COUNT = 15;
 
 	private double modifiedEnemySpawnPeriod;
 	private int modifiedMaxEnemyCount;
@@ -42,19 +40,25 @@ public class Wave5 extends Wave {
 
 	private void spawnEnemy() {
 		enemyCount++;
-		spawnMarauder();
+		switch (enemyCount % 4) {
+		case 0:
+			spawnAsteroid();
+			break;
+		case 1:
+			spawnJavelin();
+			break;
+		case 2:
+			spawnHornet();
+			break;
+		case 3:
+			spawnMarauder();
+			break;
+		}
 		if (enemyCount >= modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
-			scene.addObject(new Wave1());
+			scene.addObject(new Wave6());
 		}
-	}
-
-	private void spawnMarauder() {
-		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
-		Marauder enemy = new Marauder(position);
-		scene.addObject(enemy);
 	}
 
 	@Override
