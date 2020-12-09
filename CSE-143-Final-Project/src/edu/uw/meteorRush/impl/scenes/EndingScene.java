@@ -18,6 +18,7 @@ public class EndingScene extends SceneWithKeys {
     private int score;
     private boolean wasNewHighScore;
     private int highScore;
+    private String os;
 
     private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);
     private static final Font ENDING_FONT = ResourceLoader.loadFont("res/Font.ttf", 100);
@@ -30,6 +31,8 @@ public class EndingScene extends SceneWithKeys {
 
     public void initialize() {
         addObject(new FadeIn(1.5));
+        os = System.getProperty("os.name");
+
         try {
             highScore = getHighScore();
         } catch (FileNotFoundException e) {
@@ -88,14 +91,28 @@ public class EndingScene extends SceneWithKeys {
     }
 
     public int getHighScore() throws FileNotFoundException {
-        File highScoreFile = new File("src/res/highScore");
-        Scanner scanner = new Scanner(highScoreFile);
-        int highScore = scanner.nextInt();
-        return highScore;
+        File highScoreFile;
+        if(os.contains("Mac")) {
+            highScoreFile = new File("/Library/Application Support/highScore.txt");
+        } else {
+            highScoreFile = new File("AppData/Local");
+        }
+        if(highScoreFile.exists()) {
+            Scanner scanner = new Scanner(highScoreFile);
+            if(scanner.hasNext()) {
+                return scanner.nextInt();
+            }
+        }
+        return 0;
     }
 
     public void setHighScore(int highScore) throws IOException {
-        File highScoreFile = new File("src/res/highScore");
+        File highScoreFile;
+        if(os.contains("Mac")) {
+            highScoreFile = new File("/Library/Application Support/highScore.txt");
+        } else {
+            highScoreFile = new File("AppData/Local");
+        }
         highScoreFile.delete();
         highScoreFile.createNewFile();
         FileWriter fw = new FileWriter(highScoreFile);
