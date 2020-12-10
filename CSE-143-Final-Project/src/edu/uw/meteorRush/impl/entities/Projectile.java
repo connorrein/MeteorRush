@@ -10,7 +10,7 @@ public abstract class Projectile extends Entity {
 
 	public Projectile(Vector2 position, Vector2 size, Vector2 velocity) {
 		super(position, size);
-		this.velocity = velocity;
+		this.velocity = velocity.clone();
 	}
 
 	@Override

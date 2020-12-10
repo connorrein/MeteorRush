@@ -59,9 +59,14 @@ public abstract class Collider {
 		if (active) {
 			if (!activeColliders.contains(this)) {
 				activeColliders.add(this);
+				checkForCollision();
 			}
 		} else {
 			activeColliders.remove(this);
+			for (int i = 0; i < contacts.size(); i++) {
+				Collider contact = contacts.get(i);
+				handleCollisionExit(contact);
+			}
 		}
 	}
 
@@ -246,20 +251,28 @@ public abstract class Collider {
 			boolean collides = this.isContacting(other);
 			if (contacts.contains(other)) {
 				if (!collides) {
-					this.contacts.remove(other);
-					other.contacts.remove(this);
-					this.onCollisionExit(other);
-					other.onCollisionExit(this);
+					handleCollisionExit(other);
 				}
 			} else {
 				if (collides) {
-					this.contacts.add(other);
-					other.contacts.add(this);
-					this.onCollisionEnter(other);
-					other.onCollisionEnter(this);
+					handleCollisionEnter(other);
 				}
 			}
 		}
+	}
+
+	private void handleCollisionEnter(Collider other) {
+		this.contacts.add(other);
+		other.contacts.add(this);
+		this.onCollisionEnter(other);
+		other.onCollisionEnter(this);
+	}
+
+	private void handleCollisionExit(Collider other) {
+		this.contacts.remove(other);
+		other.contacts.remove(this);
+		this.onCollisionExit(other);
+		other.onCollisionExit(this);
 	}
 
 	/**

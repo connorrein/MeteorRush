@@ -4,10 +4,10 @@ import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
-public class Wave7 extends Wave {
+public class Wave10 extends Wave {
 
-	private static final double BASE_ENEMY_SPAWN_PERIOD = 0.75;
-	private static final int BASE_MAX_ENEMY_COUNT = 20;
+	private static final double BASE_ENEMY_SPAWN_PERIOD = 0.25;
+	private static final int BASE_MAX_ENEMY_COUNT = 35;
 
 	private double modifiedEnemySpawnPeriod;
 	private int modifiedMaxEnemyCount;
@@ -15,7 +15,7 @@ public class Wave7 extends Wave {
 	private double startTime;
 	private double nextSpawnTime;
 
-	public Wave7() {
+	public Wave10() {
 		modifiedEnemySpawnPeriod = BASE_ENEMY_SPAWN_PERIOD / Main.difficulty.getModifier();
 		modifiedMaxEnemyCount = (int) (BASE_MAX_ENEMY_COUNT * Main.difficulty.getModifier());
 		enemyCount = 0;
@@ -45,16 +45,17 @@ public class Wave7 extends Wave {
 			spawnHornet();
 			break;
 		case 3:
-			if (enemyCount % 11 == 0) {
+			if (enemyCount % 14 == 0) {
 				spawnMarauder();
+			} else {
+				spawnAsteroid();
 			}
 			break;
 		}
 		if (enemyCount >= modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
-			scene.addObject(new Wave8());
+			scene.addObject(new Wave10());
 		}
 	}
-
 }

@@ -18,7 +18,7 @@ import edu.uw.meteorRush.common.ResourceLoader;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave7;
+import edu.uw.meteorRush.impl.waves.Wave1;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class GameScene extends SceneWithKeys {
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new FadeIn(1.5));
-		addObject(new Wave7());
+		addObject(new Wave1());
 	}
 
 	@Override
@@ -116,11 +116,13 @@ public class GameScene extends SceneWithKeys {
 
 	private void pause() {
 		Game.getInstance().setTimeScale(0.0);
+		ResourceLoader.loadAudioClip("res/audio/Pause.wav").start();
 		paused = true;
 	}
 
 	private void unPause() {
 		Game.getInstance().setTimeScale(1.0);
+		ResourceLoader.loadAudioClip("res/audio/Pause.wav").start();
 		paused = false;
 	}
 

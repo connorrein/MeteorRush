@@ -128,7 +128,7 @@ public class Hornet extends Entity implements DamagableEntity {
 			if (other instanceof PlayerShip) {
 				((PlayerShip) other).damage(Main.difficulty.getModifier() * BASE_LASER_DAMAGE_AMOUNT);
 				Game.getInstance().getOpenScene().removeObject(this);
-			} else if (other instanceof Projectile) {
+			} else if (other instanceof PlayerShip.Laser) {
 				Game.getInstance().getOpenScene().removeObject(this);
 			}
 		}

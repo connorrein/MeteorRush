@@ -1,5 +1,7 @@
 package edu.uw.meteorRush.impl.waves;
 
+import java.awt.Graphics;
+
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.SceneObject;
 import edu.uw.meteorRush.common.Vector2;
@@ -10,6 +12,9 @@ import edu.uw.meteorRush.impl.entities.Javelin;
 import edu.uw.meteorRush.impl.entities.Marauder;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
+/**
+ * A wave of enemies.
+ */
 public abstract class Wave extends SceneObject {
 
 	protected void spawnAsteroid() {
@@ -36,9 +41,21 @@ public abstract class Wave extends SceneObject {
 
 	protected void spawnMarauder() {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
-		Vector2 position = new Vector2(Main.WIDTH + 50, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
+		Vector2 position = new Vector2(Main.WIDTH + 100, Math.random() * Main.HEIGHT * 0.85 + 0.075 * Main.HEIGHT);
 		Marauder enemy = new Marauder(position);
 		scene.addObject(enemy);
+	}
+
+	@Override
+	public void initialize() {
+	}
+
+	@Override
+	public void render(Graphics g) {
+	}
+
+	@Override
+	public void dispose() {
 	}
 
 }

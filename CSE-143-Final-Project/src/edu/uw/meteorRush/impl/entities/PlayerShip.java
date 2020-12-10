@@ -173,7 +173,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	public void onCollisionExit(Entity other) {
 	}
 
-	private static class Laser extends Projectile {
+	public static class Laser extends Projectile {
 		Laser(Vector2 position) {
 			super(position, new Vector2(LASER_WIDTH, LASER_HEIGHT), new Vector2(LASER_SPEED, 0));
 		}

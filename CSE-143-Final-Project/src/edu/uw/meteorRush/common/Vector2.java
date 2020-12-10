@@ -11,7 +11,7 @@ public class Vector2 {
 	private double x, y;
 
 	/**
-	 * Constructs a new vector with the given components
+	 * Constructs a new vector with the given components.
 	 * 
 	 * @param x the x-component
 	 * @param y the y-component
@@ -19,6 +19,18 @@ public class Vector2 {
 	public Vector2(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	/**
+	 * Constructs a new vector with the given angle and magnitude.
+	 * 
+	 * @param angle     the angle in radians
+	 * @param magnitude the magnitude of the vector
+	 */
+	public static Vector2 fromAngle(double angle, double magnitude) {
+		double x = Math.cos(angle) * magnitude;
+		double y = Math.sin(angle) * magnitude;
+		return new Vector2(x, y);
 	}
 
 	/**
@@ -31,7 +43,7 @@ public class Vector2 {
 	}
 
 	/**
-	 * Sets this vector's x-component
+	 * Sets this vector's x-component.
 	 * 
 	 * @param x the x-component
 	 */
@@ -50,7 +62,7 @@ public class Vector2 {
 	}
 
 	/**
-	 * Sets this vector's y-component
+	 * Sets this vector's y-component.
 	 * 
 	 * @param y the y-component
 	 */

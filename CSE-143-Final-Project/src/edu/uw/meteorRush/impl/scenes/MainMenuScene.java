@@ -23,7 +23,8 @@ public class MainMenuScene extends SceneWithKeys {
 	private final String[] SETTINGS_OPTIONS = { "EASY", "MEDIUM", "HARD", "BACK" };
 
 	private BufferedImage backgroundImage;
-	private Image IntroScene1;
+	private Image introScene1;
+	private Image introScene2;
 	private Image title;
 	private Clip backgroundMusic;
 
@@ -37,14 +38,16 @@ public class MainMenuScene extends SceneWithKeys {
 	}
 
 	public MainMenuScene() {
-		this.sceneOption = "Intro";
+		this.sceneOption = "Intro1";
 	}
 
 	@Override
 	public void initialize() {
 		backgroundImage = ResourceLoader.toBufferedImage(
 				ResourceLoader.loadImage("res/images/backgrounds/GameBackground.png").getScaledInstance(24750, 825, 0));
-		IntroScene1 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene1.png").getScaledInstance(1800, 800,
+		introScene1 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene1.png").getScaledInstance(1800, 800,
+				0);
+		introScene2 = ResourceLoader.loadImage("res/images/backgrounds/IntroScene2.png").getScaledInstance(1800, 800,
 				0);
 		title = ResourceLoader.loadImage("res/images/ui/Title.png").getScaledInstance(1089, 322, 0);
 
@@ -65,8 +68,10 @@ public class MainMenuScene extends SceneWithKeys {
 		g.drawImage(backgroundSubImage, 0, 0, null);
 
 		// render background and text
-		if (sceneOption.equals("Intro")) {
-			introScene(g, inputManager);
+		if (sceneOption.equals("Intro1")) {
+			introScene1(g, inputManager);
+		} else if (sceneOption.equals("Intro2")) {
+			introScene2(g, inputManager);
 		} else if (sceneOption.equals("Main")) {
 			g.drawImage(title, 355, 45, null);
 			currentOption = upDown(inputManager, MAIN_MENU_OPTIONS, currentOption);
@@ -104,7 +109,7 @@ public class MainMenuScene extends SceneWithKeys {
 				sceneOption = "Credits";
 				addObject(new FadeIn(1.0));
 			} else if (currentOption == 3) {
-				sceneOption = "Intro";
+				sceneOption = "Intro1";
 				addObject(new FadeIn(1.0));
 			} else if (currentOption == 4) {
 				Game.getInstance().stop();
@@ -142,9 +147,21 @@ public class MainMenuScene extends SceneWithKeys {
 	 * @param g
 	 * @param inputManager
 	 */
-	public void introScene(Graphics g, InputManager inputManager) {
-		g.drawImage(IntroScene1, 0, 0, null);
+	public void introScene1(Graphics g, InputManager inputManager) {
+		g.drawImage(introScene1, 0, 0, null);
 		g.drawString("You are an astronaut who got sucked into a wormhole...", 10, 35);
+		returnToMenuOption(g, inputManager);
+	}
+
+	public void introScene2(Graphics g, InputManager inputManager) {
+		g.drawImage(introScene2, 0, 0, null);
+		g.drawString("...You are met with an onslaught of meteors and alien ships. Your objective is to survive.", 10,
+				35);
+		g.drawString("MOVE", 870, 270);
+		g.drawString("FIRE LASER", 870, 350);
+		g.drawString("SELECT", 870, 430);
+		g.drawString("PAUSE", 700, 510);
+		g.drawString("SCROLL", 700, 590);
 		returnToMenuOption(g, inputManager);
 	}
 
@@ -183,7 +200,11 @@ public class MainMenuScene extends SceneWithKeys {
 			currentOption = 0;
 			onSound();
 			addObject(new FadeIn(1.0));
-			sceneOption = "Main";
+			if (sceneOption.equals("Intro1")) {
+				sceneOption = "Intro2";
+			} else {
+				sceneOption = "Main";
+			}
 		}
 	}
 

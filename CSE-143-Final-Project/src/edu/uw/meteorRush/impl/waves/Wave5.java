@@ -1,7 +1,5 @@
 package edu.uw.meteorRush.impl.waves;
 
-import java.awt.Graphics;
-
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
@@ -23,10 +21,6 @@ public class Wave5 extends Wave {
 		enemyCount = 0;
 		startTime = Game.getInstance().getTime();
 		nextSpawnTime = startTime + GameScene.WAVE_REST_TIME;
-	}
-
-	@Override
-	public void initialize() {
 	}
 
 	@Override
@@ -59,14 +53,6 @@ public class Wave5 extends Wave {
 			scene.removeObject(this);
 			scene.addObject(new Wave6());
 		}
-	}
-
-	@Override
-	public void render(Graphics g) {
-	}
-
-	@Override
-	public void dispose() {
 	}
 
 }

@@ -1,7 +1,5 @@
 package edu.uw.meteorRush.impl.waves;
 
-import java.awt.Graphics;
-
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
@@ -26,10 +24,6 @@ public class Wave8 extends Wave {
 	}
 
 	@Override
-	public void initialize() {
-	}
-
-	@Override
 	public void tick() {
 		double currentTime = Game.getInstance().getTime();
 		if (currentTime >= nextSpawnTime) {
@@ -51,22 +45,18 @@ public class Wave8 extends Wave {
 			spawnHornet();
 			break;
 		case 3:
-			spawnMarauder();
+			if (enemyCount % 11 == 0) {
+				spawnMarauder();
+			} else {
+				spawnAsteroid();
+			}
 			break;
 		}
 		if (enemyCount >= modifiedMaxEnemyCount) {
 			GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 			scene.removeObject(this);
-			scene.addObject(new Wave8());
+			scene.addObject(new Wave9());
 		}
-	}
-
-	@Override
-	public void render(Graphics g) {
-	}
-
-	@Override
-	public void dispose() {
 	}
 
 }
