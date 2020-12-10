@@ -175,12 +175,13 @@ public class MainMenuScene extends SceneWithKeys {
 	public void creditsScene(Graphics g, InputManager inputManager) {
 		g.drawString("CREDITS", 825, 105);
 		String[] lines = { "Jacob Barnhart - Programmer", "Connor Reinholdtsen - Programmer",
-				"Marko Milovanovic - Programmer", "Amy George - Artist", "", "Main Menu Music: Stellardrone - Eternity",
-				"Game Music: F-777 - Ludicrous Speed", "Font: Minecraft" };
+				"Marko Milovanovic - Programmer", "Amy George - Artist", "", "Sound Effects: Various YouTube Videos",
+				"Main Menu Music: Stellardrone - Eternity", "Game Music: F-777 - Ludicrous Speed",
+				"Game Over Music: Daniel Wales - To the Stars", "Font: Minecraft" };
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
 			int width = g.getFontMetrics().stringWidth(line);
-			g.drawString(lines[i], 900 - width / 2, 230 + i * 50);
+			g.drawString(lines[i], 900 - width / 2, 190 + i * 50);
 		}
 		returnToMenuOption(g, inputManager);
 	}

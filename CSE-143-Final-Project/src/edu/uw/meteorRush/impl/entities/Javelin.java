@@ -19,7 +19,7 @@ public class Javelin extends Entity implements DamagableEntity {
 	private static final int SCORE_VALUE = 100;
 	private static final double HEALTH_DROP_CHANCE = 0.2;
 	private static final double BASE_CONTACT_DAMAGE = 2.0;
-	private static final double BASE_LASER_DAMAGE = 1;
+	private static final double BASE_LASER_DAMAGE = 2;
 	private static final double LASER_COOLDOWN = 2;
 	private static final int LASER_WIDTH = 90;
 	private static final int LASER_HEIGHT = 15;
@@ -113,6 +113,7 @@ public class Javelin extends Entity implements DamagableEntity {
 
 		@Override
 		public void initialize() {
+			ResourceLoader.loadAudioClip("res/audio/AlienLaser.wav").start();
 		}
 
 		@Override

@@ -25,11 +25,11 @@ public class Marauder extends Entity implements DamagableEntity {
 	private static final double LARGE_ORB_SPEED = 500;
 	private static final double LARGE_ORB_LIFETIME = 0.7;
 	private static final double LARGE_ORB_COOLDOWN = 3.0;
-	private static final double BASE_LARGE_ORB_DAMAGE = 5.0;
+	private static final double BASE_LARGE_ORB_DAMAGE = 3.0;
 	private static final int SMALL_ORB_WIDTH = 30;
 	private static final int SMALL_ORB_HEIGHT = 30;
 	private static final int SMALL_ORB_SPEED = 600;
-	private static final double BASE_SMALL_ORB_DAMAGE = 4.0;
+	private static final double BASE_SMALL_ORB_DAMAGE = 2.0;
 
 	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/marauder/Marauder1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
@@ -95,6 +95,7 @@ public class Marauder extends Entity implements DamagableEntity {
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
 		scene.addObject(explosion);
+		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		if (Math.random() < HEALTH_DROP_CHANCE) {
 			scene.addObject(new HealthDrop(getPosition()));
 		}

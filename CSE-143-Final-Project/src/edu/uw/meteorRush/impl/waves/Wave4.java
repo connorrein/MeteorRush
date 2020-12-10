@@ -6,7 +6,7 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave4 extends Wave {
 
-	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.5;
+	private static final double BASE_ENEMY_SPAWN_PERIOD = 1.0;
 	private static final int BASE_MAX_ENEMY_COUNT = 15;
 
 	private double modifiedEnemySpawnPeriod;

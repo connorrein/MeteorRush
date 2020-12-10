@@ -1,5 +1,6 @@
 package edu.uw.meteorRush.impl.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -8,6 +9,7 @@ import edu.uw.meteorRush.common.Entity;
 import edu.uw.meteorRush.common.Game;
 import edu.uw.meteorRush.common.InputManager;
 import edu.uw.meteorRush.common.ResourceLoader;
+import edu.uw.meteorRush.common.SceneObject;
 import edu.uw.meteorRush.common.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
@@ -146,6 +148,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	public void damage(double amount) {
 		currentHealth -= amount;
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
+		scene.addObject(new DamageNotificationFilter());
 		if (currentHealth <= 0) {
 			destroy();
 			scene.endGame();
@@ -162,6 +165,7 @@ public class PlayerShip extends Entity implements DamagableEntity {
 	}
 
 	private void destroy() {
+		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		Game.getInstance().getOpenScene().removeObject(this);
 	}
 
@@ -197,6 +201,47 @@ public class PlayerShip extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionExit(Entity other) {
 		}
+	}
+
+	private static class DamageNotificationFilter extends SceneObject {
+		private static final double DURATION = 0.25;
+		private static final double MAX_OPAQUENESS = 0.25;
+		private double startTime;
+
+		private DamageNotificationFilter() {
+			startTime = Game.getInstance().getTime();
+		}
+
+		@Override
+		public void initialize() {
+		}
+
+		@Override
+		public void tick() {
+		}
+
+		@Override
+		public void render(Graphics g) {
+			double time = Game.getInstance().getTime();
+			double elapsedTime = time - startTime;
+			double opaqueness = 2.0 * elapsedTime / DURATION;
+			if (opaqueness > 1.0) {
+				opaqueness = 2.0 - opaqueness;
+			}
+			if (opaqueness < 0) {
+				Game.getInstance().getOpenScene().removeObject(this);
+				return;
+			}
+			int alpha = (int) (opaqueness * MAX_OPAQUENESS * 255);
+			Color filter = new Color(255, 0, 0, alpha);
+			g.setColor(filter);
+			g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+		}
+
+		@Override
+		public void dispose() {
+		}
+
 	}
 
 }

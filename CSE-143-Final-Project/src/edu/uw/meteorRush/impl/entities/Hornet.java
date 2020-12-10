@@ -101,6 +101,7 @@ public class Hornet extends Entity implements DamagableEntity {
 		scene.addScore(SCORE_VALUE);
 		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
 		scene.addObject(explosion);
+		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		if (Math.random() < HEALTH_DROP_CHANCE) {
 			scene.addObject(new HealthDrop(getPosition()));
 		}
@@ -114,6 +115,7 @@ public class Hornet extends Entity implements DamagableEntity {
 
 		@Override
 		public void initialize() {
+			ResourceLoader.loadAudioClip("res/audio/AlienLaser.wav").start();
 		}
 
 		@Override

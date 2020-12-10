@@ -12,7 +12,7 @@ import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class AsteroidLarge extends Entity implements DamagableEntity {
 
-	private static final double BASE_DAMAGE_AMOUNT = 1.5;
+	private static final double BASE_DAMAGE_AMOUNT = 3;
 	private static final double MAX_HEALTH = 5;
 	private static final double BASE_SPEED = 300;
 	private static final int BASE_SCORE_VALUE = 50;
@@ -60,6 +60,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
 			((PlayerShip) other).damage(BASE_DAMAGE_AMOUNT * Main.difficulty.getModifier());
+			ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
