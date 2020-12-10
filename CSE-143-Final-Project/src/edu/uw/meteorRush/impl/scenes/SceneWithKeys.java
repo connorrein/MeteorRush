@@ -7,6 +7,11 @@ import edu.uw.meteorRush.common.Scene;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+/**
+ *
+ * @author Marko Milovanovic
+ */
+
 public class SceneWithKeys extends Scene {
 
 	private static final Font UI_FONT = ResourceLoader.loadFont("res/Font.ttf", 36);

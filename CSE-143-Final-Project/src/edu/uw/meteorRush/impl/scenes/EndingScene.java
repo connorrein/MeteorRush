@@ -12,6 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ *
+ * @author Marko Milovanovic
+ */
+
 public class EndingScene extends SceneWithKeys {
 
     private Image backgroundImage;
@@ -73,8 +78,8 @@ public class EndingScene extends SceneWithKeys {
     }
 
     /**
-     * Decides what enter will do depending on the which option is highlighted, goes
-     * to main menu, or quits the game
+     * Decides what enter will do depending on the which option is highlighted,
+     * restarts, goes to main menu, or quits the game
      *
      * @param inputManager
      */
@@ -91,6 +96,13 @@ public class EndingScene extends SceneWithKeys {
             }
         }
     }
+
+    /**
+     *
+     * returns the high score found in the file, if this is the first time the game was played,
+     * creates a folder to house the high score file
+     * @throws FileNotFoundException
+     */
 
     public int getHighScore() throws FileNotFoundException {
         File highScoreFile;
@@ -117,18 +129,29 @@ public class EndingScene extends SceneWithKeys {
         return highScore;
     }
 
+    /**
+     * Creates a folder called MetoerRush on a Mac OS
+     */
     public void createFolderMac() {
         String userProfile = System.getProperty("user.home");
         File highScoreDirectory = new File( userProfile + "/Library/Application Support/MeteorRush/");
         highScoreDirectory.mkdir();
     }
 
+    /**
+     * Creates a folder called MetoerRush on a Windows OS
+     */
     public void createFolderWindows() {
         String userProfile = System.getProperty("user.home");
         File highScoreDirectory = new File(userProfile + "/AppData/Local/MeteorRush/");
         highScoreDirectory.mkdir();
     }
 
+    /**
+     * Saves the high score in a file that can be read again even when the game is closed
+     * @param highScore: the new high score
+     * @throws IOException
+     */
     public void setHighScore(int highScore) throws IOException {
         File highScoreFile;
         String userProfile = System.getProperty("user.home");
