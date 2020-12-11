@@ -1,8 +1,8 @@
 package edu.uw.meteorRush.impl.scenes;
 
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.InputManager;
-import edu.uw.meteorRush.common.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.InputManager;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
 import edu.uw.meteorRush.impl.Main;
 
 import javax.sound.sampled.Clip;
@@ -124,11 +124,14 @@ public class EndingScene extends SceneWithKeys {
 				createFolderMac();
 			}
 			highScoreFile = new File(userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
-		} else {
+		} else if (os.contains("Windows")) {
 			if (!Files.exists(Paths.get(userProfile + "/AppData/Local/MeteorRush/"))) {
 				createFolderWindows();
 			}
 			highScoreFile = new File(userProfile + "/AppData/Local/MeteorRush/highScore.txt");
+		} else {
+			// e.g. linux
+			return 0;
 		}
 		if (highScoreFile.exists()) {
 			Scanner scanner = new Scanner(highScoreFile);
@@ -170,8 +173,11 @@ public class EndingScene extends SceneWithKeys {
 		String userProfile = System.getProperty("user.home");
 		if (os.contains("Mac")) {
 			highScoreFile = new File(userProfile + "/Library/Application Support/MeteorRush/highScore.txt");
-		} else {
+		} else if (os.contains("Windows")) {
 			highScoreFile = new File(userProfile + "/AppData/Local/MeteorRush/highScore.txt");
+		} else {
+			// e.g. linux
+			return;
 		}
 		highScoreFile.delete();
 		highScoreFile.createNewFile();

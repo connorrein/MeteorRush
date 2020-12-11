@@ -1,4 +1,4 @@
-package edu.uw.meteorRush.common;
+package edu.uw.meteorRush.gameEngine;
 
 import java.util.ArrayList;
 import java.util.List;

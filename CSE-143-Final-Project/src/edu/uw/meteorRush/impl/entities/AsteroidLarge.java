@@ -3,10 +3,10 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
@@ -60,8 +60,7 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof PlayerShip) {
 			((PlayerShip) other).damage(BASE_DAMAGE_AMOUNT * Main.difficulty.getModifier());
-			ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
-			Game.getInstance().getOpenScene().removeObject(this);
+			destroy(false);
 		}
 	}
 
@@ -73,26 +72,25 @@ public class AsteroidLarge extends Entity implements DamagableEntity {
 	public void damage(double amount) {
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
-			destroy();
-		} else {
-			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.1);
-			Game.getInstance().getOpenScene().addObject(explosion);
+			destroy(true);
 		}
 	}
 
-	private void destroy() {
+	private void destroy(boolean split) {
 		ResourceLoader.loadAudioClip("res/audio/AsteroidHit.wav").start();
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.addScore((int) (BASE_SCORE_VALUE * Main.difficulty.getModifier()));
-		Explosion explosion = new Explosion(getPosition(), new Vector2(200, 200), 0.1);
+		Explosion explosion = new Explosion(getPosition(), 200, 0.4);
 		scene.addObject(explosion);
 		scene.removeObject(this);
-		Vector2 position = getPosition();
-		scene.addObject(new AsteroidSmall(position, velocity));
-		velocity.rotate(-Math.toRadians(30));
-		scene.addObject(new AsteroidSmall(position, velocity));
-		velocity.rotate(Math.toRadians(60));
-		scene.addObject(new AsteroidSmall(position, velocity));
+		if (split) {
+			Vector2 position = getPosition();
+			scene.addObject(new AsteroidSmall(position, velocity));
+			velocity.rotate(-Math.toRadians(30));
+			scene.addObject(new AsteroidSmall(position, velocity));
+			velocity.rotate(Math.toRadians(60));
+			scene.addObject(new AsteroidSmall(position, velocity));
+		}
 	}
 
 }

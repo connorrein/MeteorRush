@@ -1,13 +1,13 @@
 package edu.uw.meteorRush.impl.waves;
 
-import edu.uw.meteorRush.common.Game;
+import edu.uw.meteorRush.gameEngine.Game;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
 public class Wave6 extends Wave {
 
-	private static final double BASE_ENEMY_SPAWN_PERIOD = 1;
-	private static final int BASE_MAX_ENEMY_COUNT = 15;
+	private static final double BASE_ENEMY_SPAWN_PERIOD = 0.9;
+	private static final int BASE_MAX_ENEMY_COUNT = 20;
 
 	private double modifiedEnemySpawnPeriod;
 	private int modifiedMaxEnemyCount;
@@ -45,9 +45,7 @@ public class Wave6 extends Wave {
 			spawnHornet();
 			break;
 		case 3:
-			if (enemyCount % 14 == 0) {
-				spawnMarauder();
-			}
+			spawnMarauder();
 			break;
 		}
 		if (enemyCount >= modifiedMaxEnemyCount) {

@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.SceneObject;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.SceneObject;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 

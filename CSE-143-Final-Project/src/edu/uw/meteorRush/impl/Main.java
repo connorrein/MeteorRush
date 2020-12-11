@@ -1,6 +1,9 @@
 package edu.uw.meteorRush.impl;
 
-import edu.uw.meteorRush.common.Game;
+import java.awt.Image;
+
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
 import edu.uw.meteorRush.impl.scenes.MainMenuScene;
 
 public class Main {
@@ -11,7 +14,8 @@ public class Main {
 	public static Difficulty difficulty = Difficulty.MEDIUM;
 
 	public static void main(String[] args) {
-		Game game = new Game("Meteor Rush", WIDTH, HEIGHT);
+		Image icon = ResourceLoader.loadImage("res/images/Icon.png");
+		Game game = new Game("Meteor Rush", WIDTH, HEIGHT, icon);
 		game.start();
 		game.loadScene(new MainMenuScene());
 	}

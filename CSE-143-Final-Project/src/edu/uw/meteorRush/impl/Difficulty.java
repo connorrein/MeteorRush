@@ -2,7 +2,7 @@ package edu.uw.meteorRush.impl;
 
 public enum Difficulty {
 
-	EASY(0.5), MEDIUM(1), HARD(1.5);
+	EASY(0.75), MEDIUM(1), HARD(1.25);
 
 	private double modifier;
 

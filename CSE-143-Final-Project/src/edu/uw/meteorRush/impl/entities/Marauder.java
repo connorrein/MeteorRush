@@ -3,11 +3,12 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Scene;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Scene;
+import edu.uw.meteorRush.gameEngine.SceneObject;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
@@ -18,7 +19,7 @@ public class Marauder extends Entity implements DamagableEntity {
 	private static final int MAX_HEALTH = 8;
 	private static final double SPEED = 200.0;
 	private static final int SCORE_VALUE = 300;
-	private static final double HEALTH_DROP_CHANCE = 0.2;
+	private static final double HEALTH_DROP_CHANCE = 0.25;
 	private static final double BASE_CONTACT_DAMAGE = 2.0;
 	private static final int LARGE_ORB_WIDTH = 50;
 	private static final int LARGE_ORB_HEIGHT = 50;
@@ -29,7 +30,7 @@ public class Marauder extends Entity implements DamagableEntity {
 	private static final int SMALL_ORB_WIDTH = 30;
 	private static final int SMALL_ORB_HEIGHT = 30;
 	private static final int SMALL_ORB_SPEED = 600;
-	private static final double BASE_SMALL_ORB_DAMAGE = 2.0;
+	private static final double BASE_SMALL_ORB_DAMAGE = 1.0;
 
 	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/marauder/Marauder1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
@@ -83,9 +84,6 @@ public class Marauder extends Entity implements DamagableEntity {
 		health -= amount;
 		if (health <= 0) {
 			destroy();
-		} else {
-			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
-			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
@@ -93,9 +91,8 @@ public class Marauder extends Entity implements DamagableEntity {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeObject(this);
 		scene.addScore(SCORE_VALUE);
-		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
+		Explosion explosion = new Explosion(getPosition(), 300, 0.4);
 		scene.addObject(explosion);
-		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		if (Math.random() < HEALTH_DROP_CHANCE) {
 			scene.addObject(new HealthDrop(getPosition()));
 		}
@@ -123,6 +120,12 @@ public class Marauder extends Entity implements DamagableEntity {
 		}
 
 		@Override
+		public void initialize() {
+			super.initialize();
+			ResourceLoader.loadAudioClip("res/audio/MarauderLargeOrbFire.wav").start();
+		}
+
+		@Override
 		public void tick() {
 			super.tick();
 			if (Game.getInstance().getTime() > deathTime) {
@@ -131,6 +134,7 @@ public class Marauder extends Entity implements DamagableEntity {
 		}
 
 		private void blowUp() {
+			ResourceLoader.loadAudioClip("res/audio/MarauderLargeOrbBlowUp.wav").start();
 			Scene scene = Game.getInstance().getOpenScene();
 			scene.removeObject(this);
 			Vector2 smallOrbVelocity = Vector2.fromAngle(2.0 * Math.PI / 3.0, SMALL_ORB_SPEED);
@@ -144,9 +148,13 @@ public class Marauder extends Entity implements DamagableEntity {
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
 				((PlayerShip) other).damage(BASE_LARGE_ORB_DAMAGE);
-				Game.getInstance().getOpenScene().removeObject(this);
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new OrbSpark(getPosition()));
 			} else if (other instanceof PlayerShip.Laser) {
-				Game.getInstance().getOpenScene().removeObject(other);
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(other);
+				scene.addObject(new OrbSpark(getPosition()));
 				blowUp();
 			}
 		}
@@ -171,12 +179,21 @@ public class Marauder extends Entity implements DamagableEntity {
 		}
 
 		@Override
+		public void initialize() {
+			super.initialize();
+		}
+
+		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				((PlayerShip) other).damage(Main.difficulty.getModifier() * BASE_SMALL_ORB_DAMAGE);
-				Game.getInstance().getOpenScene().removeObject(this);
+				((PlayerShip) other).damage(BASE_SMALL_ORB_DAMAGE * Main.difficulty.getModifier());
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new OrbSpark(getPosition().add(SMALL_ORB_WIDTH / 2.0, 0)));
 			} else if (other instanceof PlayerShip.Laser) {
-				Game.getInstance().getOpenScene().removeObject(this);
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new OrbSpark(getPosition().add(SMALL_ORB_WIDTH / 2.0, 0)));
 			}
 		}
 
@@ -194,6 +211,45 @@ public class Marauder extends Entity implements DamagableEntity {
 		@Override
 		public void dispose() {
 			super.dispose();
+		}
+	}
+
+	private static class OrbSpark extends SceneObject {
+		private static final double DURATION = 0.1;
+		private static final int LASER_SPARK_WIDTH = 50;
+		private static final int LASER_SPARK_HEIGHT = 50;
+		private static final Image LASER_SPARK = ResourceLoader
+				.loadImage("res/images/entities/marauder/MarauderOrbSpark.png")
+				.getScaledInstance(LASER_SPARK_WIDTH, LASER_SPARK_HEIGHT, 0);
+
+		private Vector2 position;
+		private double deathTime;
+
+		private OrbSpark(Vector2 position) {
+			this.position = position;
+			deathTime = Game.getInstance().getTime() + DURATION;
+		}
+
+		@Override
+		public void initialize() {
+		}
+
+		@Override
+		public void tick() {
+			if (Game.getInstance().getTime() > deathTime) {
+				Game.getInstance().getOpenScene().removeObject(this);
+			}
+		}
+
+		@Override
+		public void render(Graphics g) {
+			int x = (int) (position.getX() - LASER_SPARK_WIDTH / 2.0);
+			int y = (int) (position.getY() - LASER_SPARK_HEIGHT / 2.0);
+			g.drawImage(LASER_SPARK, x, y, null);
+		}
+
+		@Override
+		public void dispose() {
 		}
 	}
 }

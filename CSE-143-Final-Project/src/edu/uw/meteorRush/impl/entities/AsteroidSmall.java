@@ -3,10 +3,10 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
@@ -48,7 +48,6 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 	public void onCollisionEnter(Entity other) {
 		if (other instanceof DamagableEntity && !(other instanceof AsteroidSmall || other instanceof AsteroidLarge)) {
 			((DamagableEntity) other).damage(BASE_DAMAGE_AMOUNT * Main.difficulty.getModifier());
-			ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 			Game.getInstance().getOpenScene().removeObject(this);
 		}
 	}
@@ -62,9 +61,6 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 		currentHealth -= amount;
 		if (currentHealth <= 0) {
 			destroy();
-		} else {
-			Explosion explosion = new Explosion(getPosition(), new Vector2(50, 50), 0.1);
-			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
@@ -72,7 +68,7 @@ public class AsteroidSmall extends Entity implements DamagableEntity {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeObject(this);
 		scene.addScore((int) (BASE_SCORE_VALUE * Main.difficulty.getModifier()));
-		Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
+		Explosion explosion = new Explosion(getPosition(), 100, 0.2);
 		scene.addObject(explosion);
 	}
 

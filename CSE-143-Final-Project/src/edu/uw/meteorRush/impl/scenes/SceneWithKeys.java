@@ -1,11 +1,11 @@
 package edu.uw.meteorRush.impl.scenes;
 
-import edu.uw.meteorRush.common.InputManager;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Scene;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
+
+import edu.uw.meteorRush.gameEngine.InputManager;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Scene;
 
 /**
  *

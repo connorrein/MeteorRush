@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.InputManager;
-import edu.uw.meteorRush.common.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.InputManager;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
 import edu.uw.meteorRush.impl.Difficulty;
 import edu.uw.meteorRush.impl.Main;
 

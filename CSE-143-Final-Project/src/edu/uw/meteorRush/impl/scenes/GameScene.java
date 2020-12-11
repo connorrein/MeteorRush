@@ -9,16 +9,16 @@ import java.awt.image.BufferedImage;
 
 import javax.sound.sampled.Clip;
 
-import edu.uw.meteorRush.common.Collider;
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Entity.EntityCollider;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.InputManager;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Collider;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Entity.EntityCollider;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.InputManager;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave1;
+import edu.uw.meteorRush.impl.waves.Wave14;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class GameScene extends SceneWithKeys {
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new FadeIn(1.5));
-		addObject(new Wave1());
+		addObject(new Wave14());
 	}
 
 	@Override

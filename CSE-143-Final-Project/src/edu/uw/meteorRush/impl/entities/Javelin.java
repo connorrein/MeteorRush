@@ -3,10 +3,12 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Scene;
+import edu.uw.meteorRush.gameEngine.SceneObject;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
@@ -87,9 +89,6 @@ public class Javelin extends Entity implements DamagableEntity {
 		health -= amount;
 		if (health <= 0) {
 			destroy();
-		} else {
-			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
-			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
@@ -97,9 +96,8 @@ public class Javelin extends Entity implements DamagableEntity {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeObject(this);
 		scene.addScore(SCORE_VALUE);
-		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
+		Explosion explosion = new Explosion(getPosition(), 250, 0.35);
 		scene.addObject(explosion);
-		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		if (Math.random() < HEALTH_DROP_CHANCE) {
 			scene.addObject(new HealthDrop(getPosition()));
 		}
@@ -113,7 +111,7 @@ public class Javelin extends Entity implements DamagableEntity {
 
 		@Override
 		public void initialize() {
-			ResourceLoader.loadAudioClip("res/audio/AlienLaser.wav").start();
+			ResourceLoader.loadAudioClip("res/audio/JavelinLaser.wav").start();
 		}
 
 		@Override
@@ -127,14 +125,57 @@ public class Javelin extends Entity implements DamagableEntity {
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
 				((PlayerShip) other).damage(BASE_LASER_DAMAGE * Main.difficulty.getModifier());
-				Game.getInstance().getOpenScene().removeObject(this);
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new LaserSpark(getPosition().add(LASER_WIDTH / 2.0, 0)));
 			} else if (other instanceof Projectile) {
-				Game.getInstance().getOpenScene().removeObject(this);
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new LaserSpark(getPosition().add(LASER_WIDTH / 2.0, 0)));
 			}
 		}
 
 		@Override
 		public void onCollisionExit(Entity other) {
+		}
+	}
+
+	private static class LaserSpark extends SceneObject {
+		private static final double DURATION = 0.1;
+		private static final int LASER_SPARK_WIDTH = 50;
+		private static final int LASER_SPARK_HEIGHT = 50;
+		private static final Image LASER_SPARK = ResourceLoader
+				.loadImage("res/images/entities/javelin/JavelinLaserSpark.png")
+				.getScaledInstance(LASER_SPARK_WIDTH, LASER_SPARK_HEIGHT, 0);
+
+		private Vector2 position;
+		private double deathTime;
+
+		private LaserSpark(Vector2 position) {
+			this.position = position;
+			deathTime = Game.getInstance().getTime() + DURATION;
+		}
+
+		@Override
+		public void initialize() {
+		}
+
+		@Override
+		public void tick() {
+			if (Game.getInstance().getTime() > deathTime) {
+				Game.getInstance().getOpenScene().removeObject(this);
+			}
+		}
+
+		@Override
+		public void render(Graphics g) {
+			int x = (int) (position.getX() - LASER_SPARK_WIDTH / 2.0);
+			int y = (int) (position.getY() - LASER_SPARK_HEIGHT / 2.0);
+			g.drawImage(LASER_SPARK, x, y, null);
+		}
+
+		@Override
+		public void dispose() {
 		}
 	}
 

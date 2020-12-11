@@ -3,10 +3,12 @@ package edu.uw.meteorRush.impl.entities;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.ResourceLoader;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.ResourceLoader;
+import edu.uw.meteorRush.gameEngine.Scene;
+import edu.uw.meteorRush.gameEngine.SceneObject;
+import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.scenes.GameScene;
 
@@ -17,13 +19,13 @@ public class Hornet extends Entity implements DamagableEntity {
 	private static final int MAX_HEALTH = 1;
 	private static final double SPEED = 700.0;
 	private static final int SCORE_VALUE = 75;
-	private static final double HEALTH_DROP_CHANCE = 0.2;
+	private static final double HEALTH_DROP_CHANCE = 0.15;
 	private static final double BASE_CONTACT_DAMAGE = 1.0;
 	private static final double LASER_COOLDOWN = 0.5;
 	private static final int LASER_WIDTH = 30;
 	private static final int LASER_HEIGHT = 6;
 	private static final double LASER_SPEED = 1000.0;
-	private static final double BASE_LASER_DAMAGE_AMOUNT = 1.0;
+	private static final double BASE_LASER_DAMAGE = 1.0;
 	private static final Image SPRITE_1 = ResourceLoader.loadImage("res/images/entities/hornet/Hornet1.png")
 			.getScaledInstance(WIDTH, HEIGHT, 0);
 	private static final Image SPRITE_2 = ResourceLoader.loadImage("res/images/entities/hornet/Hornet2.png")
@@ -89,9 +91,6 @@ public class Hornet extends Entity implements DamagableEntity {
 		health -= amount;
 		if (health <= 0) {
 			destroy();
-		} else {
-			Explosion explosion = new Explosion(getPosition(), new Vector2(100, 100), 0.2);
-			Game.getInstance().getOpenScene().addObject(explosion);
 		}
 	}
 
@@ -99,9 +98,8 @@ public class Hornet extends Entity implements DamagableEntity {
 		GameScene scene = (GameScene) Game.getInstance().getOpenScene();
 		scene.removeObject(this);
 		scene.addScore(SCORE_VALUE);
-		Explosion explosion = new Explosion(getPosition(), new Vector2(250, 250), 0.2);
+		Explosion explosion = new Explosion(getPosition(), 150, 0.3);
 		scene.addObject(explosion);
-		ResourceLoader.loadAudioClip("res/audio/Explosion.wav").start();
 		if (Math.random() < HEALTH_DROP_CHANCE) {
 			scene.addObject(new HealthDrop(getPosition()));
 		}
@@ -115,7 +113,7 @@ public class Hornet extends Entity implements DamagableEntity {
 
 		@Override
 		public void initialize() {
-			ResourceLoader.loadAudioClip("res/audio/AlienLaser.wav").start();
+			ResourceLoader.loadAudioClip("res/audio/HornetLaser.wav").start();
 		}
 
 		@Override
@@ -128,15 +126,58 @@ public class Hornet extends Entity implements DamagableEntity {
 		@Override
 		public void onCollisionEnter(Entity other) {
 			if (other instanceof PlayerShip) {
-				((PlayerShip) other).damage(Main.difficulty.getModifier() * BASE_LASER_DAMAGE_AMOUNT);
-				Game.getInstance().getOpenScene().removeObject(this);
-			} else if (other instanceof PlayerShip.Laser) {
-				Game.getInstance().getOpenScene().removeObject(this);
+				((PlayerShip) other).damage(BASE_LASER_DAMAGE * Main.difficulty.getModifier());
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new LaserSpark(getPosition().add(LASER_WIDTH / 2.0, 0)));
+			} else if (other instanceof Projectile) {
+				Scene scene = Game.getInstance().getOpenScene();
+				scene.removeObject(this);
+				scene.addObject(new LaserSpark(getPosition().add(LASER_WIDTH / 2.0, 0)));
 			}
 		}
 
 		@Override
 		public void onCollisionExit(Entity other) {
+		}
+	}
+
+	private static class LaserSpark extends SceneObject {
+		private static final double DURATION = 0.1;
+		private static final int LASER_SPARK_WIDTH = 35;
+		private static final int LASER_SPARK_HEIGHT = 35;
+		private static final Image LASER_SPARK = ResourceLoader
+				.loadImage("res/images/entities/hornet/HornetLaserSpark.png")
+				.getScaledInstance(LASER_SPARK_WIDTH, LASER_SPARK_HEIGHT, 0);
+
+		private Vector2 position;
+		private double deathTime;
+
+		private LaserSpark(Vector2 position) {
+			this.position = position;
+			deathTime = Game.getInstance().getTime() + DURATION;
+		}
+
+		@Override
+		public void initialize() {
+		}
+
+		@Override
+		public void tick() {
+			if (Game.getInstance().getTime() > deathTime) {
+				Game.getInstance().getOpenScene().removeObject(this);
+			}
+		}
+
+		@Override
+		public void render(Graphics g) {
+			int x = (int) (position.getX() - LASER_SPARK_WIDTH / 2.0);
+			int y = (int) (position.getY() - LASER_SPARK_HEIGHT / 2.0);
+			g.drawImage(LASER_SPARK, x, y, null);
+		}
+
+		@Override
+		public void dispose() {
 		}
 	}
 

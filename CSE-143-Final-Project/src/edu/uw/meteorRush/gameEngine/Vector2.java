@@ -1,4 +1,4 @@
-package edu.uw.meteorRush.common;
+package edu.uw.meteorRush.gameEngine;
 
 /**
  * Represents a 2-dimensional vector with an x-component and a y-component that

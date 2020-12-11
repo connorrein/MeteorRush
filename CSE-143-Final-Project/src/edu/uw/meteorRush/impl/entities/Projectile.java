@@ -1,8 +1,8 @@
 package edu.uw.meteorRush.impl.entities;
 
-import edu.uw.meteorRush.common.Entity;
-import edu.uw.meteorRush.common.Game;
-import edu.uw.meteorRush.common.Vector2;
+import edu.uw.meteorRush.gameEngine.Entity;
+import edu.uw.meteorRush.gameEngine.Game;
+import edu.uw.meteorRush.gameEngine.Vector2;
 
 public abstract class Projectile extends Entity {
 

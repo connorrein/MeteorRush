@@ -1,8 +1,9 @@
-package edu.uw.meteorRush.common;
+package edu.uw.meteorRush.gameEngine;
 
 import java.awt.Canvas;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
@@ -36,7 +37,7 @@ class Display {
 	 * @param height      how many pixels tall the window is
 	 * @param keyListener
 	 */
-	Display(String title, int width, int height, KeyListener keyListener) {
+	Display(String title, int width, int height, Image icon, KeyListener keyListener) {
 		Dimension dimension = new Dimension(width, height);
 
 		window = new JFrame(title);
@@ -44,9 +45,9 @@ class Display {
 		window.setSize(dimension);
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
+		window.setIconImage(icon);
 		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-		    cursorImg, new Point(0, 0), "Blank");
+		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Blank");
 		window.getContentPane().setCursor(blankCursor);
 
 		canvas = new Canvas();

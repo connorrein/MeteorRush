@@ -1,4 +1,4 @@
-package edu.uw.meteorRush.common;
+package edu.uw.meteorRush.gameEngine;
 
 /**
  * Represents a "living, breathing" SceneObject that can move and collide with

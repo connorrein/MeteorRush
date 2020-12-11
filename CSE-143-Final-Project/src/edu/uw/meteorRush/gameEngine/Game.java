@@ -1,6 +1,7 @@
-package edu.uw.meteorRush.common;
+package edu.uw.meteorRush.gameEngine;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -32,7 +33,7 @@ public class Game {
 	 * @param width  the width of the game's window
 	 * @param height the height of the game's window
 	 */
-	public Game(String title, int width, int height) {
+	public Game(String title, int width, int height, Image icon) {
 		if (instance != null) {
 			throw new IllegalStateException("There can be only one!");
 		}
@@ -40,7 +41,7 @@ public class Game {
 		this.width = width;
 		this.height = height;
 		inputManager = new InputManager();
-		display = new Display(title, width, height, inputManager.getKeyListener());
+		display = new Display(title, width, height, icon, inputManager.getKeyListener());
 		currentScene = null;
 		nextScene = null;
 		running = false;
