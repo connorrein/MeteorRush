@@ -18,7 +18,7 @@ import edu.uw.meteorRush.gameEngine.ResourceLoader;
 import edu.uw.meteorRush.gameEngine.Vector2;
 import edu.uw.meteorRush.impl.Main;
 import edu.uw.meteorRush.impl.entities.PlayerShip;
-import edu.uw.meteorRush.impl.waves.Wave14;
+import edu.uw.meteorRush.impl.waves.Wave1;
 
 /**
  * 
@@ -79,7 +79,7 @@ public class GameScene extends SceneWithKeys {
 		player = new PlayerShip(PLAYER_START);
 		addObject(player);
 		addObject(new FadeIn(1.5));
-		addObject(new Wave14());
+		addObject(new Wave1());
 	}
 
 	@Override
