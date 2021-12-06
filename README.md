@@ -1,1 +1,2 @@
-Download the built game here: https://www.dropbox.com/s/0nhcxxwwxmgmmf4/Meteor%20Rush.jar?dl=0. Requires Java Runtime Environment.
+# Meteor Rush
+A 2D space-themed shoot 'em up game developed with Java.
